@@ -42,12 +42,7 @@ export function QuizPanel() {
       setSubmitResult({ ok: true, msg: `✅ Correct! ${challenge.description} — +${pts} pts` });
       dispatch({ type: 'ADD_SCORE', payload: pts });
       dispatch({ type: 'COMPLETE_CHALLENGE', payload: challenge.level });
-      // Auto-advance to next level after 1.5s
-      setTimeout(() => {
-        setSubmitResult(null);
-        const nextIdx = QUIZ_LEVELS.findIndex(q => q.level === challenge.level + 1);
-        dispatch({ type: 'SET_CHALLENGE', payload: nextIdx >= 0 ? QUIZ_LEVELS[nextIdx] : null });
-      }, 1500);
+      // No auto-advance — use JUMP TO LEVEL buttons to continue
       return;
     }
 
