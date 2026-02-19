@@ -103,8 +103,8 @@ export function ElementTile({ el, tiny = false }: ElementTileProps) {
             d.style.zIndex = '1';
           }}
         >
-          <span style={{ fontSize: 6, opacity: 0.7, lineHeight: 1 }}>{el.atomicNumber}</span>
-          <span style={{ fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: 10, lineHeight: 1 }}>{el.symbol}</span>
+          <span style={{ fontSize: 'clamp(7px, 0.6vw, 10px)', opacity: 0.9, lineHeight: 1 }}>{el.atomicNumber}</span>
+          <span style={{ fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: 'clamp(11px, 1vw, 16px)', lineHeight: 1, textShadow: `0 0 6px ${colors.glow}` }}>{el.symbol}</span>
         </div>
       ) : (
         <div
@@ -125,9 +125,9 @@ export function ElementTile({ el, tiny = false }: ElementTileProps) {
             d.style.transform = 'scale(1)';
           }}
         >
-          <div style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 10, opacity: 0.7, lineHeight: 1 }}>{el.atomicNumber}</div>
-          <div style={{ fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: 18, lineHeight: 1.1 }}>{el.symbol}</div>
-          <div style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 9, opacity: 0.8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 54 }}>{el.name}</div>
+          <div style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, opacity: 0.9, lineHeight: 1, letterSpacing: '0.02em' }}>{el.atomicNumber}</div>
+          <div style={{ fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: 24, lineHeight: 1.1, textShadow: `0 0 10px ${colors.glow}` }}>{el.symbol}</div>
+          <div style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 12, opacity: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 60, letterSpacing: '0.01em' }}>{el.name}</div>
         </div>
       )}
     </>
