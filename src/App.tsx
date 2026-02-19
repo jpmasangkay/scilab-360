@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AppProvider } from './store/context';
+import { useApp } from './store/context';
 import { Header } from './components/Header';
 import { LeftPanel } from './components/LeftPanel';
 import { RightPanel } from './components/RightPanel';
 import { Sandbox } from './components/Sandbox';
 import { StudentDashboard } from './components/StudentDashboard';
+import { QUIZ_LEVELS } from './data/quizLevels';
 
 function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -24,6 +26,72 @@ interface Toast { id: number; msg: string; }
 import { createContext, useContext } from 'react';
 export const ToastContext = createContext<(msg: string) => void>(() => {});
 export const useToast = () => useContext(ToastContext);
+
+/** Compact progress bar shown at the top of the Lab tab on mobile */
+function MobileProgressStrip() {
+  const { state, dispatch } = useApp();
+  const pct = (state.completedChallenges.length / QUIZ_LEVELS.length) * 100;
+
+  return (
+    <div style={{
+      flexShrink: 0,
+      background: '#130929',
+      border: '1px solid #3b1d6e',
+      borderRadius: 10,
+      padding: '8px 12px',
+      marginBottom: 6,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 6,
+    }}>
+      {/* Top row: Level + Score + Mode buttons */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 10, fontWeight: 700, color: '#d8b4fe', letterSpacing: '0.12em' }}>PROGRESS</span>
+          <span style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 12, color: '#c4b5fd' }}>Lvl {state.level}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, fontWeight: 700, color: '#e9d5ff' }}>Score: {state.score}</span>
+          {(['free-play', 'quiz'] as const).map(mode => (
+            <button key={mode} onClick={() => dispatch({ type: 'SET_MODE', payload: mode })}
+              style={{
+                padding: '3px 9px', fontSize: 10,
+                fontFamily: '"Share Tech Mono", monospace', fontWeight: 700,
+                letterSpacing: '0.05em', borderRadius: 6, cursor: 'pointer',
+                background: state.mode === mode ? (mode === 'quiz' ? '#be185d' : '#6d28d9') : '#1e0b3e',
+                color: state.mode === mode ? '#fff' : '#a78bfa',
+                border: state.mode === mode ? `1px solid ${mode === 'quiz' ? '#f43f5e' : '#a855f7'}` : '1px solid #3b1d6e',
+                boxShadow: state.mode === mode ? `0 0 8px ${mode === 'quiz' ? '#f43f5e60' : '#a855f760'}` : 'none',
+              }}>
+              {mode === 'free-play' ? 'FREE PLAY' : 'QUIZ'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div style={{ height: 6, background: '#2d1b5e', borderRadius: 999, overflow: 'hidden' }}>
+        <div style={{
+          height: '100%', width: `${pct}%`,
+          background: 'linear-gradient(90deg, #7c3aed, #ec4899)',
+          boxShadow: '0 0 6px #a855f7', borderRadius: 999,
+          transition: 'width 0.5s',
+        }} />
+      </div>
+
+      {/* Feedback (success/error only, not the default hint) */}
+      {state.feedbackType && state.feedbackType !== 'info' && (
+        <p style={{
+          fontFamily: '"Share Tech Mono", monospace', fontSize: 11,
+          color: state.feedbackType === 'success' ? '#4ade80' : state.feedbackType === 'error' ? '#ef4444' : '#f97316',
+          lineHeight: 1.4, margin: 0,
+        }}>
+          {state.feedback}
+        </p>
+      )}
+    </div>
+  );
+}
 
 function AppLayout() {
   const width = useWindowWidth();
@@ -71,6 +139,7 @@ function AppLayout() {
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0' }}>
             {activeTab === 'lab' && (
               <>
+                <MobileProgressStrip />
                 <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12 }}>
                   <Sandbox isMobile />
                 </div>
