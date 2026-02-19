@@ -13,9 +13,11 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
   const offsetRef = useRef({ x: 0, y: 0 });
   const hasMoved = useRef(false);
   const elRef = useRef<HTMLDivElement>(null);
+  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const color = getAtomColor(atom.element.category);
   const colors = CATEGORY_COLORS[atom.element.category];
 
+  // ── Mouse drag ────────────────────────────────────────────────
   const onMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!elRef.current) return;
@@ -43,7 +45,6 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
 
     const onUp = (e: MouseEvent) => {
       setDragging(false);
-      // Only commit position if the atom was actually dragged — otherwise let dblclick handle removal
       if (!hasMoved.current) return;
       const sandbox = document.getElementById('sandbox-area');
       if (!sandbox) return;
@@ -62,12 +63,70 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
     };
   }, [dragging, atom, dispatch]);
 
+  // ── Touch drag ────────────────────────────────────────────────
+  const onTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    const touch = e.touches[0];
+    offsetRef.current = { x: touch.clientX - atom.x, y: touch.clientY - atom.y };
+    hasMoved.current = false;
+    // detect double-tap for removal
+    if (tapTimer.current) {
+      clearTimeout(tapTimer.current);
+      tapTimer.current = null;
+      dispatch({ type: 'REMOVE_ATOM', payload: atom.id });
+      return;
+    }
+    tapTimer.current = setTimeout(() => { tapTimer.current = null; }, 300);
+    setDragging(true);
+  };
+
+  useEffect(() => {
+    if (!dragging) return;
+
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const sandbox = document.getElementById('sandbox-area');
+      if (!sandbox || !elRef.current) return;
+      const dx = touch.clientX - (atom.x + offsetRef.current.x);
+      const dy = touch.clientY - (atom.y + offsetRef.current.y);
+      if (!hasMoved.current && Math.hypot(dx, dy) > 4) hasMoved.current = true;
+      if (!hasMoved.current) return;
+      const rect = sandbox.getBoundingClientRect();
+      const newX = Math.max(30, Math.min(rect.width - 30, touch.clientX - offsetRef.current.x));
+      const newY = Math.max(30, Math.min(rect.height - 30, touch.clientY - offsetRef.current.y));
+      elRef.current.style.left = `${newX}px`;
+      elRef.current.style.top = `${newY}px`;
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      setDragging(false);
+      if (!hasMoved.current) return;
+      const touch = e.changedTouches[0];
+      const sandbox = document.getElementById('sandbox-area');
+      if (!sandbox) return;
+      const rect = sandbox.getBoundingClientRect();
+      const newX = Math.max(30, Math.min(rect.width - 30, touch.clientX - offsetRef.current.x));
+      const newY = Math.max(30, Math.min(rect.height - 30, touch.clientY - offsetRef.current.y));
+      dispatch({ type: 'REMOVE_ATOM', payload: atom.id });
+      setTimeout(() => dispatch({ type: 'DROP_ATOM', payload: { element: atom.element, x: newX, y: newY } }), 0);
+    };
+
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd);
+    return () => {
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [dragging, atom, dispatch]);
+
   return (
     <div
       ref={elRef}
       onMouseDown={onMouseDown}
+      onTouchStart={onTouchStart}
       onDoubleClick={(e) => { e.stopPropagation(); dispatch({ type: 'REMOVE_ATOM', payload: atom.id }); }}
-      title="Double-click to remove"
+      title="Double-tap or double-click to remove"
       className="absolute flex flex-col items-center justify-center w-13 h-13 rounded-full select-none -translate-x-1/2 -translate-y-1/2"
       style={{
         left: atom.x,
@@ -80,6 +139,7 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
         cursor: dragging ? 'grabbing' : 'grab',
         zIndex: dragging ? 100 : 2,
         transition: dragging ? 'none' : 'box-shadow 0.2s',
+        touchAction: 'none',
       }}
     >
       <span className="font-orbitron font-bold text-white text-[13px] leading-none">

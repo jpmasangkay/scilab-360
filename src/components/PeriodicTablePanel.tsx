@@ -10,7 +10,9 @@ const FILTER_CATEGORIES = [
 
 type FilterCategory = (typeof FILTER_CATEGORIES)[number];
 
-export function PeriodicTablePanel() {
+interface PeriodicTablePanelProps { onToast?: (msg: string) => void; }
+
+export function PeriodicTablePanel({ onToast }: PeriodicTablePanelProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCat, setFilterCat] = useState<FilterCategory>('all');
   const [showFull, setShowFull] = useState(false);
@@ -58,7 +60,7 @@ export function PeriodicTablePanel() {
       {showFiltered ? (
         /* Search / filter results — wrap naturally, no forced scroll */
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {filtered.map(el => <ElementTile key={el.atomicNumber} el={el} />)}
+          {filtered.map(el => <ElementTile key={el.atomicNumber} el={el} onToast={onToast} />)}
           {filtered.length === 0 && (
             <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, color: '#c4b5fd', padding: 8 }}>No elements match.</p>
           )}
@@ -72,7 +74,7 @@ export function PeriodicTablePanel() {
                 Array.from({ length: 18 }, (_, c) => {
                   const el = GRID_ELEMENTS.find(g => g.row === r + 1 && g.col === c + 1);
                   if (!el) return <div key={`${r}-${c}`} style={{ aspectRatio: '1' }} />;
-                  return <ElementTile key={el.atomicNumber} el={el} tiny />;
+                  return <ElementTile key={el.atomicNumber} el={el} tiny onToast={onToast} />;
                 }),
               )}
             </div>
@@ -81,7 +83,7 @@ export function PeriodicTablePanel() {
               <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, fontSize: 7, fontFamily: '"Share Tech Mono", monospace', color: '#fb923c' }}>La-Lu</div>
               {Array.from({ length: 15 }, (_, i) => {
                 const el = GRID_ELEMENTS.find(g => g.row === 9 && g.col === i + 3);
-                return el ? <ElementTile key={el.atomicNumber} el={el} tiny /> : <div key={i} style={{ aspectRatio: '1' }} />;
+                return el ? <ElementTile key={el.atomicNumber} el={el} tiny onToast={onToast} /> : <div key={i} style={{ aspectRatio: '1' }} />;
               })}
               <div style={{ aspectRatio: '1' }} />
             </div>
@@ -90,7 +92,7 @@ export function PeriodicTablePanel() {
               <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, fontSize: 7, fontFamily: '"Share Tech Mono", monospace', color: '#f97316' }}>Ac-Lr</div>
               {Array.from({ length: 15 }, (_, i) => {
                 const el = GRID_ELEMENTS.find(g => g.row === 10 && g.col === i + 3);
-                return el ? <ElementTile key={el.atomicNumber} el={el} tiny /> : <div key={i} style={{ aspectRatio: '1' }} />;
+                return el ? <ElementTile key={el.atomicNumber} el={el} tiny onToast={onToast} /> : <div key={i} style={{ aspectRatio: '1' }} />;
               })}
               <div style={{ aspectRatio: '1' }} />
             </div>
@@ -99,7 +101,7 @@ export function PeriodicTablePanel() {
       ) : (
         /* Common elements — normal wrap, NO scroll bar */
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(64px, 1fr))', gap: 8 }}>
-          {commonEls.map(el => <ElementTile key={el.atomicNumber} el={el} />)}
+          {commonEls.map(el => <ElementTile key={el.atomicNumber} el={el} onToast={onToast} />)}
         </div>
       )}
     </div>

@@ -3,6 +3,7 @@ import { X, ChevronDown } from 'lucide-react';
 import { ELEMENTS, GRID_ELEMENTS } from '../data/elements';
 import { CATEGORY_COLORS } from '../utils/colors';
 import type { ElementData, ElementCategory } from '../types';
+import { useApp } from '../store/context';
 
 // ── Responsive hook ──────────────────────────────────────────────
 function useWindowWidth() {
@@ -94,7 +95,7 @@ function PTile({
 }
 
 // ── Element detail ───────────────────────────────────────────────
-function ElementDetail({ el, isMobile }: { el: ElementData; isMobile?: boolean }) {
+function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile?: boolean; onAddToLab?: () => void; }) {
   const c = CATEGORY_COLORS[el.category];
   const stats: [string, string | number][] = [
     ['Atomic Number',     el.atomicNumber],
@@ -134,6 +135,21 @@ function ElementDetail({ el, isMobile }: { el: ElementData; isMobile?: boolean }
           ))}
         </div>
 
+        {/* Add to Lab button — mobile only */}
+        {isMobile && onAddToLab && (
+          <button
+            onClick={onAddToLab}
+            style={{
+              width: '100%', marginTop: 8, padding: '10px', borderRadius: 8, cursor: 'pointer',
+              fontFamily: '"Share Tech Mono", monospace', fontSize: 12, fontWeight: 700,
+              letterSpacing: '0.1em', background: '#6d28d9', border: '1px solid #a855f7',
+              color: '#fff', boxShadow: '0 0 14px #a855f750',
+            }}
+          >
+            ⚗ ADD TO LAB
+          </button>
+        )}
+
         {/* Valence shell — desktop only */}
         {!isMobile && (
           <div style={{ background: '#130929', border: '1px solid #2d1b5e', borderRadius: 8, padding: '10px 12px' }}>
@@ -156,9 +172,10 @@ function ElementDetail({ el, isMobile }: { el: ElementData; isMobile?: boolean }
 }
 
 // ── Main panel ───────────────────────────────────────────────────
-interface ElementsPanelProps { onClose: () => void; }
+interface ElementsPanelProps { onClose: () => void; onToast?: (msg: string) => void; }
 
-export function ElementsPanel({ onClose }: ElementsPanelProps) {
+export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
+  const { state, dispatch } = useApp();
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<ElementData>(ELEMENTS[0]);
   const [filterCat, setFilterCat] = useState<ElementCategory | 'all'>('all');
@@ -188,6 +205,21 @@ export function ElementsPanel({ onClose }: ElementsPanelProps) {
   function handleSelect(el: ElementData) {
     setSelected(el);
     if (isMobile) setDetailOpen(true);
+  }
+
+  function addToLab(el: ElementData) {
+    const sandbox = document.getElementById('sandbox-area');
+    const rect = sandbox?.getBoundingClientRect();
+    const W = rect?.width ?? 320;
+    const H = rect?.height ?? 300;
+    const count = state.placedAtoms.length;
+    const cols = Math.max(1, Math.floor(W / 90));
+    const col = count % cols;
+    const row = Math.floor(count / cols);
+    const x = Math.min(60 + col * 90 + (row % 2) * 20, W - 50);
+    const y = Math.min(60 + row * 90, H - 50);
+    dispatch({ type: 'DROP_ATOM', payload: { element: el, x, y } });
+    onToast?.(`${el.symbol} — ${el.name} added to lab ⚗`);
   }
 
   const COLS = 'repeat(18, minmax(0, 1fr))';
@@ -384,7 +416,7 @@ export function ElementsPanel({ onClose }: ElementsPanelProps) {
             {/* Scrollable detail */}
             <div style={{ overflowY: 'auto', padding: '0 14px 24px', flex: 1 }}>
               {selected
-                ? <ElementDetail el={selected} isMobile />
+                ? <ElementDetail el={selected} isMobile onAddToLab={() => addToLab(selected)} />
                 : <p style={{ color: '#4c1d95', fontSize: 12, textAlign: 'center', padding: 16 }}>Tap any element</p>
               }
             </div>

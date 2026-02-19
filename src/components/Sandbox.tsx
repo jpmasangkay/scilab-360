@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { DragEvent } from 'react';
 import { useApp } from '../store/context';
 import { ELEMENTS } from '../data/elements';
@@ -16,10 +16,19 @@ const STARS = Array.from({ length: 60 }, (_, i) => ({
   color: ['#c084fc', '#e2e8f0', '#a78bfa', '#f0abfc'][i % 4],
 }));
 
-export function Sandbox() {
+function useIsTouchDevice() {
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => { setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0); }, []);
+  return isTouch;
+}
+
+interface SandboxProps { isMobile?: boolean; }
+
+export function Sandbox({ isMobile }: SandboxProps) {
   const { state, dispatch } = useApp();
   const [dragOver, setDragOver] = useState(false);
   const sandboxRef = useRef<HTMLDivElement>(null);
+  const isTouch = useIsTouchDevice();
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -55,8 +64,9 @@ export function Sandbox() {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="relative flex-1 rounded-xl overflow-hidden transition-all duration-200 min-h-[400px]"
+      className="relative flex-1 rounded-xl overflow-hidden transition-all duration-200"
       style={{
+        minHeight: 260,
         background: dragOver
           ? 'radial-gradient(ellipse at center, #2d1263 0%, #0d0120 70%)'
           : 'radial-gradient(ellipse at 30% 40%, #1a0533 0%, #0d0120 60%, #07011a 100%)',
@@ -102,10 +112,26 @@ export function Sandbox() {
 
       {/* Empty state */}
       {state.placedAtoms.length === 0 && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <div className="text-[44px] mb-3 opacity-50" style={{ filter: 'drop-shadow(0 0 12px #a855f7)' }}>⚛</div>
-          <p className="font-orbitron font-bold text-sm tracking-[4px] text-[#4c1d95]">DRAG ATOMS HERE</p>
-          <p className="font-share-tech text-[11px] mt-1 text-[#2d1b5e]">Double-click atoms to remove</p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ gap: 8 }}>
+          <div className="text-[44px] opacity-50" style={{ filter: 'drop-shadow(0 0 12px #a855f7)' }}>⚛</div>
+          {isMobile ? (
+            <>
+              <p className="font-orbitron font-bold text-sm tracking-[3px] text-[#4c1d95]">LAB IS EMPTY</p>
+              <div style={{ background: '#130929', border: '1px solid #3b1d6e', borderRadius: 10, padding: '10px 18px', textAlign: 'center', maxWidth: 240 }}>
+                <p className="font-share-tech text-[12px] text-[#a78bfa]">
+                  Go to the <span style={{ color: '#c084fc', fontWeight: 700 }}>GUIDE</span> tab
+                </p>
+                <p className="font-share-tech text-[11px] text-[#6b4dcc] mt-1">
+                  and tap any element to add it
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="font-orbitron font-bold text-sm tracking-[4px] text-[#4c1d95]">DRAG ATOMS HERE</p>
+              <p className="font-share-tech text-[11px] mt-1 text-[#2d1b5e]">Double-click atoms to remove</p>
+            </>
+          )}
         </div>
       )}
 
