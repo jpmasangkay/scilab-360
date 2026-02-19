@@ -39,6 +39,8 @@ export interface Bond {
 
 export type GameMode = 'free-play' | 'quiz';
 
+export type Difficulty = 'easy' | 'medium' | 'hard';
+
 export interface QuizChallenge {
   level: number;
   title: string;
@@ -46,6 +48,7 @@ export interface QuizChallenge {
   targetFormula: string;
   requiredAtoms: Record<string, number>;
   hint: string;
+  difficulty: Difficulty;
 }
 
 export interface AppState {
