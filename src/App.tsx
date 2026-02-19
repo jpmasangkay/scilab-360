@@ -95,7 +95,7 @@ function AppLayout() {
               </div>
               {tabletPanel !== 'none' && (
                 <div style={{ width: 320, flexShrink: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                  {tabletPanel === 'guide' && <LeftPanel fullHeight isMobile isTablet onToast={showToast} />}
+                  {tabletPanel === 'guide' && <LeftPanel fullHeight isTablet onToast={showToast} />}
                   {tabletPanel === 'molecules' && <RightPanel fullHeight />}
                 </div>
               )}

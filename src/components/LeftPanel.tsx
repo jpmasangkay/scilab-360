@@ -62,7 +62,7 @@ export function LeftPanel({ fullHeight, isMobile, isTablet, onToast }: LeftPanel
       </div>
 
       {/* Mobile hint */}
-      {isMobile && (
+      {(isMobile || isTablet) && (
         <div style={{ ...CARD, background: '#0d0a1f', border: '1px solid #3b1d6e', borderLeft: '4px solid #6d28d9', flexShrink: 0, padding: '10px 14px' }}>
           <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 11, color: '#a78bfa', lineHeight: 1.6 }}>
             💡 <strong style={{ color: '#c4b5fd' }}>Tap any element</strong> below to add it to your lab instantly. Long-press for element details.
