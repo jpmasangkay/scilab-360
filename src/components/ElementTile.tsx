@@ -101,7 +101,7 @@ const isTouchDevice =
   typeof window !== 'undefined' &&
   ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
-export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: ElementTileProps) {
+export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTileProps) {
   const { state, dispatch } = useApp();
   const [showPopup, setShowPopup] = useState(false);
   const colors = CATEGORY_COLORS[el.category];
