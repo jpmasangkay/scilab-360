@@ -4,7 +4,7 @@ import { QUIZ_LEVELS } from '../data/quizLevels';
 
 export function QuizPanel() {
   const { state, dispatch } = useApp();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [submitResult, setSubmitResult] = useState<{ ok: boolean; msg: string } | null>(null);
 
   if (state.mode !== 'quiz') return null;
@@ -13,7 +13,7 @@ export function QuizPanel() {
 
   if (!challenge) {
     return (
-      <div style={{ padding: '16px', borderRadius: 12, textAlign: 'center', background: '#1a0533', border: '1px solid #6d28d9', boxShadow: '0 0 20px #a855f730', flexShrink: 0 }}>
+      <div style={{ padding: '16px', borderRadius: 12, textAlign: 'center', background: '#1a0533', border: '1px solid #6d28d9', boxShadow: '0 0 20px #a855f730' }}>
         <p style={{ fontFamily: 'Orbitron, monospace', fontSize: 14, fontWeight: 700, color: '#f3e8ff' }}>🏆 ALL CHALLENGES COMPLETE!</p>
         <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, color: '#c4b5fd', marginTop: 6 }}>Score: {state.score}</p>
         <button onClick={() => dispatch({ type: 'SET_LEVEL', payload: 1 })}
@@ -36,18 +36,21 @@ export function QuizPanel() {
   const handleSubmit = () => {
     dispatch({ type: 'INC_ATTEMPTS' });
     const formula = state.formula;
+
     if (formula === challenge.targetFormula) {
       const pts = Math.max(50, 100 + (3 - Math.min(3, state.attempts)) * 25);
       setSubmitResult({ ok: true, msg: `✅ Correct! ${challenge.description} — +${pts} pts` });
       dispatch({ type: 'ADD_SCORE', payload: pts });
       dispatch({ type: 'COMPLETE_CHALLENGE', payload: challenge.level });
+      // Auto-advance to next level after 1.5s
       setTimeout(() => {
         setSubmitResult(null);
         const nextIdx = QUIZ_LEVELS.findIndex(q => q.level === challenge.level + 1);
         dispatch({ type: 'SET_CHALLENGE', payload: nextIdx >= 0 ? QUIZ_LEVELS[nextIdx] : null });
-      }, 2200);
+      }, 1500);
       return;
     }
+
     if (state.placedAtoms.length === 0) {
       setSubmitResult({ ok: false, msg: '❌ No atoms placed! Drag atoms from the periodic table first.' });
     } else {
@@ -60,15 +63,14 @@ export function QuizPanel() {
       if (extraAtoms.length) diag += ` Remove: ${[...new Set(extraAtoms.map(a => a.element.symbol))].join(', ')}.`;
       setSubmitResult({ ok: false, msg: diag });
     }
-    setTimeout(() => setSubmitResult(null), 4000);
   };
 
   return (
-    <div style={{ borderRadius: 12, overflow: 'hidden', background: '#0d0120', border: '1px solid #2d1b5e', flexShrink: 0 }}>
+    <div style={{ borderRadius: 12, overflow: 'hidden', background: '#0d0120', border: '1px solid #2d1b5e' }}>
       {/* Header */}
       <div
         onClick={() => setCollapsed(v => !v)}
-        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', cursor: 'pointer', background: '#130929', borderBottom: '1px solid #2d1b5e' }}
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', cursor: 'pointer', background: '#130929', borderBottom: collapsed ? 'none' : '1px solid #2d1b5e' }}
       >
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <span style={{ fontSize: 11, fontFamily: '"Share Tech Mono", monospace', fontWeight: 700, padding: '2px 8px', borderRadius: 6, background: '#500724', color: '#f9a8d4', border: '1px solid #9d174d' }}>

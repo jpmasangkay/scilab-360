@@ -9,7 +9,7 @@ export function BondLines({ atoms, bonds }: BondLinesProps) {
   const atomMap = new Map(atoms.map(a => [a.id, a]));
 
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none z-[1]">
+    <svg className="absolute inset-0 w-full h-full pointer-events-none z-1">
       <defs>
         <filter id="glow-ionic">
           <feGaussianBlur stdDeviation="3" result="coloredBlur" />

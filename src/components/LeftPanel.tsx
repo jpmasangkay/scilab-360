@@ -81,8 +81,10 @@ export function LeftPanel() {
         </div>
       </div>
 
-      {/* ── Quiz card ── */}
-      <QuizPanel />
+      {/* ── Quiz card (scrollable, max height so it never crushes the periodic table) ── */}
+      <div style={{ maxHeight: 320, overflowY: 'auto', overflowX: 'hidden', borderRadius: 12, flexShrink: 0 }}>
+        <QuizPanel />
+      </div>
 
       {/* ── Feedback card ── */}
       <div style={{

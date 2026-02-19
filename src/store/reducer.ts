@@ -46,25 +46,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       const formula = computeFormula(newAtoms);
       const fb = generateFeedback(newAtoms, newBonds, formula);
 
-      if (state.mode === 'quiz' && state.currentChallenge && formula === state.currentChallenge.targetFormula) {
-        const pts = 100 + (3 - Math.min(3, state.attempts)) * 25;
-        const newCompleted = [...state.completedChallenges, state.currentChallenge.level];
-        const nextIdx = QUIZ_LEVELS.findIndex(q => q.level === state.currentChallenge!.level + 1);
-        return {
-          ...state,
-          placedAtoms: newAtoms,
-          bonds: newBonds,
-          formula,
-          feedback: `🎉 Correct! ${state.currentChallenge.description} solved! +${pts} pts`,
-          feedbackType: 'success',
-          score: state.score + pts,
-          completedChallenges: newCompleted,
-          level: state.level + 1,
-          currentChallenge: nextIdx >= 0 ? QUIZ_LEVELS[nextIdx] : null,
-          atomCount: state.atomCount + 1,
-        };
-      }
-
+      // No auto-check in quiz mode — user must click CHECK ANSWER
       return { ...state, placedAtoms: newAtoms, bonds: newBonds, formula, feedback: fb.msg, feedbackType: fb.type, atomCount: state.atomCount + 1 };
     }
 
@@ -79,15 +61,15 @@ export function appReducer(state: AppState, action: AppAction): AppState {
     case 'CLEAR_SANDBOX':
       return { ...state, placedAtoms: [], bonds: [], formula: '', feedback: 'Sandbox cleared. Start building!', feedbackType: 'info', attempts: 0 };
 
-    case 'SET_DRAG':         return { ...state, draggedElement: action.payload };
-    case 'SELECT_ELEMENT':   return { ...state, selectedElement: action.payload };
-    case 'SET_FEEDBACK':     return { ...state, feedback: action.payload.msg, feedbackType: action.payload.type };
-    case 'SET_LEVEL':        return { ...state, level: action.payload, currentChallenge: QUIZ_LEVELS.find(q => q.level === action.payload) || null };
-    case 'SET_CHALLENGE':    return { ...state, currentChallenge: action.payload, placedAtoms: [], bonds: [], formula: '', attempts: 0 };
+    case 'SET_DRAG':          return { ...state, draggedElement: action.payload };
+    case 'SELECT_ELEMENT':    return { ...state, selectedElement: action.payload };
+    case 'SET_FEEDBACK':      return { ...state, feedback: action.payload.msg, feedbackType: action.payload.type };
+    case 'SET_LEVEL':         return { ...state, level: action.payload, currentChallenge: QUIZ_LEVELS.find(q => q.level === action.payload) || null };
+    case 'SET_CHALLENGE':     return { ...state, currentChallenge: action.payload, placedAtoms: [], bonds: [], formula: '', attempts: 0 };
     case 'COMPLETE_CHALLENGE': return { ...state, completedChallenges: [...state.completedChallenges, action.payload] };
-    case 'ADD_SCORE':        return { ...state, score: state.score + action.payload };
-    case 'TOGGLE_TEACHER':   return { ...state, showTeacherDash: !state.showTeacherDash };
-    case 'INC_ATTEMPTS':     return { ...state, attempts: state.attempts + 1 };
-    default:                 return state;
+    case 'ADD_SCORE':         return { ...state, score: state.score + action.payload };
+    case 'TOGGLE_TEACHER':    return { ...state, showTeacherDash: !state.showTeacherDash };
+    case 'INC_ATTEMPTS':      return { ...state, attempts: state.attempts + 1 };
+    default:                  return state;
   }
 }

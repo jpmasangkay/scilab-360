@@ -59,7 +59,7 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
       ref={elRef}
       onMouseDown={onMouseDown}
       onDoubleClick={() => dispatch({ type: 'REMOVE_ATOM', payload: atom.id })}
-      className="absolute flex flex-col items-center justify-center w-[52px] h-[52px] rounded-full select-none -translate-x-1/2 -translate-y-1/2"
+      className="absolute flex flex-col items-center justify-center w-13 h-13 rounded-full select-none -translate-x-1/2 -translate-y-1/2"
       style={{
         left: atom.x,
         top: atom.y,
