@@ -4,31 +4,6 @@ import type { ElementData } from '../types';
 import { CATEGORY_COLORS } from '../utils/colors';
 import { useApp } from '../store/context';
 
-// ── Touch drag ghost ─────────────────────────────────────────────
-let ghostEl: HTMLDivElement | null = null;
-function createGhost(symbol: string, color: string, x: number, y: number) {
-  removeGhost();
-  ghostEl = document.createElement('div');
-  ghostEl.textContent = symbol;
-  ghostEl.style.cssText = `
-    position:fixed;pointer-events:none;z-index:99999;
-    width:52px;height:52px;border-radius:50%;
-    background:${color};border:2px solid #a855f7;
-    display:flex;align-items:center;justify-content:center;
-    font-family:Orbitron,monospace;font-weight:700;font-size:16px;
-    color:#fff;opacity:0.9;box-shadow:0 0 20px #a855f7;
-    transform:translate(-50%,-50%);
-    left:${x}px;top:${y}px;
-  `;
-  document.body.appendChild(ghostEl);
-}
-function moveGhost(x: number, y: number) {
-  if (ghostEl) { ghostEl.style.left = `${x}px`; ghostEl.style.top = `${y}px`; }
-}
-function removeGhost() {
-  if (ghostEl) { ghostEl.remove(); ghostEl = null; }
-}
-
 // ── Smart placement ───────────────────────────────────────────────
 function getSmartPosition(existingCount: number): { x: number; y: number } {
   const sandbox = document.getElementById('sandbox-area');
@@ -195,9 +170,9 @@ export function ElementTile({ el, tiny = false, onToast }: ElementTileProps) {
 
       {tiny ? (
         <div
-          draggable
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
+          draggable={!isMobile}
+          onDragStart={!isMobile ? handleDragStart : undefined}
+          onDragEnd={!isMobile ? handleDragEnd : undefined}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
           title={`${el.name} (${el.atomicNumber})`}
@@ -210,9 +185,9 @@ export function ElementTile({ el, tiny = false, onToast }: ElementTileProps) {
         </div>
       ) : (
         <div
-          draggable
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
+          draggable={!isMobile}
+          onDragStart={!isMobile ? handleDragStart : undefined}
+          onDragEnd={!isMobile ? handleDragEnd : undefined}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
           title={`${el.name} — tap to add / click for details`}
