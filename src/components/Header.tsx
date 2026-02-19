@@ -57,7 +57,7 @@ export function Header() {
             boxShadow: state.showTeacherDash ? '0 0 12px #a855f760' : 'none',
           }}
         >
-          <ClipboardList size={14} /> TEACHER
+          <ClipboardList size={14} /> MY PROGRESS
         </button>
       </div>
     </div>

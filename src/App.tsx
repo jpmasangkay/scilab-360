@@ -3,7 +3,7 @@ import { Header } from './components/Header';
 import { LeftPanel } from './components/LeftPanel';
 import { RightPanel } from './components/RightPanel';
 import { Sandbox } from './components/Sandbox';
-import { TeacherDashboard } from './components/TeacherDashboard';
+import { StudentDashboard } from './components/StudentDashboard';
 
 export default function App() {
   return (
@@ -36,7 +36,7 @@ export default function App() {
           </span>
         </div>
 
-        <TeacherDashboard />
+        <StudentDashboard />
       </div>
     </AppProvider>
   );
