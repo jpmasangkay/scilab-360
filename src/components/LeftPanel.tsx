@@ -8,10 +8,11 @@ const CARD: React.CSSProperties = { padding: '14px 16px', borderRadius: 12 };
 interface LeftPanelProps {
   fullHeight?: boolean;
   isMobile?: boolean;
+  isTablet?: boolean;
   onToast?: (msg: string) => void;
 }
 
-export function LeftPanel({ fullHeight, isMobile, onToast }: LeftPanelProps) {
+export function LeftPanel({ fullHeight, isMobile, isTablet, onToast }: LeftPanelProps) {
   const { state, dispatch } = useApp();
 
   const feedbackAccent =
@@ -71,9 +72,9 @@ export function LeftPanel({ fullHeight, isMobile, onToast }: LeftPanelProps) {
 
       {/* Periodic table */}
       <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', background: '#0d0120', border: '1px solid #2d1b5e', borderRadius: 12, maxWidth: '100%' }}>
-        <div style={{ padding: '14px 16px 80px 16px' }}>
+        <div style={{ padding: '14px 16px 120px 16px' }}>
           <p style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', color: '#d8b4fe', marginBottom: 12 }}>PERIODIC TABLE</p>
-          <PeriodicTablePanel onToast={onToast} isMobile={isMobile} />
+          <PeriodicTablePanel onToast={onToast} isMobile={isMobile} isTablet={isTablet} />
         </div>
       </div>
     </div>

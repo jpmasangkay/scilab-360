@@ -68,9 +68,35 @@ interface ElementTileProps {
   tiny?: boolean;
   onToast?: (msg: string) => void;
   isMobile?: boolean;
+  isTablet?: boolean;
 }
 
-export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTileProps) {
+// ── Touch drag ghost (tablet only) ───────────────────────────────
+let ghostEl: HTMLDivElement | null = null;
+function createGhost(symbol: string, color: string, x: number, y: number) {
+  removeGhost();
+  ghostEl = document.createElement('div');
+  ghostEl.textContent = symbol;
+  ghostEl.style.cssText = `
+    position:fixed;pointer-events:none;z-index:99999;
+    width:52px;height:52px;border-radius:50%;
+    background:${color};border:2px solid #a855f7;
+    display:flex;align-items:center;justify-content:center;
+    font-family:Orbitron,monospace;font-weight:700;font-size:16px;
+    color:#fff;opacity:0.9;box-shadow:0 0 20px #a855f7;
+    transform:translate(-50%,-50%);
+    left:${x}px;top:${y}px;
+  `;
+  document.body.appendChild(ghostEl);
+}
+function moveGhost(x: number, y: number) {
+  if (ghostEl) { ghostEl.style.left = `${x}px`; ghostEl.style.top = `${y}px`; }
+}
+function removeGhost() {
+  if (ghostEl) { ghostEl.remove(); ghostEl = null; }
+}
+
+export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: ElementTileProps) {
   const { state, dispatch } = useApp();
   const [showPopup, setShowPopup] = useState(false);
   const colors = CATEGORY_COLORS[el.category];
@@ -105,54 +131,109 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
     setShowPopup(true);
   };
 
-  // ── Touch: tap = add to lab, long-press = details, drag = place ──
-  // On mobile: NO drag ghost, touchAction='auto' so native scroll works freely.
-  // On desktop/tablet with touch: full drag support.
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+  // ── Mobile: tap=add, long-press=details, NO drag, scroll free ───
+  const handleMobileTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchHandled.current = true;
-    touchDragging.current = false;
-
     const touch = e.touches[0];
     const startX = touch.clientX;
     const startY = touch.clientY;
 
     longPressTimer.current = setTimeout(() => {
       longPressTimer.current = null;
-      if (!touchDragging.current) {
-        dispatch({ type: 'SELECT_ELEMENT', payload: el });
-        setShowPopup(true);
-      }
+      dispatch({ type: 'SELECT_ELEMENT', payload: el });
+      setShowPopup(true);
     }, 600);
 
     const onMove = (ev: globalThis.TouchEvent) => {
       const t = ev.touches[0];
-      const dist = Math.hypot(t.clientX - startX, t.clientY - startY);
-
-      // If user scrolls, cancel the long-press timer and let browser scroll
-      if (dist > 8 && longPressTimer.current) {
+      if (Math.hypot(t.clientX - startX, t.clientY - startY) > 8 && longPressTimer.current) {
         clearTimeout(longPressTimer.current);
         longPressTimer.current = null;
         window.removeEventListener('touchmove', onMove);
         window.removeEventListener('touchend', onEnd);
-        return;
       }
     };
-
     const onEnd = () => {
       window.removeEventListener('touchmove', onMove);
       window.removeEventListener('touchend', onEnd);
       if (longPressTimer.current) {
         clearTimeout(longPressTimer.current);
         longPressTimer.current = null;
+        addToLab();
+      }
+    };
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('touchend', onEnd);
+  };
+
+  // ── Tablet: tap=add, long-press(500ms)=drag, scroll also works ──
+  // Scroll is free until long-press threshold; after that we take over.
+  const handleTabletTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchHandled.current = true;
+    touchDragging.current = false;
+    const touch = e.touches[0];
+    const startX = touch.clientX;
+    const startY = touch.clientY;
+
+    longPressTimer.current = setTimeout(() => {
+      longPressTimer.current = null;
+      // Long-press → start drag
+      touchDragging.current = true;
+      createGhost(el.symbol, colors.bg, startX, startY);
+      dispatch({ type: 'SET_DRAG', payload: el });
+    }, 500);
+
+    const onMove = (ev: globalThis.TouchEvent) => {
+      const t = ev.touches[0];
+      const dist = Math.hypot(t.clientX - startX, t.clientY - startY);
+
+      if (!touchDragging.current) {
+        // If user scrolls before long-press fires, cancel it
+        if (dist > 8 && longPressTimer.current) {
+          clearTimeout(longPressTimer.current);
+          longPressTimer.current = null;
+          window.removeEventListener('touchmove', onMove);
+          window.removeEventListener('touchend', onEnd);
+        }
+        return;
+      }
+      // Actively dragging — follow finger
+      ev.preventDefault();
+      moveGhost(t.clientX, t.clientY);
+    };
+
+    const onEnd = (ev: globalThis.TouchEvent) => {
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onEnd);
+      if (longPressTimer.current) {
+        clearTimeout(longPressTimer.current);
+        longPressTimer.current = null;
+      }
+      if (touchDragging.current) {
+        removeGhost();
+        dispatch({ type: 'SET_DRAG', payload: null });
+        const t = ev.changedTouches[0];
+        const sandbox = document.getElementById('sandbox-area');
+        if (sandbox) {
+          const rect = sandbox.getBoundingClientRect();
+          if (t.clientX >= rect.left && t.clientX <= rect.right && t.clientY >= rect.top && t.clientY <= rect.bottom) {
+            dispatch({ type: 'DROP_ATOM', payload: { element: el, x: t.clientX - rect.left, y: t.clientY - rect.top } });
+            onToast?.(`${el.symbol} — ${el.name} added ⚗`);
+          }
+        }
+        touchDragging.current = false;
+      } else {
         // Short tap → add to lab
         addToLab();
       }
     };
 
-    // passive:true = browser can scroll freely, no ev.preventDefault() blocking
-    window.addEventListener('touchmove', onMove, { passive: true });
+    // Start passive — only becomes non-passive after drag threshold via ev.preventDefault inside onMove
+    window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
   };
+
+  const handleTouchStart = isMobile ? handleMobileTouchStart : isTablet ? handleTabletTouchStart : undefined;
 
   const sharedStyle: React.CSSProperties = {
     userSelect: 'none',
@@ -160,7 +241,7 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
     background: colors.bg,
     border: `1px solid ${colors.border}`,
     color: colors.text,
-    touchAction: 'auto', // allow native scroll on all touch devices
+    touchAction: touchDragging.current ? 'none' : 'auto',
     cursor: 'pointer',
     position: 'relative',
   };
@@ -171,9 +252,9 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
 
       {tiny ? (
         <div
-          draggable={!isMobile}
-          onDragStart={!isMobile ? handleDragStart : undefined}
-          onDragEnd={!isMobile ? handleDragEnd : undefined}
+          draggable={!isMobile && !isTablet}
+          onDragStart={(!isMobile && !isTablet) ? handleDragStart : undefined}
+          onDragEnd={(!isMobile && !isTablet) ? handleDragEnd : undefined}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
           title={`${el.name} (${el.atomicNumber})`}
@@ -186,9 +267,9 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
         </div>
       ) : (
         <div
-          draggable={!isMobile}
-          onDragStart={!isMobile ? handleDragStart : undefined}
-          onDragEnd={!isMobile ? handleDragEnd : undefined}
+          draggable={!isMobile && !isTablet}
+          onDragStart={(!isMobile && !isTablet) ? handleDragStart : undefined}
+          onDragEnd={(!isMobile && !isTablet) ? handleDragEnd : undefined}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
           title={`${el.name} — tap to add / click for details`}
