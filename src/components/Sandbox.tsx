@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import type { DragEvent } from 'react';
 import { useApp } from '../store/context';
 import { ELEMENTS } from '../data/elements';
@@ -16,19 +16,12 @@ const STARS = Array.from({ length: 60 }, (_, i) => ({
   color: ['#c084fc', '#e2e8f0', '#a78bfa', '#f0abfc'][i % 4],
 }));
 
-function useIsTouchDevice() {
-  const [isTouch, setIsTouch] = useState(false);
-  useEffect(() => { setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0); }, []);
-  return isTouch;
-}
-
 interface SandboxProps { isMobile?: boolean; }
 
 export function Sandbox({ isMobile }: SandboxProps) {
   const { state, dispatch } = useApp();
   const [dragOver, setDragOver] = useState(false);
   const sandboxRef = useRef<HTMLDivElement>(null);
-  const isTouch = useIsTouchDevice();
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
