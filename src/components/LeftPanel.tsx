@@ -61,17 +61,20 @@ export function LeftPanel({ fullHeight, isMobile, isTablet, onToast }: LeftPanel
         <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, color: '#f3e8ff', lineHeight: 1.6 }}>{state.feedback}</p>
       </div>
 
-      {/* Mobile hint */}
+      {/* Touch hint */}
       {(isMobile || isTablet) && (
         <div style={{ ...CARD, background: '#0d0a1f', border: '1px solid #3b1d6e', borderLeft: '4px solid #6d28d9', flexShrink: 0, padding: '10px 14px' }}>
           <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 11, color: '#a78bfa', lineHeight: 1.6 }}>
-            💡 <strong style={{ color: '#c4b5fd' }}>Tap any element</strong> below to add it to your lab instantly. Long-press for element details.
+            {isTablet
+              ? <>💡 <strong style={{ color: '#c4b5fd' }}>Tap</strong> any element to add it · <strong style={{ color: '#c4b5fd' }}>Drag</strong> it into the sandbox to place precisely</>
+              : <>💡 <strong style={{ color: '#c4b5fd' }}>Tap any element</strong> below to add it to your lab instantly. Long-press for element details.</>
+            }
           </p>
         </div>
       )}
 
-      {/* Periodic table */}
-      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', background: '#0d0120', border: '1px solid #2d1b5e', borderRadius: 12, maxWidth: '100%' }}>
+      {/* Periodic table — WebkitOverflowScrolling for smooth iOS touch scroll */}
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', background: '#0d0120', border: '1px solid #2d1b5e', borderRadius: 12, maxWidth: '100%', WebkitOverflowScrolling: 'touch' as any }}>
         <div style={{ padding: '14px 16px 160px 16px' }}>
           <p style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', color: '#d8b4fe', marginBottom: 12 }}>PERIODIC TABLE</p>
           <PeriodicTablePanel onToast={onToast} isMobile={isMobile} isTablet={isTablet} />

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { X, ChevronDown } from 'lucide-react';
 import { ELEMENTS, GRID_ELEMENTS } from '../data/elements';
 import { CATEGORY_COLORS } from '../utils/colors';
@@ -33,18 +33,63 @@ const LEGEND_CATS: { value: ElementCategory; label: string }[] = [
 
 // ── Inline tile ──────────────────────────────────────────────────
 function PTile({
-  el, selected, dimmed, onSelect, compact,
+  el, selected, dimmed, onSelect, onAddToLab, compact,
 }: {
   el: ElementData;
   selected: boolean;
   dimmed: boolean;
   onSelect: (el: ElementData) => void;
+  onAddToLab?: (el: ElementData) => void;
   compact?: boolean;
 }) {
   const c = CATEGORY_COLORS[el.category];
+  const touchHandled = useRef(false);
+
+  // Tablet tap: add to lab immediately; long-press: show info
+  const handleTouchStart = onAddToLab ? (e: React.TouchEvent<HTMLDivElement>) => {
+    if (dimmed) return;
+    touchHandled.current = true;
+    const touch = e.touches[0];
+    const startX = touch.clientX;
+    const startY = touch.clientY;
+    let moved = false;
+
+    const timer = setTimeout(() => {
+      if (!moved) onSelect(el);
+    }, 600);
+
+    const onMove = (ev: globalThis.TouchEvent) => {
+      const t = ev.touches[0];
+      if (Math.hypot(t.clientX - startX, t.clientY - startY) > 8) {
+        moved = true;
+        clearTimeout(timer);
+        window.removeEventListener('touchmove', onMove);
+        window.removeEventListener('touchend', onEnd);
+      }
+    };
+    const onEnd = () => {
+      clearTimeout(timer);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onEnd);
+      if (!moved) {
+        onSelect(el);
+        onAddToLab(el);
+      }
+    };
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('touchend', onEnd);
+  } : undefined;
+
+  // Suppress click when touch already handled it
+  const handleClick = () => {
+    if (touchHandled.current) { touchHandled.current = false; return; }
+    if (!dimmed) onSelect(el);
+  };
+
   return (
     <div
-      onClick={() => onSelect(el)}
+      onClick={handleClick}
+      onTouchStart={handleTouchStart}
       title={`${el.name} (${el.atomicNumber})`}
       style={{
         aspectRatio: '1',
@@ -52,6 +97,7 @@ function PTile({
         cursor: dimmed ? 'not-allowed' : 'pointer',
         userSelect: 'none',
         transition: 'all 0.12s',
+        touchAction: 'auto',
         background: selected ? c.border : c.bg,
         border: `1px solid ${selected ? c.border : c.border + '80'}`,
         color: selected ? '#fff' : c.text,
@@ -135,8 +181,8 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
           ))}
         </div>
 
-        {/* Add to Lab button — mobile only */}
-        {isMobile && onAddToLab && (
+        {/* Add to Lab button — shown on mobile and tablet (whenever onAddToLab is provided) */}
+        {onAddToLab && (
           <button
             onClick={onAddToLab}
             style={{
@@ -233,6 +279,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
           selected={selected?.atomicNumber === el.atomicNumber}
           dimmed={!matchSet.has(el.atomicNumber)}
           onSelect={handleSelect}
+          onAddToLab={isTablet ? addToLab : undefined}
           compact={tileCompact}
         />
       );
@@ -334,7 +381,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
                 {Array.from({ length: 15 }, (_, i) => {
                   const el = GRID_ELEMENTS.find(g => g.row === 9 && g.col === i + 3);
                   return el
-                    ? <PTile key={el.atomicNumber} el={el} selected={selected?.atomicNumber === el.atomicNumber} dimmed={!matchSet.has(el.atomicNumber)} onSelect={handleSelect} compact={tileCompact} />
+                    ? <PTile key={el.atomicNumber} el={el} selected={selected?.atomicNumber === el.atomicNumber} dimmed={!matchSet.has(el.atomicNumber)} onSelect={handleSelect} onAddToLab={isTablet ? addToLab : undefined} compact={tileCompact} />
                     : <div key={i} style={{ aspectRatio: '1' }} />;
                 })}
                 <div style={{ aspectRatio: '1' }} />
@@ -348,7 +395,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
                 {Array.from({ length: 15 }, (_, i) => {
                   const el = GRID_ELEMENTS.find(g => g.row === 10 && g.col === i + 3);
                   return el
-                    ? <PTile key={el.atomicNumber} el={el} selected={selected?.atomicNumber === el.atomicNumber} dimmed={!matchSet.has(el.atomicNumber)} onSelect={handleSelect} compact={tileCompact} />
+                    ? <PTile key={el.atomicNumber} el={el} selected={selected?.atomicNumber === el.atomicNumber} dimmed={!matchSet.has(el.atomicNumber)} onSelect={handleSelect} onAddToLab={isTablet ? addToLab : undefined} compact={tileCompact} />
                     : <div key={i} style={{ aspectRatio: '1' }} />;
                 })}
                 <div style={{ aspectRatio: '1' }} />
@@ -375,8 +422,8 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
         {!isMobile && (
           <div style={{ width: isTablet ? 220 : 260, flexShrink: 0, borderLeft: '1px solid #2d1b5e', background: '#0a0118', padding: 16, overflowY: 'auto' }}>
             {selected
-              ? <ElementDetail el={selected} />
-              : <p style={{ color: '#2d1b5e', fontSize: 12, textAlign: 'center', marginTop: 40 }}>Click any element</p>
+              ? <ElementDetail el={selected} onAddToLab={isTablet ? () => addToLab(selected) : undefined} />
+              : <p style={{ color: '#2d1b5e', fontSize: 12, textAlign: 'center', marginTop: 40 }}>{isTablet ? 'Tap any element' : 'Click any element'}</p>
             }
           </div>
         )}

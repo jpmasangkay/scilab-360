@@ -96,17 +96,23 @@ function removeGhost() {
   if (ghostEl) { ghostEl.remove(); ghostEl = null; }
 }
 
+// Detect real touch-capable devices regardless of screen width
+const isTouchDevice =
+  typeof window !== 'undefined' &&
+  ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
 export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: ElementTileProps) {
   const { state, dispatch } = useApp();
   const [showPopup, setShowPopup] = useState(false);
   const colors = CATEGORY_COLORS[el.category];
+  // Any non-mobile touch device (covers iPads beyond the isTablet width breakpoint too)
+  const treatAsTablet = !isMobile && isTouchDevice;
 
-  // Track touch state to prevent click from firing after touch
+  // Prevent synthetic click from firing after a touch event
   const touchHandled = useRef(false);
   const touchDragging = useRef(false);
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ── Add atom to lab ───────────────────────────────────────────
+  // ── Add atom to lab (smart position) ─────────────────────────
   const addToLab = () => {
     const pos = getSmartPosition(state.placedAtoms.length);
     dispatch({ type: 'DROP_ATOM', payload: { element: el, x: pos.x, y: pos.y } });
@@ -122,70 +128,50 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
 
   // ── Desktop: click → popup ────────────────────────────────────
   const handleClick = () => {
-    // Ignore click if it was triggered by a touch event
-    if (touchHandled.current) {
-      touchHandled.current = false;
-      return;
-    }
+    if (touchHandled.current) { touchHandled.current = false; return; }
     dispatch({ type: 'SELECT_ELEMENT', payload: el });
     setShowPopup(true);
   };
 
-  // ── Mobile: tap=add, long-press=details, NO drag, scroll free ───
+  // ── Mobile: tap=add, long-press=details, NO drag, scroll free ──
   const handleMobileTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchHandled.current = true;
     const touch = e.touches[0];
     const startX = touch.clientX;
     const startY = touch.clientY;
 
-    longPressTimer.current = setTimeout(() => {
-      longPressTimer.current = null;
+    const timer = setTimeout(() => {
       dispatch({ type: 'SELECT_ELEMENT', payload: el });
       setShowPopup(true);
     }, 600);
 
     const onMove = (ev: globalThis.TouchEvent) => {
       const t = ev.touches[0];
-      if (Math.hypot(t.clientX - startX, t.clientY - startY) > 8 && longPressTimer.current) {
-        clearTimeout(longPressTimer.current);
-        longPressTimer.current = null;
+      if (Math.hypot(t.clientX - startX, t.clientY - startY) > 8) {
+        clearTimeout(timer);
         window.removeEventListener('touchmove', onMove);
         window.removeEventListener('touchend', onEnd);
       }
     };
     const onEnd = () => {
+      clearTimeout(timer);
       window.removeEventListener('touchmove', onMove);
       window.removeEventListener('touchend', onEnd);
-      if (longPressTimer.current) {
-        clearTimeout(longPressTimer.current);
-        longPressTimer.current = null;
-        addToLab();
-      }
+      addToLab();
     };
     window.addEventListener('touchmove', onMove, { passive: true });
     window.addEventListener('touchend', onEnd);
   };
 
-  // ── Tablet: tap=add, drag=drop, 2s hold=info, scroll by touching gaps ──
+  // ── Tablet: tap=add, horizontal-drag=drop to sandbox, NO popup ever ──
+  // touchAction:'pan-y' lets the browser handle vertical scroll natively.
+  // We only intercept when the gesture is clearly a horizontal drag.
   const handleTabletTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchHandled.current = true;
     touchDragging.current = false;
     const touch = e.touches[0];
     const startX = touch.clientX;
     const startY = touch.clientY;
-    let scrolling = false;
-
-    // Find the nearest scrollable parent to scroll manually when needed
-    const scrollParent = (e.currentTarget as HTMLElement).closest('[style*="overflow"]') as HTMLElement | null;
-    let scrollStartTop = scrollParent?.scrollTop ?? 0;
-
-    longPressTimer.current = setTimeout(() => {
-      longPressTimer.current = null;
-      if (!touchDragging.current && !scrolling) {
-        dispatch({ type: 'SELECT_ELEMENT', payload: el });
-        setShowPopup(true);
-      }
-    }, 2000);
 
     const onMove = (ev: globalThis.TouchEvent) => {
       const t = ev.touches[0];
@@ -193,65 +179,48 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
       const dy = t.clientY - startY;
       const dist = Math.hypot(dx, dy);
 
-      if (!touchDragging.current && !scrolling) {
-        if (dist > 6) {
-          if (longPressTimer.current) {
-            clearTimeout(longPressTimer.current);
-            longPressTimer.current = null;
-          }
-          // Mostly vertical → scroll the list
-          if (Math.abs(dy) > Math.abs(dx) * 1.2) {
-            scrolling = true;
-            if (scrollParent) scrollParent.scrollTop = scrollStartTop - dy;
-            return;
-          }
-          // Otherwise → start drag
-          if (dist > 10) {
-            touchDragging.current = true;
-            createGhost(el.symbol, colors.bg, t.clientX, t.clientY);
-            dispatch({ type: 'SET_DRAG', payload: el });
-          }
-        }
-        return;
-      }
-
-      if (scrolling) {
-        // Keep scrolling
+      if (touchDragging.current) {
+        // Already dragging — follow finger and block scroll
         ev.preventDefault();
-        if (scrollParent) scrollParent.scrollTop = scrollStartTop - dy;
+        moveGhost(t.clientX, t.clientY);
         return;
       }
 
-      // Dragging — follow finger
-      ev.preventDefault();
-      moveGhost(t.clientX, t.clientY);
+      // Only commit to a drag if movement is clearly horizontal (not a scroll)
+      if (dist > 12 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        touchDragging.current = true;
+        createGhost(el.symbol, colors.bg, t.clientX, t.clientY);
+        dispatch({ type: 'SET_DRAG', payload: el });
+      }
     };
 
     const onEnd = (ev: globalThis.TouchEvent) => {
       window.removeEventListener('touchmove', onMove);
       window.removeEventListener('touchend', onEnd);
-      if (longPressTimer.current) {
-        clearTimeout(longPressTimer.current);
-        longPressTimer.current = null;
-      }
 
       if (touchDragging.current) {
+        // Finish drag — drop into sandbox if finger is over it
         removeGhost();
         dispatch({ type: 'SET_DRAG', payload: null });
         const t = ev.changedTouches[0];
         const sandbox = document.getElementById('sandbox-area');
         if (sandbox) {
           const rect = sandbox.getBoundingClientRect();
-          if (t.clientX >= rect.left && t.clientX <= rect.right &&
-              t.clientY >= rect.top && t.clientY <= rect.bottom) {
+          if (
+            t.clientX >= rect.left && t.clientX <= rect.right &&
+            t.clientY >= rect.top  && t.clientY <= rect.bottom
+          ) {
             dispatch({ type: 'DROP_ATOM', payload: { element: el, x: t.clientX - rect.left, y: t.clientY - rect.top } });
             onToast?.(`${el.symbol} — ${el.name} added ⚗`);
           }
         }
         touchDragging.current = false;
-      } else if (!scrolling && !showPopup) {
-        // Clean short tap → add to lab
-        addToLab();
+      } else {
+        // Short tap (no significant movement) → add to lab. No popup on tablet.
+        const t = ev.changedTouches[0];
+        if (Math.hypot(t.clientX - startX, t.clientY - startY) < 10) {
+          addToLab();
+        }
       }
     };
 
@@ -259,7 +228,11 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
     window.addEventListener('touchend', onEnd);
   };
 
-  const handleTouchStart = isMobile ? handleMobileTouchStart : isTablet ? handleTabletTouchStart : undefined;
+  const handleTouchStart = isMobile
+    ? handleMobileTouchStart
+    : treatAsTablet
+    ? handleTabletTouchStart
+    : undefined;
 
   const sharedStyle: React.CSSProperties = {
     userSelect: 'none',
@@ -267,9 +240,10 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
     background: colors.bg,
     border: `1px solid ${colors.border}`,
     color: colors.text,
-    // tablet: touch-action:none so browser doesn't steal the gesture before JS can detect drag
-    // mobile: auto so native scroll works freely
-    touchAction: isTablet ? 'none' : 'auto',
+    // pan-y: browser handles vertical scroll natively (enables scrolling through the tile list).
+    // Horizontal drags are still intercepted by JS for drag-to-sandbox.
+    // Mobile uses 'auto' so native scroll is completely free.
+    touchAction: treatAsTablet ? 'pan-y' : 'auto',
     cursor: 'pointer',
     position: 'relative',
   };
@@ -280,9 +254,9 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
 
       {tiny ? (
         <div
-          draggable={!isMobile && !isTablet}
-          onDragStart={(!isMobile && !isTablet) ? handleDragStart : undefined}
-          onDragEnd={(!isMobile && !isTablet) ? handleDragEnd : undefined}
+          draggable={!isMobile && !treatAsTablet}
+          onDragStart={(!isMobile && !treatAsTablet) ? handleDragStart : undefined}
+          onDragEnd={(!isMobile && !treatAsTablet) ? handleDragEnd : undefined}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
           title={`${el.name} (${el.atomicNumber})`}
@@ -295,12 +269,12 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
         </div>
       ) : (
         <div
-          draggable={!isMobile && !isTablet}
-          onDragStart={(!isMobile && !isTablet) ? handleDragStart : undefined}
-          onDragEnd={(!isMobile && !isTablet) ? handleDragEnd : undefined}
+          draggable={!isMobile && !treatAsTablet}
+          onDragStart={(!isMobile && !treatAsTablet) ? handleDragStart : undefined}
+          onDragEnd={(!isMobile && !treatAsTablet) ? handleDragEnd : undefined}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
-          title={`${el.name} — tap to add / click for details`}
+          title={`${el.name} — tap to add`}
           style={{ ...sharedStyle, borderRadius: 8, display: 'flex', flexDirection: 'column', gap: 2, padding: '8px 10px', minWidth: 64 }}
           onMouseEnter={e => { const d = e.currentTarget as HTMLDivElement; d.style.boxShadow = `0 0 14px ${colors.glow}`; d.style.transform = 'scale(1.06)'; }}
           onMouseLeave={e => { const d = e.currentTarget as HTMLDivElement; d.style.boxShadow = 'none'; d.style.transform = 'scale(1)'; }}

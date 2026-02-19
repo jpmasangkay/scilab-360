@@ -44,7 +44,11 @@ export function QuizPanel() {
   }
   const diff = DIFFICULTY_CONFIG[challenge.difficulty];
 
+  // Guard: once a challenge is in completedChallenges, never award points again
+  const alreadyCompleted = state.completedChallenges.includes(challenge.level);
+
   const handleSubmit = () => {
+    if (alreadyCompleted) return; // belt-and-suspenders guard
     dispatch({ type: 'INC_ATTEMPTS' });
     const formula = state.formula;
     if (formula === challenge.targetFormula) {
@@ -68,6 +72,11 @@ export function QuizPanel() {
       setSubmitResult({ ok: false, msg: diag });
     }
   };
+
+  // Next incomplete challenge for the "Next" button shown after completion
+  const nextChallenge = QUIZ_LEVELS.find(
+    q => q.level > challenge.level && !state.completedChallenges.includes(q.level)
+  );
 
   return (
     <div style={{ borderRadius: 12, overflow: 'hidden', background: '#0d0120', border: '1px solid #2d1b5e' }}>
@@ -142,13 +151,32 @@ export function QuizPanel() {
             </div>
           )}
 
-          {/* Check answer */}
-          <button onClick={handleSubmit}
-            style={{ padding: 12, borderRadius: 12, color: '#fff', fontFamily: S.orbit, fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', cursor: 'pointer', border: 'none', background: 'linear-gradient(135deg, #6d28d9, #a855f7)', boxShadow: '0 0 20px #a855f760', transition: 'all 0.15s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 30px #a855f7bb'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.02)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px #a855f760'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}>
-            ⚗ CHECK ANSWER
-          </button>
+          {/* Check answer button — replaced with completion state once done */}
+          {alreadyCompleted ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ padding: '10px 14px', borderRadius: 12, background: '#052e16', border: '1px solid #a855f7', textAlign: 'center' }}>
+                <p style={{ fontFamily: S.orbit, fontSize: 12, fontWeight: 700, color: '#86efac', letterSpacing: '0.1em' }}>
+                  ✅ CHALLENGE COMPLETE
+                </p>
+              </div>
+              {nextChallenge && (
+                <button
+                  onClick={() => { dispatch({ type: 'SET_CHALLENGE', payload: nextChallenge }); setSubmitResult(null); }}
+                  style={{ padding: 12, borderRadius: 12, color: '#fff', fontFamily: S.orbit, fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', cursor: 'pointer', border: 'none', background: 'linear-gradient(135deg, #1d4ed8, #6d28d9)', boxShadow: '0 0 20px #6d28d960', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 30px #a855f7bb'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.02)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px #6d28d960'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}>
+                  ⚡ NEXT CHALLENGE (LVL {nextChallenge.level})
+                </button>
+              )}
+            </div>
+          ) : (
+            <button onClick={handleSubmit}
+              style={{ padding: 12, borderRadius: 12, color: '#fff', fontFamily: S.orbit, fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', cursor: 'pointer', border: 'none', background: 'linear-gradient(135deg, #6d28d9, #a855f7)', boxShadow: '0 0 20px #a855f760', transition: 'all 0.15s' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 30px #a855f7bb'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.02)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px #a855f760'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}>
+              ⚗ CHECK ANSWER
+            </button>
+          )}
 
           {/* Level selector filtered by difficulty */}
           <div>
