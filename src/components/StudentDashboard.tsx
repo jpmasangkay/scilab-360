@@ -7,8 +7,14 @@ const PAD = { padding: '14px 18px' };
 
 const TOTAL_QUESTIONS = 30;
 
+function useIsMobile() {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768;
+}
+
 export function StudentDashboard() {
   const { state, dispatch } = useApp();
+  const isMobile = useIsMobile();
   if (!state.showTeacherDash) return null;
 
   const completed = state.completedChallenges.length;
@@ -72,7 +78,17 @@ ${wrongList}
 
   return (
     <div
-      style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 320, display: 'flex', flexDirection: 'column', gap: 0, zIndex: 1000, background: '#0d0120', borderLeft: '1px solid #3b1d6e', boxShadow: '-4px 0 40px #00000080, -2px 0 20px #a855f720', overflowY: 'auto' }}
+      style={{
+        position: 'fixed',
+        top: 0, right: 0, bottom: 0,
+        width: isMobile ? '100%' : 320,
+        display: 'flex', flexDirection: 'column',
+        zIndex: 1000,
+        background: '#0d0120',
+        borderLeft: isMobile ? 'none' : '1px solid #3b1d6e',
+        boxShadow: '-4px 0 40px #00000080, -2px 0 20px #a855f720',
+        overflowY: 'auto',
+      }}
     >
       {/* ── Header ── */}
       <div style={{ padding: '18px 20px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #2d1b5e', flexShrink: 0 }}>

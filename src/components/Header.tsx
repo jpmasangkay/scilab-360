@@ -138,7 +138,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
               </>
             )}
 
-            {/* MY PROGRESS — all sizes; label hidden on mobile to save space */}
+            {/* MY PROGRESS — all sizes */}
             <button
               onClick={() => dispatch({ type: 'TOGGLE_TEACHER' })}
               title="My Progress"
@@ -150,8 +150,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                 boxShadow: state.showTeacherDash ? '0 0 12px #a855f760' : 'none',
               }}
             >
-              <ClipboardList size={iconSz} />
-              {!isMobile && ' MY PROGRESS'}
+              <ClipboardList size={iconSz} /> {isMobile ? 'PROGRESS' : 'MY PROGRESS'}
             </button>
           </div>
         </div>
