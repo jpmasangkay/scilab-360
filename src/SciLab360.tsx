@@ -1085,7 +1085,7 @@ const MolecularPanel: React.FC = () => {
   }, {});
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function dispatch(arg0: { type: string; payload: null; }): void {
+  function dispatch(_arg0: { type: string; payload: null; }): void {
     throw new Error("Function not implemented.");
   }
 

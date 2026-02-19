@@ -25,7 +25,7 @@ export function TeacherDashboard() {
   };
 
   return (
-    <div className="fixed top-0 right-0 bottom-0 w-[290px] flex flex-col p-5 gap-4 z-[1000]"
+    <div className="fixed top-0 right-0 bottom-0 w-72.5 flex flex-col p-5 gap-4 z-1000"
       style={{ background: '#0d0120', borderLeft: '1px solid #2d1b5e', boxShadow: '-4px 0 40px #00000080, -2px 0 20px #a855f720' }}>
       
       <div className="flex justify-between items-center">
