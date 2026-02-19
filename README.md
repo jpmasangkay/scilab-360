@@ -183,13 +183,7 @@ SciLab 360 uses a real-time bond detection algorithm based on actual chemistry r
 6. Earn points, advance levels, and track your progress in the **Student Dashboard**
 7. When done, open **MY PROGRESS** → **DOWNLOAD MY REPORT** to save your results
 
----
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
 
 <div align="center">
 
