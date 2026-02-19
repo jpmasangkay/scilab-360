@@ -130,15 +130,16 @@ export function ElementTile({ el, tiny = false, onToast }: ElementTileProps) {
   };
 
   // ── Touch: tap = add to lab, long-press = details, drag = place ──
+  // On mobile: NO drag ghost, touchAction='auto' so native scroll works freely.
+  // On desktop/tablet with touch: full drag support.
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    touchHandled.current = true; // block subsequent click event
+    touchHandled.current = true;
     touchDragging.current = false;
 
     const touch = e.touches[0];
     const startX = touch.clientX;
     const startY = touch.clientY;
 
-    // Long-press → show a lightweight mobile detail sheet
     longPressTimer.current = setTimeout(() => {
       longPressTimer.current = null;
       if (!touchDragging.current) {
@@ -151,44 +152,29 @@ export function ElementTile({ el, tiny = false, onToast }: ElementTileProps) {
       const t = ev.touches[0];
       const dist = Math.hypot(t.clientX - startX, t.clientY - startY);
 
-      if (!touchDragging.current && dist > 10) {
-        touchDragging.current = true;
-        if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null; }
-        createGhost(el.symbol, colors.bg, t.clientX, t.clientY);
-        dispatch({ type: 'SET_DRAG', payload: el });
-      }
-      if (touchDragging.current) {
-        ev.preventDefault();
-        moveGhost(t.clientX, t.clientY);
+      // If user scrolls, cancel the long-press timer and let browser scroll
+      if (dist > 8 && longPressTimer.current) {
+        clearTimeout(longPressTimer.current);
+        longPressTimer.current = null;
+        window.removeEventListener('touchmove', onMove);
+        window.removeEventListener('touchend', onEnd);
+        return;
       }
     };
 
-    const onEnd = (ev: globalThis.TouchEvent) => {
+    const onEnd = () => {
       window.removeEventListener('touchmove', onMove);
       window.removeEventListener('touchend', onEnd);
-      if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null; }
-
-      if (touchDragging.current) {
-        // Drag: drop on sandbox if over it
-        removeGhost();
-        dispatch({ type: 'SET_DRAG', payload: null });
-        const t = ev.changedTouches[0];
-        const sandbox = document.getElementById('sandbox-area');
-        if (sandbox) {
-          const rect = sandbox.getBoundingClientRect();
-          if (t.clientX >= rect.left && t.clientX <= rect.right && t.clientY >= rect.top && t.clientY <= rect.bottom) {
-            dispatch({ type: 'DROP_ATOM', payload: { element: el, x: t.clientX - rect.left, y: t.clientY - rect.top } });
-            onToast?.(`${el.symbol} — ${el.name} added ⚗`);
-          }
-        }
-        touchDragging.current = false;
-      } else {
-        // Simple tap → add to lab immediately
+      if (longPressTimer.current) {
+        clearTimeout(longPressTimer.current);
+        longPressTimer.current = null;
+        // Short tap → add to lab
         addToLab();
       }
     };
 
-    window.addEventListener('touchmove', onMove, { passive: false });
+    // passive:true = browser can scroll freely, no ev.preventDefault() blocking
+    window.addEventListener('touchmove', onMove, { passive: true });
     window.addEventListener('touchend', onEnd);
   };
 
@@ -198,7 +184,7 @@ export function ElementTile({ el, tiny = false, onToast }: ElementTileProps) {
     background: colors.bg,
     border: `1px solid ${colors.border}`,
     color: colors.text,
-    touchAction: 'none',
+    touchAction: 'auto', // allow native scroll on all touch devices
     cursor: 'pointer',
     position: 'relative',
   };
