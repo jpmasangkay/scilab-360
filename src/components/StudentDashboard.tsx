@@ -13,7 +13,6 @@ export function StudentDashboard() {
 
   const completed = state.completedChallenges.length;
   const totalScore = state.score;
-  const scoreOutOf30 = completed; // each completed = 1 correct answer
   const wrong = state.attempts - completed;
   const pct = TOTAL_QUESTIONS > 0 ? Math.round((completed / TOTAL_QUESTIONS) * 100) : 0;
 
