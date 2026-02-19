@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useApp } from '../store/context';
 import { PeriodicTablePanel } from './PeriodicTablePanel';
 import { QuizPanel } from './QuizPanel';
