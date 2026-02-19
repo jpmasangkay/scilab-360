@@ -166,18 +166,22 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
     window.addEventListener('touchend', onEnd);
   };
 
-  // ── Tablet: tap=add, drag=drop, 2s hold=info, scroll free ───────
+  // ── Tablet: tap=add, drag=drop, 2s hold=info, scroll by touching gaps ──
   const handleTabletTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchHandled.current = true;
     touchDragging.current = false;
     const touch = e.touches[0];
     const startX = touch.clientX;
     const startY = touch.clientY;
+    let scrolling = false;
 
-    // 2-second hold → show element info (only if not scrolling/dragging)
+    // Find the nearest scrollable parent to scroll manually when needed
+    const scrollParent = (e.currentTarget as HTMLElement).closest('[style*="overflow"]') as HTMLElement | null;
+    let scrollStartTop = scrollParent?.scrollTop ?? 0;
+
     longPressTimer.current = setTimeout(() => {
       longPressTimer.current = null;
-      if (!touchDragging.current) {
+      if (!touchDragging.current && !scrolling) {
         dispatch({ type: 'SELECT_ELEMENT', payload: el });
         setShowPopup(true);
       }
@@ -185,27 +189,40 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
 
     const onMove = (ev: globalThis.TouchEvent) => {
       const t = ev.touches[0];
-      const dist = Math.hypot(t.clientX - startX, t.clientY - startY);
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      const dist = Math.hypot(dx, dy);
 
-      if (!touchDragging.current) {
-        if (dist > 8 && longPressTimer.current) {
-          // User is scrolling — cancel long-press, let browser scroll
-          clearTimeout(longPressTimer.current);
-          longPressTimer.current = null;
-        }
-        if (dist > 12) {
-          // User moved enough — start drag
-          touchDragging.current = true;
+      if (!touchDragging.current && !scrolling) {
+        if (dist > 6) {
           if (longPressTimer.current) {
             clearTimeout(longPressTimer.current);
             longPressTimer.current = null;
           }
-          createGhost(el.symbol, colors.bg, t.clientX, t.clientY);
-          dispatch({ type: 'SET_DRAG', payload: el });
+          // Mostly vertical → scroll the list
+          if (Math.abs(dy) > Math.abs(dx) * 1.2) {
+            scrolling = true;
+            if (scrollParent) scrollParent.scrollTop = scrollStartTop - dy;
+            return;
+          }
+          // Otherwise → start drag
+          if (dist > 10) {
+            touchDragging.current = true;
+            createGhost(el.symbol, colors.bg, t.clientX, t.clientY);
+            dispatch({ type: 'SET_DRAG', payload: el });
+          }
         }
         return;
       }
-      // Actively dragging — block scroll, follow finger
+
+      if (scrolling) {
+        // Keep scrolling
+        ev.preventDefault();
+        if (scrollParent) scrollParent.scrollTop = scrollStartTop - dy;
+        return;
+      }
+
+      // Dragging — follow finger
       ev.preventDefault();
       moveGhost(t.clientX, t.clientY);
     };
@@ -219,7 +236,6 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
       }
 
       if (touchDragging.current) {
-        // Drop on sandbox if finger lifted over it
         removeGhost();
         dispatch({ type: 'SET_DRAG', payload: null });
         const t = ev.changedTouches[0];
@@ -233,8 +249,8 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
           }
         }
         touchDragging.current = false;
-      } else if (!showPopup) {
-        // Short tap (not a long-press that opened popup) → add to lab
+      } else if (!scrolling && !showPopup) {
+        // Clean short tap → add to lab
         addToLab();
       }
     };
@@ -251,7 +267,9 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
     background: colors.bg,
     border: `1px solid ${colors.border}`,
     color: colors.text,
-    touchAction: touchDragging.current ? 'none' : 'auto',
+    // tablet: touch-action:none so browser doesn't steal the gesture before JS can detect drag
+    // mobile: auto so native scroll works freely
+    touchAction: isTablet ? 'none' : 'auto',
     cursor: 'pointer',
     position: 'relative',
   };
