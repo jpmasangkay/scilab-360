@@ -1,0 +1,148 @@
+import type { ElementData, ElementCategory, GridElement } from '../types';
+
+function cat(c: ElementCategory): ElementCategory { return c; }
+
+export const ELEMENTS: ElementData[] = [
+  { atomicNumber: 1, symbol: 'H', name: 'Hydrogen', category: cat('nonmetal'), valenceElectrons: 1, electronegativity: 2.2, group: 1, period: 1, isMetal: false },
+  { atomicNumber: 2, symbol: 'He', name: 'Helium', category: cat('noble-gas'), valenceElectrons: 2, electronegativity: null, group: 18, period: 1, isMetal: false },
+  { atomicNumber: 3, symbol: 'Li', name: 'Lithium', category: cat('alkali-metal'), valenceElectrons: 1, electronegativity: 0.98, group: 1, period: 2, isMetal: true },
+  { atomicNumber: 4, symbol: 'Be', name: 'Beryllium', category: cat('alkaline-earth'), valenceElectrons: 2, electronegativity: 1.57, group: 2, period: 2, isMetal: true },
+  { atomicNumber: 5, symbol: 'B', name: 'Boron', category: cat('metalloid'), valenceElectrons: 3, electronegativity: 2.04, group: 13, period: 2, isMetal: false },
+  { atomicNumber: 6, symbol: 'C', name: 'Carbon', category: cat('nonmetal'), valenceElectrons: 4, electronegativity: 2.55, group: 14, period: 2, isMetal: false },
+  { atomicNumber: 7, symbol: 'N', name: 'Nitrogen', category: cat('nonmetal'), valenceElectrons: 5, electronegativity: 3.04, group: 15, period: 2, isMetal: false },
+  { atomicNumber: 8, symbol: 'O', name: 'Oxygen', category: cat('nonmetal'), valenceElectrons: 6, electronegativity: 3.44, group: 16, period: 2, isMetal: false },
+  { atomicNumber: 9, symbol: 'F', name: 'Fluorine', category: cat('halogen'), valenceElectrons: 7, electronegativity: 3.98, group: 17, period: 2, isMetal: false },
+  { atomicNumber: 10, symbol: 'Ne', name: 'Neon', category: cat('noble-gas'), valenceElectrons: 8, electronegativity: null, group: 18, period: 2, isMetal: false },
+  { atomicNumber: 11, symbol: 'Na', name: 'Sodium', category: cat('alkali-metal'), valenceElectrons: 1, electronegativity: 0.93, group: 1, period: 3, isMetal: true },
+  { atomicNumber: 12, symbol: 'Mg', name: 'Magnesium', category: cat('alkaline-earth'), valenceElectrons: 2, electronegativity: 1.31, group: 2, period: 3, isMetal: true },
+  { atomicNumber: 13, symbol: 'Al', name: 'Aluminum', category: cat('post-transition'), valenceElectrons: 3, electronegativity: 1.61, group: 13, period: 3, isMetal: true },
+  { atomicNumber: 14, symbol: 'Si', name: 'Silicon', category: cat('metalloid'), valenceElectrons: 4, electronegativity: 1.9, group: 14, period: 3, isMetal: false },
+  { atomicNumber: 15, symbol: 'P', name: 'Phosphorus', category: cat('nonmetal'), valenceElectrons: 5, electronegativity: 2.19, group: 15, period: 3, isMetal: false },
+  { atomicNumber: 16, symbol: 'S', name: 'Sulfur', category: cat('nonmetal'), valenceElectrons: 6, electronegativity: 2.58, group: 16, period: 3, isMetal: false },
+  { atomicNumber: 17, symbol: 'Cl', name: 'Chlorine', category: cat('halogen'), valenceElectrons: 7, electronegativity: 3.16, group: 17, period: 3, isMetal: false },
+  { atomicNumber: 18, symbol: 'Ar', name: 'Argon', category: cat('noble-gas'), valenceElectrons: 8, electronegativity: null, group: 18, period: 3, isMetal: false },
+  { atomicNumber: 19, symbol: 'K', name: 'Potassium', category: cat('alkali-metal'), valenceElectrons: 1, electronegativity: 0.82, group: 1, period: 4, isMetal: true },
+  { atomicNumber: 20, symbol: 'Ca', name: 'Calcium', category: cat('alkaline-earth'), valenceElectrons: 2, electronegativity: 1.0, group: 2, period: 4, isMetal: true },
+  { atomicNumber: 21, symbol: 'Sc', name: 'Scandium', category: cat('transition-metal'), valenceElectrons: 3, electronegativity: 1.36, group: 3, period: 4, isMetal: true },
+  { atomicNumber: 22, symbol: 'Ti', name: 'Titanium', category: cat('transition-metal'), valenceElectrons: 4, electronegativity: 1.54, group: 4, period: 4, isMetal: true },
+  { atomicNumber: 23, symbol: 'V', name: 'Vanadium', category: cat('transition-metal'), valenceElectrons: 5, electronegativity: 1.63, group: 5, period: 4, isMetal: true },
+  { atomicNumber: 24, symbol: 'Cr', name: 'Chromium', category: cat('transition-metal'), valenceElectrons: 6, electronegativity: 1.66, group: 6, period: 4, isMetal: true },
+  { atomicNumber: 25, symbol: 'Mn', name: 'Manganese', category: cat('transition-metal'), valenceElectrons: 7, electronegativity: 1.55, group: 7, period: 4, isMetal: true },
+  { atomicNumber: 26, symbol: 'Fe', name: 'Iron', category: cat('transition-metal'), valenceElectrons: 2, electronegativity: 1.83, group: 8, period: 4, isMetal: true },
+  { atomicNumber: 27, symbol: 'Co', name: 'Cobalt', category: cat('transition-metal'), valenceElectrons: 2, electronegativity: 1.88, group: 9, period: 4, isMetal: true },
+  { atomicNumber: 28, symbol: 'Ni', name: 'Nickel', category: cat('transition-metal'), valenceElectrons: 2, electronegativity: 1.91, group: 10, period: 4, isMetal: true },
+  { atomicNumber: 29, symbol: 'Cu', name: 'Copper', category: cat('transition-metal'), valenceElectrons: 1, electronegativity: 1.9, group: 11, period: 4, isMetal: true },
+  { atomicNumber: 30, symbol: 'Zn', name: 'Zinc', category: cat('transition-metal'), valenceElectrons: 2, electronegativity: 1.65, group: 12, period: 4, isMetal: true },
+  { atomicNumber: 31, symbol: 'Ga', name: 'Gallium', category: cat('post-transition'), valenceElectrons: 3, electronegativity: 1.81, group: 13, period: 4, isMetal: true },
+  { atomicNumber: 32, symbol: 'Ge', name: 'Germanium', category: cat('metalloid'), valenceElectrons: 4, electronegativity: 2.01, group: 14, period: 4, isMetal: false },
+  { atomicNumber: 33, symbol: 'As', name: 'Arsenic', category: cat('metalloid'), valenceElectrons: 5, electronegativity: 2.18, group: 15, period: 4, isMetal: false },
+  { atomicNumber: 34, symbol: 'Se', name: 'Selenium', category: cat('nonmetal'), valenceElectrons: 6, electronegativity: 2.55, group: 16, period: 4, isMetal: false },
+  { atomicNumber: 35, symbol: 'Br', name: 'Bromine', category: cat('halogen'), valenceElectrons: 7, electronegativity: 2.96, group: 17, period: 4, isMetal: false },
+  { atomicNumber: 36, symbol: 'Kr', name: 'Krypton', category: cat('noble-gas'), valenceElectrons: 8, electronegativity: 3.0, group: 18, period: 4, isMetal: false },
+  { atomicNumber: 37, symbol: 'Rb', name: 'Rubidium', category: cat('alkali-metal'), valenceElectrons: 1, electronegativity: 0.82, group: 1, period: 5, isMetal: true },
+  { atomicNumber: 38, symbol: 'Sr', name: 'Strontium', category: cat('alkaline-earth'), valenceElectrons: 2, electronegativity: 0.95, group: 2, period: 5, isMetal: true },
+  { atomicNumber: 39, symbol: 'Y', name: 'Yttrium', category: cat('transition-metal'), valenceElectrons: 3, electronegativity: 1.22, group: 3, period: 5, isMetal: true },
+  { atomicNumber: 40, symbol: 'Zr', name: 'Zirconium', category: cat('transition-metal'), valenceElectrons: 4, electronegativity: 1.33, group: 4, period: 5, isMetal: true },
+  { atomicNumber: 41, symbol: 'Nb', name: 'Niobium', category: cat('transition-metal'), valenceElectrons: 5, electronegativity: 1.6, group: 5, period: 5, isMetal: true },
+  { atomicNumber: 42, symbol: 'Mo', name: 'Molybdenum', category: cat('transition-metal'), valenceElectrons: 6, electronegativity: 2.16, group: 6, period: 5, isMetal: true },
+  { atomicNumber: 43, symbol: 'Tc', name: 'Technetium', category: cat('transition-metal'), valenceElectrons: 7, electronegativity: 1.9, group: 7, period: 5, isMetal: true },
+  { atomicNumber: 44, symbol: 'Ru', name: 'Ruthenium', category: cat('transition-metal'), valenceElectrons: 7, electronegativity: 2.2, group: 8, period: 5, isMetal: true },
+  { atomicNumber: 45, symbol: 'Rh', name: 'Rhodium', category: cat('transition-metal'), valenceElectrons: 6, electronegativity: 2.28, group: 9, period: 5, isMetal: true },
+  { atomicNumber: 46, symbol: 'Pd', name: 'Palladium', category: cat('transition-metal'), valenceElectrons: 10, electronegativity: 2.2, group: 10, period: 5, isMetal: true },
+  { atomicNumber: 47, symbol: 'Ag', name: 'Silver', category: cat('transition-metal'), valenceElectrons: 1, electronegativity: 1.93, group: 11, period: 5, isMetal: true },
+  { atomicNumber: 48, symbol: 'Cd', name: 'Cadmium', category: cat('transition-metal'), valenceElectrons: 2, electronegativity: 1.69, group: 12, period: 5, isMetal: true },
+  { atomicNumber: 49, symbol: 'In', name: 'Indium', category: cat('post-transition'), valenceElectrons: 3, electronegativity: 1.78, group: 13, period: 5, isMetal: true },
+  { atomicNumber: 50, symbol: 'Sn', name: 'Tin', category: cat('post-transition'), valenceElectrons: 4, electronegativity: 1.96, group: 14, period: 5, isMetal: true },
+  { atomicNumber: 51, symbol: 'Sb', name: 'Antimony', category: cat('metalloid'), valenceElectrons: 5, electronegativity: 2.05, group: 15, period: 5, isMetal: false },
+  { atomicNumber: 52, symbol: 'Te', name: 'Tellurium', category: cat('metalloid'), valenceElectrons: 6, electronegativity: 2.1, group: 16, period: 5, isMetal: false },
+  { atomicNumber: 53, symbol: 'I', name: 'Iodine', category: cat('halogen'), valenceElectrons: 7, electronegativity: 2.66, group: 17, period: 5, isMetal: false },
+  { atomicNumber: 54, symbol: 'Xe', name: 'Xenon', category: cat('noble-gas'), valenceElectrons: 8, electronegativity: 2.6, group: 18, period: 5, isMetal: false },
+  { atomicNumber: 55, symbol: 'Cs', name: 'Cesium', category: cat('alkali-metal'), valenceElectrons: 1, electronegativity: 0.79, group: 1, period: 6, isMetal: true },
+  { atomicNumber: 56, symbol: 'Ba', name: 'Barium', category: cat('alkaline-earth'), valenceElectrons: 2, electronegativity: 0.89, group: 2, period: 6, isMetal: true },
+  { atomicNumber: 57, symbol: 'La', name: 'Lanthanum', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.1, group: 3, period: 6, isMetal: true },
+  { atomicNumber: 58, symbol: 'Ce', name: 'Cerium', category: cat('lanthanide'), valenceElectrons: 4, electronegativity: 1.12, group: null, period: 6, isMetal: true },
+  { atomicNumber: 59, symbol: 'Pr', name: 'Praseodymium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.13, group: null, period: 6, isMetal: true },
+  { atomicNumber: 60, symbol: 'Nd', name: 'Neodymium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.14, group: null, period: 6, isMetal: true },
+  { atomicNumber: 61, symbol: 'Pm', name: 'Promethium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.13, group: null, period: 6, isMetal: true },
+  { atomicNumber: 62, symbol: 'Sm', name: 'Samarium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.17, group: null, period: 6, isMetal: true },
+  { atomicNumber: 63, symbol: 'Eu', name: 'Europium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.2, group: null, period: 6, isMetal: true },
+  { atomicNumber: 64, symbol: 'Gd', name: 'Gadolinium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.2, group: null, period: 6, isMetal: true },
+  { atomicNumber: 65, symbol: 'Tb', name: 'Terbium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.1, group: null, period: 6, isMetal: true },
+  { atomicNumber: 66, symbol: 'Dy', name: 'Dysprosium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.22, group: null, period: 6, isMetal: true },
+  { atomicNumber: 67, symbol: 'Ho', name: 'Holmium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.23, group: null, period: 6, isMetal: true },
+  { atomicNumber: 68, symbol: 'Er', name: 'Erbium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.24, group: null, period: 6, isMetal: true },
+  { atomicNumber: 69, symbol: 'Tm', name: 'Thulium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.25, group: null, period: 6, isMetal: true },
+  { atomicNumber: 70, symbol: 'Yb', name: 'Ytterbium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.1, group: null, period: 6, isMetal: true },
+  { atomicNumber: 71, symbol: 'Lu', name: 'Lutetium', category: cat('lanthanide'), valenceElectrons: 3, electronegativity: 1.27, group: 3, period: 6, isMetal: true },
+  { atomicNumber: 72, symbol: 'Hf', name: 'Hafnium', category: cat('transition-metal'), valenceElectrons: 4, electronegativity: 1.3, group: 4, period: 6, isMetal: true },
+  { atomicNumber: 73, symbol: 'Ta', name: 'Tantalum', category: cat('transition-metal'), valenceElectrons: 5, electronegativity: 1.5, group: 5, period: 6, isMetal: true },
+  { atomicNumber: 74, symbol: 'W', name: 'Tungsten', category: cat('transition-metal'), valenceElectrons: 6, electronegativity: 2.36, group: 6, period: 6, isMetal: true },
+  { atomicNumber: 75, symbol: 'Re', name: 'Rhenium', category: cat('transition-metal'), valenceElectrons: 7, electronegativity: 1.9, group: 7, period: 6, isMetal: true },
+  { atomicNumber: 76, symbol: 'Os', name: 'Osmium', category: cat('transition-metal'), valenceElectrons: 6, electronegativity: 2.2, group: 8, period: 6, isMetal: true },
+  { atomicNumber: 77, symbol: 'Ir', name: 'Iridium', category: cat('transition-metal'), valenceElectrons: 6, electronegativity: 2.2, group: 9, period: 6, isMetal: true },
+  { atomicNumber: 78, symbol: 'Pt', name: 'Platinum', category: cat('transition-metal'), valenceElectrons: 1, electronegativity: 2.28, group: 10, period: 6, isMetal: true },
+  { atomicNumber: 79, symbol: 'Au', name: 'Gold', category: cat('transition-metal'), valenceElectrons: 1, electronegativity: 2.54, group: 11, period: 6, isMetal: true },
+  { atomicNumber: 80, symbol: 'Hg', name: 'Mercury', category: cat('transition-metal'), valenceElectrons: 2, electronegativity: 2.0, group: 12, period: 6, isMetal: true },
+  { atomicNumber: 81, symbol: 'Tl', name: 'Thallium', category: cat('post-transition'), valenceElectrons: 3, electronegativity: 1.62, group: 13, period: 6, isMetal: true },
+  { atomicNumber: 82, symbol: 'Pb', name: 'Lead', category: cat('post-transition'), valenceElectrons: 4, electronegativity: 2.33, group: 14, period: 6, isMetal: true },
+  { atomicNumber: 83, symbol: 'Bi', name: 'Bismuth', category: cat('post-transition'), valenceElectrons: 5, electronegativity: 2.02, group: 15, period: 6, isMetal: true },
+  { atomicNumber: 84, symbol: 'Po', name: 'Polonium', category: cat('post-transition'), valenceElectrons: 6, electronegativity: 2.0, group: 16, period: 6, isMetal: true },
+  { atomicNumber: 85, symbol: 'At', name: 'Astatine', category: cat('halogen'), valenceElectrons: 7, electronegativity: 2.2, group: 17, period: 6, isMetal: false },
+  { atomicNumber: 86, symbol: 'Rn', name: 'Radon', category: cat('noble-gas'), valenceElectrons: 8, electronegativity: null, group: 18, period: 6, isMetal: false },
+  { atomicNumber: 87, symbol: 'Fr', name: 'Francium', category: cat('alkali-metal'), valenceElectrons: 1, electronegativity: 0.7, group: 1, period: 7, isMetal: true },
+  { atomicNumber: 88, symbol: 'Ra', name: 'Radium', category: cat('alkaline-earth'), valenceElectrons: 2, electronegativity: 0.9, group: 2, period: 7, isMetal: true },
+  { atomicNumber: 89, symbol: 'Ac', name: 'Actinium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.1, group: 3, period: 7, isMetal: true },
+  { atomicNumber: 90, symbol: 'Th', name: 'Thorium', category: cat('actinide'), valenceElectrons: 4, electronegativity: 1.3, group: null, period: 7, isMetal: true },
+  { atomicNumber: 91, symbol: 'Pa', name: 'Protactinium', category: cat('actinide'), valenceElectrons: 5, electronegativity: 1.5, group: null, period: 7, isMetal: true },
+  { atomicNumber: 92, symbol: 'U', name: 'Uranium', category: cat('actinide'), valenceElectrons: 6, electronegativity: 1.38, group: null, period: 7, isMetal: true },
+  { atomicNumber: 93, symbol: 'Np', name: 'Neptunium', category: cat('actinide'), valenceElectrons: 5, electronegativity: 1.36, group: null, period: 7, isMetal: true },
+  { atomicNumber: 94, symbol: 'Pu', name: 'Plutonium', category: cat('actinide'), valenceElectrons: 6, electronegativity: 1.28, group: null, period: 7, isMetal: true },
+  { atomicNumber: 95, symbol: 'Am', name: 'Americium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.13, group: null, period: 7, isMetal: true },
+  { atomicNumber: 96, symbol: 'Cm', name: 'Curium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.28, group: null, period: 7, isMetal: true },
+  { atomicNumber: 97, symbol: 'Bk', name: 'Berkelium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.3, group: null, period: 7, isMetal: true },
+  { atomicNumber: 98, symbol: 'Cf', name: 'Californium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.3, group: null, period: 7, isMetal: true },
+  { atomicNumber: 99, symbol: 'Es', name: 'Einsteinium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.3, group: null, period: 7, isMetal: true },
+  { atomicNumber: 100, symbol: 'Fm', name: 'Fermium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.3, group: null, period: 7, isMetal: true },
+  { atomicNumber: 101, symbol: 'Md', name: 'Mendelevium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.3, group: null, period: 7, isMetal: true },
+  { atomicNumber: 102, symbol: 'No', name: 'Nobelium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.3, group: null, period: 7, isMetal: true },
+  { atomicNumber: 103, symbol: 'Lr', name: 'Lawrencium', category: cat('actinide'), valenceElectrons: 3, electronegativity: 1.3, group: 3, period: 7, isMetal: true },
+  { atomicNumber: 104, symbol: 'Rf', name: 'Rutherfordium', category: cat('unknown'), valenceElectrons: 4, electronegativity: null, group: 4, period: 7, isMetal: true },
+  { atomicNumber: 105, symbol: 'Db', name: 'Dubnium', category: cat('unknown'), valenceElectrons: 5, electronegativity: null, group: 5, period: 7, isMetal: true },
+  { atomicNumber: 106, symbol: 'Sg', name: 'Seaborgium', category: cat('unknown'), valenceElectrons: 6, electronegativity: null, group: 6, period: 7, isMetal: true },
+  { atomicNumber: 107, symbol: 'Bh', name: 'Bohrium', category: cat('unknown'), valenceElectrons: 7, electronegativity: null, group: 7, period: 7, isMetal: true },
+  { atomicNumber: 108, symbol: 'Hs', name: 'Hassium', category: cat('unknown'), valenceElectrons: 8, electronegativity: null, group: 8, period: 7, isMetal: true },
+  { atomicNumber: 109, symbol: 'Mt', name: 'Meitnerium', category: cat('unknown'), valenceElectrons: 9, electronegativity: null, group: 9, period: 7, isMetal: true },
+  { atomicNumber: 110, symbol: 'Ds', name: 'Darmstadtium', category: cat('unknown'), valenceElectrons: 10, electronegativity: null, group: 10, period: 7, isMetal: true },
+  { atomicNumber: 111, symbol: 'Rg', name: 'Roentgenium', category: cat('unknown'), valenceElectrons: 11, electronegativity: null, group: 11, period: 7, isMetal: true },
+  { atomicNumber: 112, symbol: 'Cn', name: 'Copernicium', category: cat('unknown'), valenceElectrons: 12, electronegativity: null, group: 12, period: 7, isMetal: true },
+  { atomicNumber: 113, symbol: 'Nh', name: 'Nihonium', category: cat('unknown'), valenceElectrons: 3, electronegativity: null, group: 13, period: 7, isMetal: true },
+  { atomicNumber: 114, symbol: 'Fl', name: 'Flerovium', category: cat('unknown'), valenceElectrons: 4, electronegativity: null, group: 14, period: 7, isMetal: true },
+  { atomicNumber: 115, symbol: 'Mc', name: 'Moscovium', category: cat('unknown'), valenceElectrons: 5, electronegativity: null, group: 15, period: 7, isMetal: true },
+  { atomicNumber: 116, symbol: 'Lv', name: 'Livermorium', category: cat('unknown'), valenceElectrons: 6, electronegativity: null, group: 16, period: 7, isMetal: true },
+  { atomicNumber: 117, symbol: 'Ts', name: 'Tennessine', category: cat('unknown'), valenceElectrons: 7, electronegativity: null, group: 17, period: 7, isMetal: false },
+  { atomicNumber: 118, symbol: 'Og', name: 'Oganesson', category: cat('unknown'), valenceElectrons: 8, electronegativity: null, group: 18, period: 7, isMetal: false },
+];
+
+export const COMMON_ELEMENT_SYMBOLS = [
+  'H','He','C','N','O','F','Ne','Na','Mg','Al',
+  'Si','P','S','Cl','Ar','K','Ca','Fe','Cu','Zn','Br','I','Ba','Pb',
+];
+
+export function buildPeriodicGrid(): GridElement[] {
+  const result: GridElement[] = [];
+  for (const el of ELEMENTS) {
+    let row = el.period;
+    let col = el.group || 0;
+    if (el.category === 'lanthanide' && el.atomicNumber >= 58 && el.atomicNumber <= 71) {
+      row = 9;
+      col = el.atomicNumber - 57 + 2;
+    } else if (el.category === 'actinide' && el.atomicNumber >= 90 && el.atomicNumber <= 103) {
+      row = 10;
+      col = el.atomicNumber - 89 + 2;
+    }
+    if (col > 0 && row > 0) result.push({ ...el, row, col });
+  }
+  return result;
+}
+
+export const GRID_ELEMENTS = buildPeriodicGrid();
