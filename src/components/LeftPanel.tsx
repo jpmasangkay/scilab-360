@@ -22,7 +22,7 @@ export function LeftPanel() {
     state.feedbackType === 'warning' ? '#2d1500' : '#1a0b38';
 
   return (
-    <div style={{ width: 296, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
+    <div style={{ width: 420, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10, height: '100%' }}>
 
       {/* ── Progress card ── */}
       <div style={{ ...CARD, background: '#130929', border: '1px solid #3b1d6e', flexShrink: 0 }}>

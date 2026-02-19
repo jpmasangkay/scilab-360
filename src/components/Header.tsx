@@ -5,11 +5,10 @@ export function Header() {
   const { state, dispatch } = useApp();
   return (
     <div
-      className="h-16 flex items-center justify-between shrink-0 relative overflow-hidden border-b border-[#4c1d95]"
+      className="flex items-center justify-between shrink-0 relative overflow-hidden border-b border-[#4c1d95]"
       style={{
         background: 'linear-gradient(90deg, #0d0120 0%, #1a0533 40%, #200040 100%)',
-        paddingLeft: '1rem',
-        paddingRight: '1rem',
+        padding: '1.25rem 1.75rem',
       }}
     >
       {[10, 25, 60, 80, 92].map((left, i) => {
