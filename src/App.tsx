@@ -68,7 +68,7 @@ function AppLayout() {
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', maxWidth: '100vw' }}>
             {activeTab === 'lab' && (
               <>
-                <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12 }}>
+                <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
                   <Sandbox isMobile />
                 </div>
                 {legend}

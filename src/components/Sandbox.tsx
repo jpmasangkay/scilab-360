@@ -59,7 +59,8 @@ export function Sandbox({ isMobile }: SandboxProps) {
       onDrop={handleDrop}
       className="relative flex-1 rounded-xl overflow-hidden transition-all duration-200"
       style={{
-        minHeight: 260,
+        minHeight: isMobile ? 0 : 260,
+        height: isMobile ? '100%' : undefined,
         background: dragOver
           ? 'radial-gradient(ellipse at center, #2d1263 0%, #0d0120 70%)'
           : 'radial-gradient(ellipse at 30% 40%, #1a0533 0%, #0d0120 60%, #07011a 100%)',
