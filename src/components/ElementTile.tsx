@@ -71,7 +71,7 @@ interface ElementTileProps {
   isTablet?: boolean;
 }
 
-// ── Touch drag ghost (tablet only) ───────────────────────────────
+// ── Touch drag ghost ─────────────────────────────────────────────
 let ghostEl: HTMLDivElement | null = null;
 function createGhost(symbol: string, color: string, x: number, y: number) {
   removeGhost();
@@ -79,13 +79,14 @@ function createGhost(symbol: string, color: string, x: number, y: number) {
   ghostEl.textContent = symbol;
   ghostEl.style.cssText = `
     position:fixed;pointer-events:none;z-index:99999;
-    width:52px;height:52px;border-radius:50%;
+    width:56px;height:56px;border-radius:50%;
     background:${color};border:2px solid #a855f7;
     display:flex;align-items:center;justify-content:center;
-    font-family:Orbitron,monospace;font-weight:700;font-size:16px;
-    color:#fff;opacity:0.9;box-shadow:0 0 20px #a855f7;
+    font-family:Orbitron,monospace;font-weight:700;font-size:18px;
+    color:#fff;opacity:0.92;box-shadow:0 0 24px #a855f7;
     transform:translate(-50%,-50%);
     left:${x}px;top:${y}px;
+    transition:none;
   `;
   document.body.appendChild(ghostEl);
 }
@@ -96,7 +97,8 @@ function removeGhost() {
   if (ghostEl) { ghostEl.remove(); ghostEl = null; }
 }
 
-// Detect real touch-capable devices regardless of screen width
+// Detect real touch-capable devices regardless of screen width.
+// Evaluated once at module load — stable for the lifetime of the page.
 const isTouchDevice =
   typeof window !== 'undefined' &&
   ('ontouchstart' in window || navigator.maxTouchPoints > 0);
@@ -105,35 +107,40 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
   const { state, dispatch } = useApp();
   const [showPopup, setShowPopup] = useState(false);
   const colors = CATEGORY_COLORS[el.category];
-  // Any non-mobile touch device (covers iPads beyond the isTablet width breakpoint too)
+
+  // A tablet is any non-mobile touch device.
+  // This covers all iPad sizes, Surfaces, etc. regardless of breakpoint.
   const treatAsTablet = !isMobile && isTouchDevice;
 
-  // Prevent synthetic click from firing after a touch event
+  // Prevents the synthetic `click` event (fired ~300ms after touchend) from
+  // opening the popup after a touch interaction has already been handled.
   const touchHandled = useRef(false);
   const touchDragging = useRef(false);
 
-  // ── Add atom to lab (smart position) ─────────────────────────
+  // ── Shared: add atom to lab at a smart grid position ─────────
   const addToLab = () => {
     const pos = getSmartPosition(state.placedAtoms.length);
     dispatch({ type: 'DROP_ATOM', payload: { element: el, x: pos.x, y: pos.y } });
     onToast?.(`${el.symbol} — ${el.name} added ⚗`);
   };
 
-  // ── Desktop: drag ─────────────────────────────────────────────
+  // ── Desktop: native HTML drag ─────────────────────────────────
   const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData('elementSymbol', el.symbol);
     dispatch({ type: 'SET_DRAG', payload: el });
   };
   const handleDragEnd = () => dispatch({ type: 'SET_DRAG', payload: null });
 
-  // ── Desktop: click → popup ────────────────────────────────────
+  // ── Desktop: click → element info popup ──────────────────────
   const handleClick = () => {
+    // Swallow the synthetic click that browsers fire ~300ms after touchend
     if (touchHandled.current) { touchHandled.current = false; return; }
     dispatch({ type: 'SELECT_ELEMENT', payload: el });
     setShowPopup(true);
   };
 
-  // ── Mobile: tap=add, long-press=details, NO drag, scroll free ──
+  // ── Mobile: tap = add, long-press = info, NO drag ────────────
+  // touchAction:'auto' leaves all native scroll/zoom behaviour intact.
   const handleMobileTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchHandled.current = true;
     const touch = e.touches[0];
@@ -160,12 +167,22 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
       addToLab();
     };
     window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('touchend', onEnd);
+    window.addEventListener('touchend', onEnd, { passive: true });
   };
 
-  // ── Tablet: tap=add, horizontal-drag=drop to sandbox, NO popup ever ──
-  // touchAction:'pan-y' lets the browser handle vertical scroll natively.
-  // We only intercept when the gesture is clearly a horizontal drag.
+  // ── Tablet: tap = add, horizontal-drag = drop into sandbox ───
+  //
+  // touchAction:'pan-y' is the key:
+  //   • The BROWSER handles vertical scroll natively and smoothly.
+  //   • Horizontal gestures are left entirely to our JS.
+  //   • Because the browser owns vertical scroll, we do NOT need
+  //     ev.preventDefault() at all — which means we can use
+  //     passive:true on the touchmove listener, avoiding any
+  //     scroll jank or event-dropping on slower tablets.
+  //
+  // Drag is committed only when movement is clearly horizontal
+  // (|dx| > |dy| × 1.5 and total distance > 12px), so normal
+  // vertical scrolling never accidentally starts a drag.
   const handleTabletTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchHandled.current = true;
     touchDragging.current = false;
@@ -180,13 +197,13 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
       const dist = Math.hypot(dx, dy);
 
       if (touchDragging.current) {
-        // Already dragging — follow finger and block scroll
-        ev.preventDefault();
+        // Drag already committed — keep ghost following finger
         moveGhost(t.clientX, t.clientY);
         return;
       }
 
-      // Only commit to a drag if movement is clearly horizontal (not a scroll)
+      // Commit to drag only when finger has moved clearly sideways.
+      // |dx| > |dy| × 1.5 means the angle must be within ~34° of horizontal.
       if (dist > 12 && Math.abs(dx) > Math.abs(dy) * 1.5) {
         touchDragging.current = true;
         createGhost(el.symbol, colors.bg, t.clientX, t.clientY);
@@ -199,9 +216,11 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
       window.removeEventListener('touchend', onEnd);
 
       if (touchDragging.current) {
-        // Finish drag — drop into sandbox if finger is over it
+        // ── Drag ended — check if finger is over the sandbox ──
         removeGhost();
         dispatch({ type: 'SET_DRAG', payload: null });
+        touchDragging.current = false;
+
         const t = ev.changedTouches[0];
         const sandbox = document.getElementById('sandbox-area');
         if (sandbox) {
@@ -210,13 +229,15 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
             t.clientX >= rect.left && t.clientX <= rect.right &&
             t.clientY >= rect.top  && t.clientY <= rect.bottom
           ) {
-            dispatch({ type: 'DROP_ATOM', payload: { element: el, x: t.clientX - rect.left, y: t.clientY - rect.top } });
+            dispatch({
+              type: 'DROP_ATOM',
+              payload: { element: el, x: t.clientX - rect.left, y: t.clientY - rect.top },
+            });
             onToast?.(`${el.symbol} — ${el.name} added ⚗`);
           }
         }
-        touchDragging.current = false;
       } else {
-        // Short tap (no significant movement) → add to lab. No popup on tablet.
+        // ── No drag — treat as a tap if finger barely moved ───
         const t = ev.changedTouches[0];
         if (Math.hypot(t.clientX - startX, t.clientY - startY) < 10) {
           addToLab();
@@ -224,8 +245,10 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
       }
     };
 
-    window.addEventListener('touchmove', onMove, { passive: false });
-    window.addEventListener('touchend', onEnd);
+    // passive:true — browser does not wait for JS before scrolling vertically.
+    // This is safe because pan-y already prevents horizontal browser scroll.
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('touchend', onEnd, { passive: true });
   };
 
   const handleTouchStart = isMobile
@@ -240,9 +263,8 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
     background: colors.bg,
     border: `1px solid ${colors.border}`,
     color: colors.text,
-    // pan-y: browser handles vertical scroll natively (enables scrolling through the tile list).
-    // Horizontal drags are still intercepted by JS for drag-to-sandbox.
-    // Mobile uses 'auto' so native scroll is completely free.
+    // pan-y  → browser scrolls vertically, JS handles horizontal drag
+    // auto   → full native handling on mobile (scroll + zoom)
     touchAction: treatAsTablet ? 'pan-y' : 'auto',
     cursor: 'pointer',
     position: 'relative',
