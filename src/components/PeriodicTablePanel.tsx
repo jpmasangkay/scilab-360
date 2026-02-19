@@ -68,7 +68,8 @@ export function PeriodicTablePanel({ onToast, isMobile }: PeriodicTablePanelProp
       ) : showFull ? (
         /* Full 118-element table — ONLY here do we add horizontal scroll */
         <div style={{ overflowX: 'auto', paddingBottom: 6 }}>
-          <div style={{ minWidth: 520 }}>
+          <div style={{ overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch' as any }}>
+            <div style={{ minWidth: 520 }}>
             <div style={{ display: 'grid', gridTemplateColumns: GRID_COLS, gap: 2 }}>
               {Array.from({ length: 10 }, (_, r) =>
                 Array.from({ length: 18 }, (_, c) => {
@@ -95,6 +96,7 @@ export function PeriodicTablePanel({ onToast, isMobile }: PeriodicTablePanelProp
                 return el ? <ElementTile key={el.atomicNumber} el={el} tiny onToast={onToast} isMobile={isMobile} /> : <div key={i} style={{ aspectRatio: '1' }} />;
               })}
               <div style={{ aspectRatio: '1' }} />
+            </div>
             </div>
           </div>
         </div>
