@@ -65,22 +65,24 @@ function AppLayout() {
         />
 
         {isMobile ? (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', maxWidth: '100vw' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', maxWidth: '100vw', paddingBottom: 'env(safe-area-inset-bottom, 8px)' }}>
             {activeTab === 'lab' && (
               <>
-                <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+                <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12, display: 'flex', flexDirection: 'column', minHeight: 0, marginBottom: 8 }}>
                   <Sandbox isMobile />
                 </div>
-                {legend}
+                <div style={{ flexShrink: 0, paddingBottom: 64 }}>
+                  {legend}
+                </div>
               </>
             )}
             {activeTab === 'guide' && (
-              <div style={{ flex: 1, overflow: 'hidden' }}>
+              <div style={{ flex: 1, overflow: 'hidden', paddingBottom: 64 }}>
                 <LeftPanel fullHeight isMobile onToast={showToast} />
               </div>
             )}
             {activeTab === 'molecules' && (
-              <div style={{ flex: 1, overflow: 'hidden' }}>
+              <div style={{ flex: 1, overflow: 'hidden', paddingBottom: 64 }}>
                 <RightPanel fullHeight />
               </div>
             )}
