@@ -166,8 +166,7 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
     window.addEventListener('touchend', onEnd);
   };
 
-  // ── Tablet: tap=add, long-press(500ms)=drag, scroll also works ──
-  // Scroll is free until long-press threshold; after that we take over.
+  // ── Tablet: tap=add, drag=drop, 2s hold=info, scroll free ───────
   const handleTabletTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchHandled.current = true;
     touchDragging.current = false;
@@ -175,29 +174,38 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
     const startX = touch.clientX;
     const startY = touch.clientY;
 
+    // 2-second hold → show element info (only if not scrolling/dragging)
     longPressTimer.current = setTimeout(() => {
       longPressTimer.current = null;
-      // Long-press → start drag
-      touchDragging.current = true;
-      createGhost(el.symbol, colors.bg, startX, startY);
-      dispatch({ type: 'SET_DRAG', payload: el });
-    }, 500);
+      if (!touchDragging.current) {
+        dispatch({ type: 'SELECT_ELEMENT', payload: el });
+        setShowPopup(true);
+      }
+    }, 2000);
 
     const onMove = (ev: globalThis.TouchEvent) => {
       const t = ev.touches[0];
       const dist = Math.hypot(t.clientX - startX, t.clientY - startY);
 
       if (!touchDragging.current) {
-        // If user scrolls before long-press fires, cancel it
         if (dist > 8 && longPressTimer.current) {
+          // User is scrolling — cancel long-press, let browser scroll
           clearTimeout(longPressTimer.current);
           longPressTimer.current = null;
-          window.removeEventListener('touchmove', onMove);
-          window.removeEventListener('touchend', onEnd);
+        }
+        if (dist > 12) {
+          // User moved enough — start drag
+          touchDragging.current = true;
+          if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current);
+            longPressTimer.current = null;
+          }
+          createGhost(el.symbol, colors.bg, t.clientX, t.clientY);
+          dispatch({ type: 'SET_DRAG', payload: el });
         }
         return;
       }
-      // Actively dragging — follow finger
+      // Actively dragging — block scroll, follow finger
       ev.preventDefault();
       moveGhost(t.clientX, t.clientY);
     };
@@ -209,26 +217,28 @@ export function ElementTile({ el, tiny = false, onToast, isMobile, isTablet }: E
         clearTimeout(longPressTimer.current);
         longPressTimer.current = null;
       }
+
       if (touchDragging.current) {
+        // Drop on sandbox if finger lifted over it
         removeGhost();
         dispatch({ type: 'SET_DRAG', payload: null });
         const t = ev.changedTouches[0];
         const sandbox = document.getElementById('sandbox-area');
         if (sandbox) {
           const rect = sandbox.getBoundingClientRect();
-          if (t.clientX >= rect.left && t.clientX <= rect.right && t.clientY >= rect.top && t.clientY <= rect.bottom) {
+          if (t.clientX >= rect.left && t.clientX <= rect.right &&
+              t.clientY >= rect.top && t.clientY <= rect.bottom) {
             dispatch({ type: 'DROP_ATOM', payload: { element: el, x: t.clientX - rect.left, y: t.clientY - rect.top } });
             onToast?.(`${el.symbol} — ${el.name} added ⚗`);
           }
         }
         touchDragging.current = false;
-      } else {
-        // Short tap → add to lab
+      } else if (!showPopup) {
+        // Short tap (not a long-press that opened popup) → add to lab
         addToLab();
       }
     };
 
-    // Start passive — only becomes non-passive after drag threshold via ev.preventDefault inside onMove
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
   };
