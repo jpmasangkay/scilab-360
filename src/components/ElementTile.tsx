@@ -67,9 +67,10 @@ interface ElementTileProps {
   el: ElementData;
   tiny?: boolean;
   onToast?: (msg: string) => void;
+  isMobile?: boolean;
 }
 
-export function ElementTile({ el, tiny = false, onToast }: ElementTileProps) {
+export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTileProps) {
   const { state, dispatch } = useApp();
   const [showPopup, setShowPopup] = useState(false);
   const colors = CATEGORY_COLORS[el.category];
