@@ -717,7 +717,7 @@ const PeriodicTablePanel: React.FC = () => {
         }}>{showFull ? "▴ Show Common Only" : "▾ Show All 118 Elements"}</button>
       )}
       {/* Scrollable element area — fixed height so it never disappears */}
-      <div style={{ overflowY: "auto", maxHeight: 360, minHeight: 100, paddingRight: 2 }}>
+      <div style={{ overflowY: "auto", maxHeight: 500, minHeight: 100, paddingRight: 2 }}>
         {showFiltered ? (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
             {filtered.map(el => <ElementTile key={el.atomicNumber} el={el} />)}
@@ -1644,7 +1644,7 @@ const LeftPanel: React.FC = () => {
 
   return (
     <div style={{
-      width: 272,
+      width: 420,
       flexShrink: 0,
       display: "flex",
       flexDirection: "column",
