@@ -1,17 +1,44 @@
 import type { PlacedAtom, Bond, ElementData, AppState } from '../types';
 import { KNOWN_COMPOUNDS } from '../data/compounds';
 
+// Priority for conventional inorganic/organic formula ordering.
+// Lower number = appears first in formula.
+// Based on: metals → C → N/P → H → S → O → halogens → others
+const FORMULA_PRIORITY: Record<string, number> = {
+  // Metals (electropositive — always first)
+  Li: 10, Na: 10, K: 10, Rb: 10, Cs: 10,
+  Be: 10, Mg: 10, Ca: 10, Sr: 10, Ba: 10,
+  Fe: 10, Cu: 10, Zn: 10, Ag: 10, Au: 10,
+  Al: 10, Cr: 10, Mn: 10, Co: 10, Ni: 10,
+  Pb: 10, Sn: 10, Ti: 10, V: 10, W: 10,
+  // Carbon (Hill system: C always first in organic)
+  C: 20,
+  // Nitrogen & Phosphorus group
+  N: 30, P: 30,
+  // Hydrogen (after N/P so NH3 works, but before S/O so H2O/H2S work)
+  H: 40,
+  // Sulfur (after H so H2S works, but before O so SO2 works)
+  S: 45,
+  // Oxygen
+  O: 50,
+  // Halogens (most electronegative — always last)
+  F: 60, Cl: 60, Br: 60, I: 60,
+};
+
+function getFormulaPriority(symbol: string): number {
+  return FORMULA_PRIORITY[symbol] ?? 55; // default between O and halogens
+}
+
 export function computeFormula(atoms: PlacedAtom[]): string {
   const counts: Record<string, number> = {};
   for (const a of atoms) {
     counts[a.element.symbol] = (counts[a.element.symbol] || 0) + 1;
   }
   const order = Object.keys(counts).sort((a, b) => {
-    if (a === 'C') return -1;
-    if (b === 'C') return 1;
-    if (a === 'H') return -1;
-    if (b === 'H') return 1;
-    return a.localeCompare(b);
+    const pa = getFormulaPriority(a);
+    const pb = getFormulaPriority(b);
+    if (pa !== pb) return pa - pb;
+    return a.localeCompare(b); // tie-break alphabetically
   });
   return order.map(s => (counts[s] > 1 ? `${s}${counts[s]}` : s)).join('');
 }

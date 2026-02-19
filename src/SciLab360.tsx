@@ -368,43 +368,43 @@ export function generateFeedback(atoms: PlacedAtom[], bonds: Bond[], formula: st
 const QUIZ_LEVELS: QuizChallenge[] = [
   {
     level: 1, title: "Diatomic Molecules", description: "Build Hydrogen Gas (H₂)", targetFormula: "H2", requiredAtoms: { H: 2 }, hint: "Drag 2 Hydrogen atoms close together. Two nonmetals share electrons = covalent bond!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 2, title: "Diatomic Molecules", description: "Build Oxygen Gas (O₂)", targetFormula: "O2", requiredAtoms: { O: 2 }, hint: "Oxygen needs 2 more electrons to complete its octet — it forms a double bond with another O!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 3, title: "Ionic Compounds", description: "Build Table Salt (NaCl)", targetFormula: "NaCl", requiredAtoms: { Na: 1, Cl: 1 }, hint: "Sodium (metal) transfers its 1 valence electron to Chlorine (nonmetal). Metal + Nonmetal = Ionic bond!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 4, title: "Simple Covalent", description: "Build Water (H₂O)", targetFormula: "H2O", requiredAtoms: { H: 2, O: 1 }, hint: "Oxygen has 6 valence electrons and needs 2 more. Two H atoms share one electron each. Bent geometry, 104.5°!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 5, title: "Simple Covalent", description: "Build Ammonia (NH₃)", targetFormula: "NH3", requiredAtoms: { N: 1, H: 3 }, hint: "Nitrogen has 5 valence electrons, needs 3 more. Add 3 Hydrogen atoms around it!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 6, title: "Carbon Compounds", description: "Build Carbon Dioxide (CO₂)", targetFormula: "CO2", requiredAtoms: { C: 1, O: 2 }, hint: "Carbon needs 4 bonds. Each Oxygen forms a double bond with Carbon. Linear geometry!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 7, title: "Carbon Compounds", description: "Build Methane (CH₄)", targetFormula: "CH4", requiredAtoms: { C: 1, H: 4 }, hint: "Carbon has 4 valence electrons and needs 4 single bonds. Add 4 Hydrogen atoms!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 8, title: "Ionic Compound", description: "Build Magnesium Oxide (MgO)", targetFormula: "MgO", requiredAtoms: { Mg: 1, O: 1 }, hint: "Magnesium (metal) transfers 2 electrons to Oxygen (nonmetal). Ionic bond with 2:2 charge balance!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 9, title: "Polyatomic", description: "Build Sulfur Dioxide (SO₂)", targetFormula: "SO2", requiredAtoms: { S: 1, O: 2 }, hint: "Sulfur can expand its octet. Place 2 Oxygen atoms around Sulfur for bent geometry!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
   {
     level: 10, title: "Complex Covalent", description: "Build Hydrogen Peroxide (H₂O₂)", targetFormula: "H2O2", requiredAtoms: { H: 2, O: 2 }, hint: "Two O atoms bonded to each other, each also bonded to one H. Bent geometry per oxygen!",
-    difficulty: "medium"
+    difficulty: "easy"
   },
 ];
 

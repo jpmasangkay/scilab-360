@@ -31,9 +31,6 @@ export default function App() {
               <span className="text-xs font-share-tech" style={{ color: '#c4b5fd' }}>{label}</span>
             </div>
           ))}
-          <span className="ml-auto text-xs font-share-tech" style={{ color: '#6b21a8' }}>
-            SciLab 360 v1.0 · 118 Elements
-          </span>
         </div>
 
         <StudentDashboard />
