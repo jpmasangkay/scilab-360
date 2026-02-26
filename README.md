@@ -1,20 +1,10 @@
-<div align="center">
-
-<img src="https://img.shields.io/badge/⚛-SCILAB%20360-a855f7?style=for-the-badge&labelColor=0d0120&color=a855f7" alt="SciLab 360" />
-
 # ⚛ SCILAB 360
+[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/jpmasangkay/scilab-360)
 
 ### Interactive Chemistry Lab
 
 **Drag. Drop. Bond. Learn.**  
 A gamified chemistry simulation where students build real molecules from scratch using all 118 elements of the periodic table.
-
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://your-vercel-url.vercel.app)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-
-</div>
 
 ---
 
@@ -94,8 +84,8 @@ A gamified chemistry simulation where students build real molecules from scratch
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/scilab360.git
-cd scilab360
+git clone https://github.com/jpmasangkay/scilab-360.git
+cd scilab-360
 
 # Install dependencies
 npm install
@@ -113,15 +103,6 @@ npm run build
 ```
 
 The output will be in the `dist/` folder, ready to deploy.
-
-### Deploy to Vercel
-
-```bash
-npm install -g vercel
-vercel
-```
-
-Or connect your GitHub repo directly in the [Vercel Dashboard](https://vercel.com/dashboard) for automatic deployments on every push.
 
 ---
 
@@ -182,11 +163,3 @@ SciLab 360 uses a real-time bond detection algorithm based on actual chemistry r
 5. Click **CHECK ANSWER** when you think your molecule is correct
 6. Earn points, advance levels, and track your progress in the **Student Dashboard**
 7. When done, open **MY PROGRESS** → **DOWNLOAD MY REPORT** to save your results
-
-
-
-<div align="center">
-
-Made with ⚛ and 💜 &nbsp;|&nbsp; **SciLab 360** — Interactive Chemistry Lab
-
-</div>
