@@ -8,14 +8,6 @@ A gamified chemistry simulation where students build real molecules from scratch
 
 ---
 
-## 📸 Preview
-
-![SciLab 360 Screenshot](./screenshot.png)
-
-> *The sandbox workspace — drag elements from the periodic table into the canvas to form bonds in real time.*
-
----
-
 ## ✨ Features
 
 ### 🧪 Interactive Sandbox
