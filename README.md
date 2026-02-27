@@ -1,8 +1,5 @@
-<div align="center">
-
-<img src="https://img.shields.io/badge/⚛-SCILAB%20360-a855f7?style=for-the-badge&labelColor=0d0120&color=a855f7" alt="SciLab 360" />
-
 # ⚛ SCILAB 360
+[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/jpmasangkay/scilab-360)
 
 ### Interactive Chemistry Lab
 
@@ -14,22 +11,14 @@ A gamified chemistry simulation where students build real molecules from scratch
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
-
-</div>
 
 ---
 
 ## 📸 Preview
 
-<div align="center">
-
 ![SciLab 360 Screenshot](./screenshot.png)
 
 > *The sandbox workspace — drag elements from the periodic table into the canvas to form bonds in real time.*
-
-</div>
-
 ---
 
 ## ✨ Features
@@ -113,7 +102,7 @@ The app uses a **custom chemistry engine** built from scratch — handling bond 
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/scilab-360.git
+git clone https://github.com/jpmasangkay/scilab-360.git
 cd scilab-360
 
 # Install dependencies
@@ -141,15 +130,6 @@ npm run build
 ```
 
 The output will be in the `dist/` folder, ready to deploy to any static hosting provider.
-
-### Deploy to Vercel
-
-```bash
-npm install -g vercel
-vercel
-```
-
-Or connect your GitHub repo directly in the [Vercel Dashboard](https://vercel.com/dashboard) for automatic deployments on every push.
 
 ---
 
@@ -241,12 +221,6 @@ Contributions are welcome! Feel free to open an issue or submit a pull request.
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
