@@ -216,11 +216,3 @@ Contributions are welcome! Feel free to open an issue or submit a pull request.
 5. Open a Pull Request
 
 ---
-
-<div align="center">
-
-Made with ⚛ and 💜 by the SciLab 360 team
-
-**SciLab 360** — Interactive Chemistry Lab
-
-</div>
