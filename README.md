@@ -204,15 +204,3 @@ SciLab 360 uses a **real-time bond detection algorithm** based on actual chemist
 7. Open **MY PROGRESS** → **DOWNLOAD MY REPORT** to save a full progress report
 
 ---
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open an issue or submit a pull request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
