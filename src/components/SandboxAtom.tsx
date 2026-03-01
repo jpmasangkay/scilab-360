@@ -17,7 +17,7 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
   const color = getAtomColor(atom.element.category);
   const colors = CATEGORY_COLORS[atom.element.category];
 
-  // ── Mouse drag ────────────────────────────────────────────────
+  // Mouse drag
   const onMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!elRef.current) return;
@@ -63,13 +63,12 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
     };
   }, [dragging, atom, dispatch]);
 
-  // ── Touch drag ────────────────────────────────────────────────
+  // Touch drag
   const onTouchStart = (e: React.TouchEvent) => {
     e.stopPropagation();
     const touch = e.touches[0];
     offsetRef.current = { x: touch.clientX - atom.x, y: touch.clientY - atom.y };
     hasMoved.current = false;
-    // detect double-tap for removal
     if (tapTimer.current) {
       clearTimeout(tapTimer.current);
       tapTimer.current = null;
@@ -131,22 +130,22 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
       style={{
         left: atom.x,
         top: atom.y,
-        background: `radial-gradient(circle at 35% 35%, ${color}99, ${color}dd)`,
-        border: `2px solid ${colors.border}`,
+        background: color,
+        border: `3px solid ${colors.border}`,
         boxShadow: dragging
-          ? `0 0 24px ${colors.glow}, 0 0 48px ${colors.glow}40`
-          : `0 0 12px ${colors.glow}60`,
+          ? `0 4px 20px ${color}60, 0 0 0 4px ${color}20`
+          : `0 2px 8px ${color}30`,
         cursor: dragging ? 'grabbing' : 'grab',
         zIndex: dragging ? 100 : 2,
         transition: dragging ? 'none' : 'box-shadow 0.2s',
         touchAction: 'none',
       }}
     >
-      <span className="font-orbitron font-bold text-white text-[13px] leading-none">
+      <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, color: '#ffffff', fontSize: 13, lineHeight: 1, textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
         {atom.element.symbol}
       </span>
-      <span className="text-[8px] text-white/70 font-share-tech">
-        {atom.element.valenceElectrons}e⁻
+      <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.8)', fontFamily: '"Space Mono", monospace' }}>
+        {atom.element.valenceElectrons}e
       </span>
     </div>
   );
