@@ -45,7 +45,6 @@ function PTile({
   const c = CATEGORY_COLORS[el.category];
   const touchHandled = useRef(false);
 
-  // Tablet tap: add to lab immediately; long-press: show info
   const handleTouchStart = onAddToLab ? (e: React.TouchEvent<HTMLDivElement>) => {
     if (dimmed) return;
     touchHandled.current = true;
@@ -80,7 +79,6 @@ function PTile({
     window.addEventListener('touchend', onEnd);
   } : undefined;
 
-  // Suppress click when touch already handled it
   const handleClick = () => {
     if (touchHandled.current) { touchHandled.current = false; return; }
     if (!dimmed) onSelect(el);
@@ -93,15 +91,15 @@ function PTile({
       title={`${el.name} (${el.atomicNumber})`}
       style={{
         aspectRatio: '1',
-        borderRadius: compact ? 3 : 4,
+        borderRadius: compact ? 4 : 6,
         cursor: dimmed ? 'not-allowed' : 'pointer',
         userSelect: 'none',
-        transition: 'all 0.12s',
+        transition: 'all 0.15s ease',
         touchAction: 'auto',
         background: selected ? c.border : c.bg,
-        border: `1px solid ${selected ? c.border : c.border + '80'}`,
-        color: selected ? '#fff' : c.text,
-        opacity: dimmed ? 0.15 : 1,
+        border: `1.5px solid ${selected ? c.border : c.border + '60'}`,
+        color: selected ? '#ffffff' : c.text,
+        opacity: dimmed ? 0.2 : 1,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -109,30 +107,30 @@ function PTile({
         padding: compact ? 1 : 3,
         position: 'relative',
         zIndex: selected ? 5 : 1,
-        boxShadow: selected ? `0 0 10px ${c.glow}` : 'none',
+        boxShadow: selected ? `0 2px 10px ${c.border}40` : 'none',
         pointerEvents: dimmed ? 'none' : 'auto',
       }}
       onMouseEnter={e => {
         const d = e.currentTarget as HTMLDivElement;
-        d.style.transform = 'scale(1.25)';
+        d.style.transform = 'scale(1.2)';
         d.style.zIndex = '20';
-        d.style.boxShadow = `0 0 12px ${c.glow}`;
+        d.style.boxShadow = `0 4px 14px ${c.border}30`;
       }}
       onMouseLeave={e => {
         const d = e.currentTarget as HTMLDivElement;
         d.style.transform = 'scale(1)';
         d.style.zIndex = selected ? '5' : '1';
-        d.style.boxShadow = selected ? `0 0 10px ${c.glow}` : 'none';
+        d.style.boxShadow = selected ? `0 2px 10px ${c.border}40` : 'none';
       }}
     >
-      <span style={{ fontSize: compact ? '5px' : 'clamp(7px, 0.6vw, 10px)', opacity: 0.9, lineHeight: 1, fontFamily: '"Share Tech Mono", monospace' }}>
+      <span style={{ fontSize: compact ? '5px' : 'clamp(7px, 0.6vw, 10px)', opacity: 0.7, lineHeight: 1, fontFamily: '"Space Mono", monospace' }}>
         {el.atomicNumber}
       </span>
-      <span style={{ fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: compact ? '8px' : 'clamp(11px, 1vw, 16px)', lineHeight: 1, marginTop: 1, textShadow: `0 0 6px ${c.glow}` }}>
+      <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: compact ? '8px' : 'clamp(11px, 1vw, 16px)', lineHeight: 1, marginTop: 1 }}>
         {el.symbol}
       </span>
       {!compact && (
-        <span style={{ fontSize: 'clamp(7px, 0.55vw, 10px)', opacity: 0.9, lineHeight: 1, marginTop: 1, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: '"Share Tech Mono", monospace' }}>
+        <span style={{ fontSize: 'clamp(7px, 0.55vw, 10px)', opacity: 0.7, lineHeight: 1, marginTop: 1, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: '"Inter", sans-serif' }}>
           {el.name}
         </span>
       )}
@@ -146,9 +144,9 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
   const stats: [string, string | number][] = [
     ['Atomic Number',     el.atomicNumber],
     ['Period',            el.period],
-    ['Group',             el.group ?? '—'],
-    ['Valence e⁻',        el.valenceElectrons],
-    ['Electronegativity', el.electronegativity ?? '—'],
+    ['Group',             el.group ?? '--'],
+    ['Valence e-',        el.valenceElectrons],
+    ['Electronegativity', el.electronegativity ?? '--'],
     ['Metal',             el.isMetal ? 'Yes' : 'No'],
     ['Category',          el.category.replace(/-/g, ' ')],
   ];
@@ -156,16 +154,16 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
     <div style={{ display: 'flex', flexDirection: isMobile ? 'row' : 'column', gap: isMobile ? 12 : 14, alignItems: isMobile ? 'flex-start' : 'stretch' }}>
       {/* Symbol tile */}
       <div style={{
-        borderRadius: 12, background: c.bg, border: `2px solid ${c.border}`,
+        borderRadius: 14, background: c.bg, border: `2px solid ${c.border}`,
         padding: isMobile ? '12px 14px' : '20px 16px',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
-        boxShadow: `0 0 30px ${c.glow}40`, flexShrink: 0,
+        boxShadow: `0 4px 20px ${c.border}20`, flexShrink: 0,
         minWidth: isMobile ? 88 : 'auto',
       }}>
-        <span style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 11, color: c.text, opacity: 0.6 }}>{el.atomicNumber}</span>
-        <span style={{ fontFamily: 'Orbitron, monospace', fontWeight: 900, fontSize: isMobile ? 34 : 52, color: c.text, lineHeight: 1, textShadow: `0 0 20px ${c.glow}` }}>{el.symbol}</span>
-        <span style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: isMobile ? 11 : 14, color: c.text, marginTop: 6, textAlign: 'center' }}>{el.name}</span>
-        <span style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 9, color: c.text, opacity: 0.7, background: c.bg, border: `1px solid ${c.border}`, borderRadius: 4, padding: '2px 8px', marginTop: 8, textTransform: 'capitalize', letterSpacing: '0.08em', textAlign: 'center' }}>
+        <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 11, color: c.text, opacity: 0.6 }}>{el.atomicNumber}</span>
+        <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 900, fontSize: isMobile ? 34 : 52, color: c.text, lineHeight: 1 }}>{el.symbol}</span>
+        <span style={{ fontFamily: '"Inter", sans-serif', fontSize: isMobile ? 11 : 14, color: c.text, marginTop: 6, textAlign: 'center', fontWeight: 600 }}>{el.name}</span>
+        <span style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, color: c.text, opacity: 0.7, background: '#ffffff', border: `1px solid ${c.border}60`, borderRadius: 6, padding: '3px 10px', marginTop: 8, textTransform: 'capitalize', letterSpacing: '0.05em', textAlign: 'center' }}>
           {el.category.replace(/-/g, ' ')}
         </span>
       </div>
@@ -174,39 +172,39 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(4, 1fr)' : '1fr 1fr', gap: isMobile ? 5 : 8, marginBottom: 8 }}>
           {stats.map(([label, value]) => (
-            <div key={label} style={{ background: '#130929', border: '1px solid #2d1b5e', borderRadius: 8, padding: isMobile ? '5px 7px' : '8px 10px' }}>
-              <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 8, color: '#6b21a8', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</p>
-              <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: isMobile ? 11 : 13, color: '#e9d5ff', textTransform: 'capitalize' }}>{value}</p>
+            <div key={label} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: isMobile ? '5px 7px' : '8px 10px' }}>
+              <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 8, color: '#94a3b8', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: isMobile ? 11 : 13, color: '#1e293b', fontWeight: 700, textTransform: 'capitalize' }}>{value}</p>
             </div>
           ))}
         </div>
 
-        {/* Add to Lab button — shown on mobile and tablet (whenever onAddToLab is provided) */}
         {onAddToLab && (
           <button
             onClick={onAddToLab}
             style={{
-              width: '100%', marginTop: 8, padding: '10px', borderRadius: 8, cursor: 'pointer',
-              fontFamily: '"Share Tech Mono", monospace', fontSize: 12, fontWeight: 700,
-              letterSpacing: '0.1em', background: '#6d28d9', border: '1px solid #a855f7',
-              color: '#fff', boxShadow: '0 0 14px #a855f750',
+              width: '100%', marginTop: 8, padding: '10px', borderRadius: 10, cursor: 'pointer',
+              fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 800,
+              letterSpacing: '0.05em', background: '#14b8a6', border: '1px solid #0d9488',
+              color: '#ffffff', boxShadow: '0 2px 10px #14b8a630',
+              transition: 'all 0.15s',
             }}
           >
-            ⚗ ADD TO LAB
+            ADD TO LAB
           </button>
         )}
 
-        {/* Valence shell — desktop only */}
         {!isMobile && (
-          <div style={{ background: '#130929', border: '1px solid #2d1b5e', borderRadius: 8, padding: '10px 12px' }}>
-            <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 8, color: '#6b21a8', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Valence Shell (max 8)</p>
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '10px 12px', marginTop: 8 }}>
+            <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, color: '#94a3b8', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Valence Shell (max 8)</p>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {Array.from({ length: 8 }, (_, i) => (
                 <div key={i} style={{
-                  width: 16, height: 16, borderRadius: '50%',
+                  width: 18, height: 18, borderRadius: '50%',
                   background: i < el.valenceElectrons ? c.border : 'transparent',
-                  border: `1px solid ${i < el.valenceElectrons ? c.border : '#2d1b5e'}`,
-                  boxShadow: i < el.valenceElectrons ? `0 0 6px ${c.glow}` : 'none',
+                  border: `2px solid ${i < el.valenceElectrons ? c.border : '#e2e8f0'}`,
+                  boxShadow: i < el.valenceElectrons ? `0 1px 6px ${c.border}40` : 'none',
+                  transition: 'all 0.2s',
                 }} />
               ))}
             </div>
@@ -265,7 +263,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
     const x = Math.min(60 + col * 90 + (row % 2) * 20, W - 50);
     const y = Math.min(60 + row * 90, H - 50);
     dispatch({ type: 'DROP_ATOM', payload: { element: el, x, y } });
-    onToast?.(`${el.symbol} — ${el.name} added to lab ⚗`);
+    onToast?.(`${el.symbol} -- ${el.name} added to lab`);
   }
 
   const COLS = 'repeat(18, minmax(0, 1fr))';
@@ -289,44 +287,47 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
   const activeCatColor = selected ? CATEGORY_COLORS[selected.category] : null;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', flexDirection: 'column', background: '#07011a', fontFamily: '"Share Tech Mono", monospace' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', flexDirection: 'column', background: '#f8fafc', fontFamily: '"Inter", sans-serif' }}>
 
       {/* ── Header ── */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: isMobile ? '10px 12px' : '1.25rem 1.75rem',
-        background: 'linear-gradient(90deg, #0d0120 0%, #1a0533 40%, #200040 100%)',
-        borderBottom: '1px solid #4c1d95',
+        padding: isMobile ? '10px 12px' : '14px 24px',
+        background: '#ffffff',
+        borderBottom: '1px solid #e2e8f0',
         flexShrink: 0, gap: 10,
+        boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 12 }}>
-          <span style={{ fontSize: isMobile ? 20 : 30, filter: 'drop-shadow(0 0 10px #a855f7)', flexShrink: 0 }}>⚛</span>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: '#ccfbf1', border: '1px solid #14b8a640', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="2" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /><ellipse cx="12" cy="12" rx="10" ry="4" /></svg>
+          </div>
           <div>
-            <p style={{ fontFamily: 'Orbitron, monospace', fontWeight: 900, fontSize: isMobile ? 12 : 20, color: '#f3e8ff', letterSpacing: isMobile ? '1px' : '4px', textShadow: '0 0 20px #a855f780', whiteSpace: 'nowrap' }}>
-              ELEMENT LIBRARY
+            <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: isMobile ? 14 : 20, color: '#0f172a', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
+              Element Library
             </p>
-            {!isMobile && <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 11, color: '#c084fc', letterSpacing: '3px' }}>ALL 118 ELEMENTS</p>}
+            {!isMobile && <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: '#94a3b8', letterSpacing: '0.02em' }}>All 118 Elements</p>}
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: isMobile ? 1 : 'none' }}>
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder={isMobile ? 'Search…' : 'Search name, symbol or number…'}
+            placeholder={isMobile ? 'Search...' : 'Search name, symbol or number...'}
             style={{
-              width: isMobile ? '100%' : 220, minWidth: 0,
-              padding: '7px 12px', background: '#0d0120', border: '1px solid #2d1b5e',
-              borderRadius: 8, color: '#e9d5ff', fontFamily: '"Share Tech Mono", monospace',
-              fontSize: 12, outline: 'none',
+              width: isMobile ? '100%' : 240, minWidth: 0,
+              padding: '8px 14px', background: '#f8fafc', border: '1px solid #e2e8f0',
+              borderRadius: 10, color: '#1e293b', fontFamily: '"Inter", sans-serif',
+              fontSize: 13, outline: 'none', transition: 'border-color 0.2s',
             }}
-            onFocus={e => (e.currentTarget.style.borderColor = '#7c3aed')}
-            onBlur={e => (e.currentTarget.style.borderColor = '#2d1b5e')}
+            onFocus={e => (e.currentTarget.style.borderColor = '#14b8a6')}
+            onBlur={e => (e.currentTarget.style.borderColor = '#e2e8f0')}
           />
           <button
             onClick={onClose}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 8, flexShrink: 0, background: '#1e0b3e', border: '1px solid #4c1d95', color: '#c084fc', cursor: 'pointer', transition: 'all 0.15s' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#3b0764'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#a855f7'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#1e0b3e'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#4c1d95'; }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#fee2e2'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#fca5a5'; (e.currentTarget as HTMLButtonElement).style.color = '#ef4444'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f8fafc'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0'; (e.currentTarget as HTMLButtonElement).style.color = '#64748b'; }}
           >
             <X size={16} />
           </button>
@@ -339,28 +340,28 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
         {/* ── Left / main: table ── */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: isMobile ? '8px 8px' : '16px 20px', overflow: 'auto', gap: isMobile ? 6 : 10, minWidth: 0 }}>
 
-          {/* Filter pills — horizontally scrollable on mobile */}
+          {/* Filter pills */}
           <div style={{ display: 'flex', flexWrap: isMobile ? 'nowrap' : 'wrap', gap: 5, flexShrink: 0, overflowX: 'auto', paddingBottom: isMobile ? 3 : 0 }}>
             <button
               onClick={() => setFilterCat('all')}
-              style={{ padding: '5px 10px', fontSize: isMobile ? 10 : 11, borderRadius: 6, cursor: 'pointer', background: filterCat === 'all' ? '#7c3aed' : '#1e0b3e', color: filterCat === 'all' ? '#fff' : '#a78bfa', border: filterCat === 'all' ? '1px solid #a855f7' : '1px solid #2d1b5e', transition: 'all 0.12s', whiteSpace: 'nowrap', flexShrink: 0 }}
+              style={{ padding: '5px 12px', fontSize: isMobile ? 10 : 11, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, background: filterCat === 'all' ? '#14b8a6' : '#ffffff', color: filterCat === 'all' ? '#ffffff' : '#64748b', border: filterCat === 'all' ? '1px solid #0d9488' : '1px solid #e2e8f0', transition: 'all 0.12s', whiteSpace: 'nowrap', flexShrink: 0 }}
             >All</button>
             {LEGEND_CATS.map(cat => {
               const c = CATEGORY_COLORS[cat.value];
               const active = filterCat === cat.value;
               return (
                 <button key={cat.value} onClick={() => setFilterCat(active ? 'all' : cat.value)}
-                  style={{ padding: '5px 10px', fontSize: isMobile ? 10 : 11, borderRadius: 6, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, background: active ? c.border : c.bg, color: active ? '#fff' : c.text, border: `1px solid ${active ? c.border : c.border + '80'}`, boxShadow: active ? `0 0 8px ${c.glow}60` : 'none', transition: 'all 0.12s' }}
+                  style={{ padding: '5px 12px', fontSize: isMobile ? 10 : 11, borderRadius: 8, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, fontFamily: '"Nunito", sans-serif', fontWeight: 700, background: active ? c.border : c.bg, color: active ? '#ffffff' : c.text, border: `1px solid ${active ? c.border : c.border + '40'}`, boxShadow: active ? `0 2px 8px ${c.border}30` : 'none', transition: 'all 0.12s' }}
                 >{cat.label}</button>
               );
             })}
           </div>
 
-          {/* ── Table — horizontal scroll so it never crushes on mobile ── */}
+          {/* ── Table ── */}
           <div style={{ flex: 1, overflowX: 'auto', overflowY: 'visible' }}>
             <div style={{ minWidth: isMobile ? 480 : 'auto', display: 'flex', flexDirection: 'column', gap: isMobile ? 2 : 3 }}>
 
-              {/* Rows 1–7 */}
+              {/* Rows 1-7 */}
               <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: isMobile ? 2 : 3 }}>
                 {Array.from({ length: 7 }, (_, r) => renderRow(r + 1))}
               </div>
@@ -368,15 +369,15 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
               {/* Gap hint */}
               <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: isMobile ? 2 : 3 }}>
                 <div style={{ gridColumn: '1 / 3' }} />
-                <div style={{ gridColumn: '3 / 18', height: isMobile ? 4 : 6, borderRadius: 3, background: 'linear-gradient(90deg, #fb923c20, #f8717120)', border: '1px dashed #2d1b5e40', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {!isMobile && <span style={{ fontSize: 7, color: '#6b4dcc', fontFamily: '"Share Tech Mono", monospace', letterSpacing: '0.15em' }}>LANTHANIDES & ACTINIDES BELOW</span>}
+                <div style={{ gridColumn: '3 / 18', height: isMobile ? 4 : 8, borderRadius: 4, background: '#f1f5f9', border: '1px dashed #cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {!isMobile && <span style={{ fontSize: 8, color: '#94a3b8', fontFamily: '"Inter", sans-serif', letterSpacing: '0.1em', fontWeight: 500 }}>LANTHANIDES & ACTINIDES</span>}
                 </div>
               </div>
 
               {/* Lanthanides */}
               <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: isMobile ? 2 : 3 }}>
                 <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 3 }}>
-                  <span style={{ fontSize: isMobile ? 6 : 8, color: '#fb923c', fontFamily: '"Share Tech Mono", monospace' }}>57–71</span>
+                  <span style={{ fontSize: isMobile ? 6 : 9, color: '#f97316', fontFamily: '"Space Mono", monospace', fontWeight: 700 }}>57-71</span>
                 </div>
                 {Array.from({ length: 15 }, (_, i) => {
                   const el = GRID_ELEMENTS.find(g => g.row === 9 && g.col === i + 3);
@@ -390,7 +391,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
               {/* Actinides */}
               <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: isMobile ? 2 : 3 }}>
                 <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 3 }}>
-                  <span style={{ fontSize: isMobile ? 6 : 8, color: '#f87171', fontFamily: '"Share Tech Mono", monospace' }}>89–103</span>
+                  <span style={{ fontSize: isMobile ? 6 : 9, color: '#ef4444', fontFamily: '"Space Mono", monospace', fontWeight: 700 }}>89-103</span>
                 </div>
                 {Array.from({ length: 15 }, (_, i) => {
                   const el = GRID_ELEMENTS.find(g => g.row === 10 && g.col === i + 3);
@@ -410,8 +411,8 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
               const c = CATEGORY_COLORS[cat.value];
               return (
                 <div key={cat.value} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <div style={{ width: 8, height: 8, borderRadius: 2, background: c.bg, border: `1px solid ${c.border}`, flexShrink: 0 }} />
-                  <span style={{ fontSize: isMobile ? 9 : 10, color: '#a78bfa', fontFamily: '"Share Tech Mono", monospace' }}>{cat.label}</span>
+                  <div style={{ width: 10, height: 10, borderRadius: 3, background: c.bg, border: `1.5px solid ${c.border}`, flexShrink: 0 }} />
+                  <span style={{ fontSize: isMobile ? 9 : 10, color: '#64748b', fontFamily: '"Inter", sans-serif', fontWeight: 500 }}>{cat.label}</span>
                 </div>
               );
             })}
@@ -420,10 +421,10 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
 
         {/* ── Desktop / tablet right panel ── */}
         {!isMobile && (
-          <div style={{ width: isTablet ? 220 : 260, flexShrink: 0, borderLeft: '1px solid #2d1b5e', background: '#0a0118', padding: 16, overflowY: 'auto' }}>
+          <div style={{ width: isTablet ? 220 : 270, flexShrink: 0, borderLeft: '1px solid #e2e8f0', background: '#ffffff', padding: 16, overflowY: 'auto' }}>
             {selected
               ? <ElementDetail el={selected} onAddToLab={isTablet ? () => addToLab(selected) : undefined} />
-              : <p style={{ color: '#2d1b5e', fontSize: 12, textAlign: 'center', marginTop: 40 }}>{isTablet ? 'Tap any element' : 'Click any element'}</p>
+              : <p style={{ color: '#cbd5e1', fontSize: 13, textAlign: 'center', marginTop: 40, fontFamily: '"Inter", sans-serif' }}>{isTablet ? 'Tap any element' : 'Click any element'}</p>
             }
           </div>
         )}
@@ -432,13 +433,13 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
         {isMobile && (
           <div style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
-            background: '#0a0118',
-            borderTop: `2px solid ${activeCatColor ? activeCatColor.border : '#2d1b5e'}`,
-            borderRadius: '14px 14px 0 0',
+            background: '#ffffff',
+            borderTop: `2px solid ${activeCatColor ? activeCatColor.border : '#e2e8f0'}`,
+            borderRadius: '16px 16px 0 0',
             transform: detailOpen ? 'translateY(0)' : 'translateY(calc(100% - 50px))',
             transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             zIndex: 100,
-            boxShadow: `0 -8px 40px ${activeCatColor ? activeCatColor.glow + '50' : '#00000060'}`,
+            boxShadow: '0 -4px 24px rgba(0,0,0,0.08)',
             maxHeight: '60vh',
             display: 'flex',
             flexDirection: 'column',
@@ -449,22 +450,21 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', cursor: 'pointer', flexShrink: 0, gap: 10 }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                {/* pill */}
-                <div style={{ width: 32, height: 3, borderRadius: 99, background: '#4c1d95' }} />
+                <div style={{ width: 32, height: 3, borderRadius: 99, background: '#cbd5e1' }} />
                 {selected && (
-                  <span style={{ fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: 13, color: activeCatColor?.text ?? '#e9d5ff' }}>
+                  <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 700, fontSize: 13, color: activeCatColor?.text ?? '#1e293b' }}>
                     {selected.symbol} &mdash; {selected.name}
                   </span>
                 )}
               </div>
-              <ChevronDown size={16} color="#a78bfa" style={{ transform: detailOpen ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.3s', flexShrink: 0 }} />
+              <ChevronDown size={16} color="#94a3b8" style={{ transform: detailOpen ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.3s', flexShrink: 0 }} />
             </div>
 
             {/* Scrollable detail */}
             <div style={{ overflowY: 'auto', padding: '0 14px 24px', flex: 1 }}>
               {selected
                 ? <ElementDetail el={selected} isMobile onAddToLab={() => addToLab(selected)} />
-                : <p style={{ color: '#4c1d95', fontSize: 12, textAlign: 'center', padding: 16 }}>Tap any element</p>
+                : <p style={{ color: '#cbd5e1', fontSize: 12, textAlign: 'center', padding: 16 }}>Tap any element</p>
               }
             </div>
           </div>
