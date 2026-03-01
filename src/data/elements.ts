@@ -146,7 +146,3 @@ export function buildPeriodicGrid(): GridElement[] {
 }
 
 export const GRID_ELEMENTS = buildPeriodicGrid();
-
-export const ELEMENT_BY_SYMBOL: Record<string, ElementData> = Object.fromEntries(
-  ELEMENTS.map(el => [el.symbol, el])
-);
