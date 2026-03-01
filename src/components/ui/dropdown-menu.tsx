@@ -1,6 +1,6 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { cn } from "@/lib/utils"
-import type { HTMLAttributes } from "react"
+import type { FocusEvent, MouseEvent } from "react"
 
 export const DropdownMenu = DropdownMenuPrimitive.Root
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
@@ -34,10 +34,10 @@ export function DropdownMenuItem({ className, style, ...props }: DropdownMenuPri
         gap:          "8px",
         ...style,
       }}
-      onFocus={e => (e.currentTarget.style.background = "var(--color-cyan-dim)")}
-      onBlur={e =>  (e.currentTarget.style.background = "transparent")}
-      onMouseEnter={e => (e.currentTarget.style.background = "var(--color-cyan-dim)")}
-      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+      onFocus={(e: FocusEvent<HTMLDivElement>) => (e.currentTarget.style.background = "var(--color-cyan-dim)")}
+      onBlur={(e: FocusEvent<HTMLDivElement>) =>  (e.currentTarget.style.background = "transparent")}
+      onMouseEnter={(e: MouseEvent<HTMLDivElement>) => (e.currentTarget.style.background = "var(--color-cyan-dim)")}
+      onMouseLeave={(e: MouseEvent<HTMLDivElement>) => (e.currentTarget.style.background = "transparent")}
       {...props}
     />
   )

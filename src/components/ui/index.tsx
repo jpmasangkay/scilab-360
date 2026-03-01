@@ -103,7 +103,7 @@ export function Tooltip({ children, content }: TooltipProps) {
 }
 export const TooltipProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>
 export const TooltipTrigger  = ({ children }: { children: React.ReactNode; asChild?: boolean }) => <>{children}</>
-export const TooltipContent  = ({ children }: { children: React.ReactNode }) => null
+export const TooltipContent  = ({ _children }: { _children?: React.ReactNode }) => null
 
 // ── Card ──────────────────────────────────
 export function Card({ className, style, children, ...props }: HTMLAttributes<HTMLDivElement>) {

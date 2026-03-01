@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react"
 import { v4 as uuid } from "uuid"
 import type { Molecule, BondConnection, BondType } from "../types/chemistry"
-import type { Difficulty, Grade, QuizResult, QuizConfig, QuizPhase } from "../types/quiz"
+import type { Difficulty, QuizResult, QuizConfig, QuizPhase } from "../types/quiz"
 import { validateBonds } from "../utils/bondValidation"
 import { calculateGrade } from "../utils/gradeCalculator"
 import { MOLECULES } from "../data/molecules"
@@ -199,7 +199,6 @@ export function useQuizState(): UseQuizStateReturn {
     const next = challengeIndex + 1
     if (next >= config.totalChallenges) {
       // build final result
-      const totalPoints = attempts.reduce((s, a) => s + a.points, 0) + (points - attempts.reduce((s, a) => s + a.points, 0))
       const allPoints = attempts.reduce((s, a) => s + a.points, 0)
       const maxPossible = config.totalChallenges * 30
       const pct = Math.round((allPoints / maxPossible) * 100)
