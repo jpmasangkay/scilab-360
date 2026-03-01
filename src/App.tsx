@@ -39,15 +39,15 @@ function AppLayout() {
   }, []);
 
   const legend = (
-    <div className="flex items-center gap-4 px-4 shrink-0" style={{ height: 32, background: '#0d0120', borderTop: '1px solid #2d1b5e' }}>
+    <div className="flex items-center gap-4 px-4 shrink-0" style={{ height: 36, background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
       {[
-        { color: '#a855f7', label: 'Covalent Bond' },
+        { color: '#14b8a6', label: 'Covalent Bond' },
         { color: '#f43f5e', label: 'Ionic Bond' },
-        { color: '#818cf8', label: 'Metallic Bond' },
+        { color: '#3b82f6', label: 'Metallic Bond' },
       ].map(({ color, label }) => (
         <div key={label} className="flex items-center gap-2">
-          <div className="w-5 h-0.5 rounded" style={{ background: color, boxShadow: `0 0 4px ${color}` }} />
-          <span className="text-xs font-share-tech" style={{ color: '#c4b5fd' }}>{label}</span>
+          <div className="w-5 h-0.5 rounded-full" style={{ background: color }} />
+          <span className="text-xs font-share-tech" style={{ color: '#64748b' }}>{label}</span>
         </div>
       ))}
     </div>
@@ -55,7 +55,7 @@ function AppLayout() {
 
   return (
     <ToastContext.Provider value={showToast}>
-      <div className="w-full h-screen flex flex-col overflow-hidden font-exo2" style={{ background: '#07011a', color: '#f3e8ff' }}>
+      <div className="w-full h-screen flex flex-col overflow-hidden font-exo2" style={{ background: '#f8fafc', color: '#1e293b' }}>
         <Header
           isMobile={isMobile}
           isTablet={isTablet}
@@ -122,10 +122,10 @@ function AppLayout() {
           {toasts.map(t => (
             <div key={t.id} style={{
               padding: '8px 18px', borderRadius: 20,
-              background: 'linear-gradient(135deg, #3b0764, #1e0b3e)',
-              border: '1px solid #a855f7',
-              boxShadow: '0 0 20px #a855f750',
-              fontFamily: '"Share Tech Mono", monospace', fontSize: 13, color: '#e9d5ff',
+              background: '#ffffff',
+              border: '1px solid #14b8a6',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.1), 0 0 0 1px rgba(20,184,166,0.2)',
+              fontFamily: '"Space Mono", monospace', fontSize: 13, color: '#0f766e',
               whiteSpace: 'nowrap',
               animation: 'slideUp 0.25s ease-out',
             }}>

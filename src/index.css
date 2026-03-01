@@ -1,33 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --font-orbitron: 'Orbitron', monospace;
-  --font-share-tech: 'Share Tech Mono', monospace;
-  --font-exo2: 'Exo 2', sans-serif;
+  --font-heading: 'Nunito', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Inter', sans-serif;
+
+  /* Keep old font names for backward compat during migration */
+  --font-orbitron: 'Nunito', sans-serif;
+  --font-share-tech: 'Space Mono', monospace;
+  --font-exo2: 'Inter', sans-serif;
 
   --animate-twinkle: twinkle 2s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 0.4s ease-out;
-  --animate-float-triangle: float-triangle 4s ease-in-out infinite;
+  --animate-float-triangle: float-bubble 4s ease-in-out infinite;
   --animate-slideUp: slideUp 0.25s ease-out;
+  --animate-bounce-in: bounce-in 0.4s ease-out;
 
   @keyframes twinkle {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.8; }
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.45; }
   }
   @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 8px #a855f740; }
-    50% { box-shadow: 0 0 20px #a855f7aa; }
+    0%, 100% { box-shadow: 0 0 8px #14b8a640; }
+    50% { box-shadow: 0 0 16px #14b8a6aa; }
   }
-  @keyframes float-triangle {
-    0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
-    50% { transform: translateY(-12px) rotate(3deg); opacity: 0.3; }
+  @keyframes float-bubble {
+    0%, 100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+    50% { transform: translateY(-8px) scale(1.05); opacity: 0.25; }
   }
-
   @keyframes slideUp {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce-in {
+    0% { transform: scale(0.9); opacity: 0; }
+    60% { transform: scale(1.02); }
+    100% { transform: scale(1); opacity: 1; }
   }
 }
 
@@ -47,7 +57,7 @@ body {
   inset: 0;
 }
 
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: #130929; }
-::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #6d28d9; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #64748b; }

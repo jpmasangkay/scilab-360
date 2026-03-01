@@ -38,13 +38,15 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         placeholder="Search by name, symbol, or number..."
-        style={{ width: '100%', padding: '8px 12px', borderRadius: 8, fontFamily: '"Share Tech Mono", monospace', fontSize: 12, outline: 'none', background: '#07011a', border: '1px solid #3b1d6e', color: '#e9d5ff', caretColor: '#a855f7', boxSizing: 'border-box' }}
+        style={{ width: '100%', padding: '9px 14px', borderRadius: 10, fontFamily: '"Inter", sans-serif', fontSize: 13, outline: 'none', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#1e293b', caretColor: '#14b8a6', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+        onFocus={e => (e.currentTarget.style.borderColor = '#14b8a6')}
+        onBlur={e => (e.currentTarget.style.borderColor = '#e2e8f0')}
       />
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
         {FILTER_CATEGORIES.map(c => (
           <button key={c} onClick={() => setFilterCat(c)}
-            style={{ padding: '4px 10px', fontSize: 11, borderRadius: 8, cursor: 'pointer', fontFamily: '"Share Tech Mono", monospace', whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? '#6d28d9' : '#1e0b3e', color: filterCat === c ? '#fff' : '#c4b5fd', border: filterCat === c ? '1px solid #a855f7' : '1px solid #3b1d6e', boxShadow: filterCat === c ? '0 0 8px #a855f750' : 'none' }}>
+            style={{ padding: '4px 12px', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? '#14b8a6' : '#f8fafc', color: filterCat === c ? '#ffffff' : '#64748b', border: filterCat === c ? '1px solid #0d9488' : '1px solid #e2e8f0' }}>
             {c === 'all' ? 'All' : c.replace(/-/g, ' ')}
           </button>
         ))}
@@ -52,22 +54,20 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
 
       {!showFiltered && (
         <button onClick={() => setShowFull(v => !v)}
-          style={{ padding: '6px 12px', borderRadius: 8, cursor: 'pointer', fontFamily: '"Share Tech Mono", monospace', fontSize: 12, textAlign: 'left', background: '#1e0b3e', border: '1px solid #3b1d6e', color: '#c4b5fd' }}>
-          {showFull ? '▴ Show Common Only' : '▾ Show All 118 Elements'}
+          style={{ padding: '7px 14px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 700, textAlign: 'left', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#64748b', transition: 'all 0.15s' }}>
+          {showFull ? 'Show Common Only' : 'Show All 118 Elements'}
         </button>
       )}
 
-      {/* ── Element display area ── */}
+      {/* Element display area */}
       {showFiltered ? (
-        /* Search / filter results — wrap naturally, no forced scroll */
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {filtered.map(el => <ElementTile key={el.atomicNumber} el={el} onToast={onToast} isMobile={isMobile} isTablet={isTablet} />)}
           {filtered.length === 0 && (
-            <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, color: '#c4b5fd', padding: 8 }}>No elements match.</p>
+            <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: '#94a3b8', padding: 8 }}>No elements match.</p>
           )}
         </div>
       ) : showFull ? (
-        /* Full 118-element table — ONLY here do we add horizontal scroll */
         <div style={{ overflowX: 'auto', paddingBottom: 6 }}>
           <div style={{ overflowX: 'auto', overflowY: 'hidden', WebkitOverflowScrolling: 'touch' as any }}>
             <div style={{ minWidth: 520 }}>
@@ -82,7 +82,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
             </div>
             {/* Lanthanides */}
             <div style={{ display: 'grid', gridTemplateColumns: GRID_COLS, gap: 2, marginTop: 6 }}>
-              <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, fontSize: 7, fontFamily: '"Share Tech Mono", monospace', color: '#fb923c' }}>La-Lu</div>
+              <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, fontSize: 8, fontFamily: '"Space Mono", monospace', color: '#f97316' }}>La-Lu</div>
               {Array.from({ length: 15 }, (_, i) => {
                 const el = GRID_ELEMENTS.find(g => g.row === 9 && g.col === i + 3);
                 return el ? <ElementTile key={el.atomicNumber} el={el} tiny onToast={onToast} isMobile={isMobile} isTablet={isTablet} /> : <div key={i} style={{ aspectRatio: '1' }} />;
@@ -91,7 +91,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
             </div>
             {/* Actinides */}
             <div style={{ display: 'grid', gridTemplateColumns: GRID_COLS, gap: 2, marginTop: 2 }}>
-              <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, fontSize: 7, fontFamily: '"Share Tech Mono", monospace', color: '#f97316' }}>Ac-Lr</div>
+              <div style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, fontSize: 8, fontFamily: '"Space Mono", monospace', color: '#ef4444' }}>Ac-Lr</div>
               {Array.from({ length: 15 }, (_, i) => {
                 const el = GRID_ELEMENTS.find(g => g.row === 10 && g.col === i + 3);
                 return el ? <ElementTile key={el.atomicNumber} el={el} tiny onToast={onToast} isMobile={isMobile} isTablet={isTablet} /> : <div key={i} style={{ aspectRatio: '1' }} />;
@@ -102,7 +102,6 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
           </div>
         </div>
       ) : (
-        /* Common elements — normal wrap, NO scroll bar */
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(64px, 1fr))', gap: 8 }}>
           {commonEls.map(el => <ElementTile key={el.atomicNumber} el={el} onToast={onToast} isMobile={isMobile} isTablet={isTablet} />)}
         </div>

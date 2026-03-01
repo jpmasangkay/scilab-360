@@ -4,7 +4,7 @@ import { PeriodicTablePanel } from './PeriodicTablePanel';
 import { QuizPanel } from './QuizPanel';
 import { QUIZ_LEVELS } from '../data/quizLevels';
 
-const CARD: React.CSSProperties = { padding: '14px 16px', borderRadius: 12 };
+const CARD: React.CSSProperties = { padding: '14px 16px', borderRadius: 14 };
 
 interface LeftPanelProps {
   fullHeight?: boolean;
@@ -17,67 +17,67 @@ export function LeftPanel({ fullHeight, isMobile, isTablet, onToast }: LeftPanel
   const { state, dispatch } = useApp();
 
   const feedbackAccent =
-    state.feedbackType === 'success' ? '#4ade80' :
+    state.feedbackType === 'success' ? '#10b981' :
     state.feedbackType === 'error'   ? '#ef4444' :
-    state.feedbackType === 'warning' ? '#f97316' : '#c084fc';
+    state.feedbackType === 'warning' ? '#f59e0b' : '#14b8a6';
 
   const feedbackBg =
-    state.feedbackType === 'success' ? '#052e16' :
-    state.feedbackType === 'error'   ? '#2d0a0a' :
-    state.feedbackType === 'warning' ? '#2d1500' : '#1a0b38';
+    state.feedbackType === 'success' ? '#f0fdf4' :
+    state.feedbackType === 'error'   ? '#fef2f2' :
+    state.feedbackType === 'warning' ? '#fffbeb' : '#f0fdfa';
 
   return (
     <div style={{ width: fullHeight ? '100%' : 'min(420px, 38vw)', minWidth: fullHeight ? undefined : 300, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10, height: '100%', minHeight: 0, overflow: 'hidden' }}>
 
       {/* Progress */}
-      <div style={{ ...CARD, background: '#130929', border: '1px solid #3b1d6e', flexShrink: 0 }}>
+      <div style={{ ...CARD, background: '#ffffff', border: '1px solid #e2e8f0', flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, color: '#d8b4fe', letterSpacing: '0.15em' }}>PROGRESS</span>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 800, color: '#0f766e', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Progress</span>
+          <div style={{ display: 'flex', gap: 6 }}>
             {(['free-play', 'quiz'] as const).map(mode => (
               <button key={mode} onClick={() => dispatch({ type: 'SET_MODE', payload: mode })}
-                style={{ padding: '4px 12px', fontSize: 11, fontFamily: '"Share Tech Mono", monospace', fontWeight: 700, letterSpacing: '0.05em', borderRadius: 8, cursor: 'pointer', transition: 'all 0.15s', background: state.mode === mode ? (mode === 'quiz' ? '#be185d' : '#6d28d9') : '#1e0b3e', color: state.mode === mode ? '#fff' : '#a78bfa', border: state.mode === mode ? `1px solid ${mode === 'quiz' ? '#f43f5e' : '#a855f7'}` : '1px solid #3b1d6e', boxShadow: state.mode === mode ? `0 0 10px ${mode === 'quiz' ? '#f43f5e60' : '#a855f760'}` : 'none' }}>
-                {mode === 'free-play' ? 'FREE PLAY' : 'QUIZ'}
+                style={{ padding: '5px 14px', fontSize: 12, fontFamily: '"Nunito", sans-serif', fontWeight: 700, borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s', background: state.mode === mode ? (mode === 'quiz' ? '#f43f5e' : '#14b8a6') : '#f1f5f9', color: state.mode === mode ? '#ffffff' : '#64748b', border: state.mode === mode ? `1px solid ${mode === 'quiz' ? '#e11d48' : '#0d9488'}` : '1px solid #e2e8f0' }}>
+                {mode === 'free-play' ? 'Free Play' : 'Quiz'}
               </button>
             ))}
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-          <span style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, color: '#c4b5fd' }}>Level {state.level}</span>
-          <span style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, fontWeight: 700, color: '#e9d5ff' }}>Score: {state.score}</span>
+          <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, color: '#64748b' }}>Level {state.level}</span>
+          <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 800, color: '#0f766e' }}>Score: {state.score}</span>
         </div>
-        <div style={{ height: 8, background: '#2d1b5e', borderRadius: 999, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${(state.completedChallenges.length / QUIZ_LEVELS.length) * 100}%`, background: 'linear-gradient(90deg, #7c3aed, #ec4899)', boxShadow: '0 0 8px #a855f7', borderRadius: 999, transition: 'width 0.5s' }} />
+        <div style={{ height: 8, background: '#e2e8f0', borderRadius: 999, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${(state.completedChallenges.length / QUIZ_LEVELS.length) * 100}%`, background: 'linear-gradient(90deg, #14b8a6, #06b6d4)', borderRadius: 999, transition: 'width 0.5s' }} />
         </div>
       </div>
 
       {/* Quiz */}
-      <div style={{ maxHeight: 320, overflowY: 'auto', overflowX: 'hidden', borderRadius: 12, flexShrink: 0 }}>
+      <div style={{ maxHeight: 320, overflowY: 'auto', overflowX: 'hidden', borderRadius: 14, flexShrink: 0 }}>
         <QuizPanel />
       </div>
 
       {/* Feedback */}
-      <div style={{ ...CARD, background: feedbackBg, border: `1px solid ${feedbackAccent}50`, borderLeft: `4px solid ${feedbackAccent}`, boxShadow: `0 0 14px ${feedbackAccent}18`, flexShrink: 0 }}>
-        <p style={{ fontFamily: 'Orbitron, monospace', fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', color: feedbackAccent, marginBottom: 8, textTransform: 'uppercase' }}>Feedback</p>
-        <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 13, color: '#f3e8ff', lineHeight: 1.6 }}>{state.feedback}</p>
+      <div style={{ ...CARD, background: feedbackBg, border: `1px solid ${feedbackAccent}30`, borderLeft: `4px solid ${feedbackAccent}`, flexShrink: 0 }}>
+        <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', color: feedbackAccent, marginBottom: 6, textTransform: 'uppercase' }}>Feedback</p>
+        <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: '#334155', lineHeight: 1.6 }}>{state.feedback}</p>
       </div>
 
       {/* Touch hint */}
       {(isMobile || isTablet) && (
-        <div style={{ ...CARD, background: '#0d0a1f', border: '1px solid #3b1d6e', borderLeft: '4px solid #6d28d9', flexShrink: 0, padding: '10px 14px' }}>
-          <p style={{ fontFamily: '"Share Tech Mono", monospace', fontSize: 11, color: '#a78bfa', lineHeight: 1.6 }}>
+        <div style={{ ...CARD, background: '#f0fdfa', border: '1px solid #ccfbf1', borderLeft: '4px solid #14b8a6', flexShrink: 0, padding: '10px 14px' }}>
+          <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: '#475569', lineHeight: 1.6 }}>
             {isTablet
-              ? <>💡 <strong style={{ color: '#c4b5fd' }}>Tap</strong> any element to add it · <strong style={{ color: '#c4b5fd' }}>Drag</strong> it into the sandbox to place precisely</>
-              : <>💡 <strong style={{ color: '#c4b5fd' }}>Tap any element</strong> below to add it to your lab instantly. Long-press for element details.</>
+              ? <><strong style={{ color: '#0f766e' }}>Tap</strong> any element to add it &middot; <strong style={{ color: '#0f766e' }}>Drag</strong> it into the sandbox to place precisely</>
+              : <><strong style={{ color: '#0f766e' }}>Tap any element</strong> below to add it to your lab instantly. Long-press for element details.</>
             }
           </p>
         </div>
       )}
 
-      {/* Periodic table — WebkitOverflowScrolling for smooth iOS touch scroll */}
-      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', background: '#0d0120', border: '1px solid #2d1b5e', borderRadius: 12, maxWidth: '100%', WebkitOverflowScrolling: 'touch' as any }}>
+      {/* Periodic table */}
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 14, maxWidth: '100%', WebkitOverflowScrolling: 'touch' as any, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
         <div style={{ padding: '14px 16px 16px 16px' }}>
-          <p style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', color: '#d8b4fe', marginBottom: 12 }}>PERIODIC TABLE</p>
+          <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 800, letterSpacing: '0.05em', color: '#0f766e', marginBottom: 12, textTransform: 'uppercase' }}>Periodic Table</p>
           <PeriodicTablePanel onToast={onToast} isMobile={isMobile} isTablet={isTablet} />
         </div>
       </div>

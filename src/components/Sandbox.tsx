@@ -5,15 +5,16 @@ import { ELEMENTS } from '../data/elements';
 import { validateBond } from '../utils/chemistry';
 import { BondLines } from './BondLines';
 import { SandboxAtom } from './SandboxAtom';
+import { FlaskConical } from 'lucide-react';
 
-// Stable star positions generated from deterministic values
-const STARS = Array.from({ length: 60 }, (_, i) => ({
+// Subtle floating circles for the background
+const BUBBLES = Array.from({ length: 20 }, (_, i) => ({
   left: ((i * 137.508) % 100).toFixed(2),
   top: ((i * 93.7) % 100).toFixed(2),
-  size: i % 5 === 0 ? 2.5 : i % 3 === 0 ? 2 : 1.5,
-  duration: (1.5 + (i % 7) * 0.4).toFixed(1),
-  delay: ((i * 0.3) % 3).toFixed(1),
-  color: ['#c084fc', '#e2e8f0', '#a78bfa', '#f0abfc'][i % 4],
+  size: i % 5 === 0 ? 12 : i % 3 === 0 ? 8 : 6,
+  duration: (3 + (i % 5) * 0.8).toFixed(1),
+  delay: ((i * 0.5) % 4).toFixed(1),
+  color: ['#14b8a6', '#06b6d4', '#10b981', '#0ea5e9'][i % 4],
 }));
 
 interface SandboxProps { isMobile?: boolean; }
@@ -42,7 +43,7 @@ export function Sandbox({ isMobile }: SandboxProps) {
     if (state.placedAtoms.length > 0 && state.mode !== 'free-play') {
       const validation = validateBond(el, state.placedAtoms[0].element);
       if (!validation.valid) {
-        dispatch({ type: 'SET_FEEDBACK', payload: { msg: `⚠️ ${validation.reason}`, type: 'warning' } });
+        dispatch({ type: 'SET_FEEDBACK', payload: { msg: `${validation.reason}`, type: 'warning' } });
         return;
       }
     }
@@ -57,48 +58,40 @@ export function Sandbox({ isMobile }: SandboxProps) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="relative flex-1 rounded-xl overflow-hidden transition-all duration-200"
+      className="relative flex-1 rounded-2xl overflow-hidden transition-all duration-200"
       style={{
         minHeight: isMobile ? 0 : 260,
         height: isMobile ? '100%' : undefined,
         background: dragOver
-          ? 'radial-gradient(ellipse at center, #2d1263 0%, #0d0120 70%)'
-          : 'radial-gradient(ellipse at 30% 40%, #1a0533 0%, #0d0120 60%, #07011a 100%)',
-        border: dragOver ? '2px dashed #a855f7' : '2px dashed #2d1b5e',
-        boxShadow: dragOver ? 'inset 0 0 40px #a855f720' : 'inset 0 0 20px #0d0120',
+          ? '#f0fdfa'
+          : 'linear-gradient(135deg, #f8fafc 0%, #f0fdfa 50%, #ecfdf5 100%)',
+        border: dragOver ? '2px dashed #14b8a6' : '2px dashed #cbd5e1',
+        boxShadow: dragOver ? 'inset 0 0 30px rgba(20,184,166,0.08)' : 'inset 0 0 20px rgba(0,0,0,0.02)',
       }}
     >
-      {/* Starfield */}
-      {STARS.map((star, i) => (
+      {/* Floating bubbles */}
+      {BUBBLES.map((bubble, i) => (
         <div
           key={i}
-          className="absolute rounded-full pointer-events-none animate-twinkle"
+          className="absolute rounded-full pointer-events-none animate-float-triangle"
           style={{
-            left: `${star.left}%`,
-            top: `${star.top}%`,
-            width: star.size,
-            height: star.size,
-            background: star.color,
-            opacity: 0.35,
-            animationDuration: `${star.duration}s`,
-            animationDelay: `${star.delay}s`,
+            left: `${bubble.left}%`,
+            top: `${bubble.top}%`,
+            width: bubble.size,
+            height: bubble.size,
+            background: bubble.color,
+            opacity: 0.08,
+            animationDuration: `${bubble.duration}s`,
+            animationDelay: `${bubble.delay}s`,
           }}
         />
       ))}
 
-      {/* Floating triangles */}
-      <div className="absolute left-5 bottom-10 pointer-events-none animate-float-triangle opacity-[0.12]"
-        style={{ width: 0, height: 0, borderLeft: '20px solid transparent', borderRight: '20px solid transparent', borderBottom: '35px solid #4c1d95' }} />
-      <div className="absolute right-[30px] top-10 pointer-events-none animate-float-triangle opacity-[0.15]"
-        style={{ width: 0, height: 0, borderLeft: '14px solid transparent', borderRight: '14px solid transparent', borderBottom: '24px solid #7c3aed', animationDelay: '1s', animationDuration: '5.5s' }} />
-      <div className="absolute right-[100px] bottom-[60px] pointer-events-none animate-float-triangle opacity-10"
-        style={{ width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '14px solid #c084fc', animationDelay: '2s', animationDuration: '3.5s' }} />
-
-      {/* Dot grid */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.12]">
+      {/* Subtle dot grid */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]">
         <defs>
           <pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-            <circle cx="15" cy="15" r="1" fill="#7c3aed" />
+            <circle cx="15" cy="15" r="1.2" fill="#94a3b8" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#dots)" />
@@ -107,23 +100,25 @@ export function Sandbox({ isMobile }: SandboxProps) {
       {/* Empty state */}
       {state.placedAtoms.length === 0 && (
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ gap: 8 }}>
-          <div className="text-[44px] opacity-50" style={{ filter: 'drop-shadow(0 0 12px #a855f7)' }}>⚛</div>
+          <div style={{ width: 56, height: 56, borderRadius: 16, background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FlaskConical size={28} color="#94a3b8" />
+          </div>
           {isMobile ? (
             <>
-              <p className="font-orbitron font-bold text-sm tracking-[3px] text-[#4c1d95]">LAB IS EMPTY</p>
-              <div style={{ background: '#130929', border: '1px solid #3b1d6e', borderRadius: 10, padding: '10px 18px', textAlign: 'center', maxWidth: 240 }}>
-                <p className="font-share-tech text-[12px] text-[#a78bfa]">
-                  Go to the <span style={{ color: '#c084fc', fontWeight: 700 }}>GUIDE</span> tab
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: 14, color: '#94a3b8', letterSpacing: '0.02em' }}>Lab is Empty</p>
+              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '10px 18px', textAlign: 'center', maxWidth: 240, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: '#64748b' }}>
+                  Go to the <span style={{ color: '#14b8a6', fontWeight: 700 }}>Guide</span> tab
                 </p>
-                <p className="font-share-tech text-[11px] text-[#6b4dcc] mt-1">
+                <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 11, color: '#94a3b8', marginTop: 4 }}>
                   and tap any element to add it
                 </p>
               </div>
             </>
           ) : (
             <>
-              <p className="font-orbitron font-bold text-sm tracking-[4px] text-[#4c1d95]">DRAG ATOMS HERE</p>
-              <p className="font-share-tech text-[11px] mt-1 text-[#2d1b5e]">Double-click atoms to remove</p>
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: 15, color: '#94a3b8', letterSpacing: '0.02em' }}>Drag Atoms Here</p>
+              <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, marginTop: 2, color: '#cbd5e1' }}>Double-click atoms to remove</p>
             </>
           )}
         </div>
@@ -135,12 +130,16 @@ export function Sandbox({ isMobile }: SandboxProps) {
       {/* Formula overlay */}
       {state.formula && (
         <div
-          className="absolute bottom-3 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-lg font-orbitron text-xl text-[#e2e8f0] tracking-[2px] z-10"
+          className="absolute bottom-3 left-1/2 -translate-x-1/2 px-5 py-2 rounded-xl z-10"
           style={{
-            background: 'linear-gradient(135deg, #1a0533, #0d0120)',
-            border: '1px solid #4c1d95',
-            boxShadow: '0 0 24px #a855f750, 0 0 4px #a855f7',
-            textShadow: '0 0 12px #a855f7',
+            fontFamily: '"Nunito", sans-serif',
+            fontSize: 18,
+            fontWeight: 800,
+            color: '#0f766e',
+            letterSpacing: '0.5px',
+            background: '#ffffff',
+            border: '1px solid #99f6e4',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
           }}
         >
           {state.formula}
