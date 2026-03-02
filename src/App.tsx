@@ -53,9 +53,13 @@ function AppLayout() {
     </div>
   );
 
+  const bgColor = state.theme === 'dark' ? '#0f172a' : '#f8fafc';
+  const textColor = state.theme === 'dark' ? '#e2e8f0' : '#1e293b';
+  const borderColor = state.theme === 'dark' ? '#334155' : '#e2e8f0';
+
   return (
     <ToastContext.Provider value={showToast}>
-      <div className="w-full h-screen flex flex-col overflow-hidden font-exo2" style={{ background: '#f8fafc', color: '#1e293b' }}>
+      <div className="w-full h-screen flex flex-col overflow-hidden font-exo2" style={{ background: bgColor, color: textColor }}>
         <Header
           isMobile={isMobile}
           isTablet={isTablet}
@@ -66,10 +70,10 @@ function AppLayout() {
         />
 
         {isMobile ? (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', maxWidth: '100vw', paddingBottom: 'env(safe-area-inset-bottom, 8px)' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '16px 8px 8px', maxWidth: '100vw', paddingBottom: 'env(safe-area-inset-bottom, 8px)' }}>
             {activeTab === 'lab' && (
               <>
-                <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12, display: 'flex', flexDirection: 'column', minHeight: 0, marginBottom: 8 }}>
+                <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12, display: 'flex', flexDirection: 'column', minHeight: 0, marginBottom: 16 }}>
                   <Sandbox isMobile />
                 </div>
                 <div style={{ flexShrink: 0, paddingBottom: 64 }}>
@@ -89,7 +93,7 @@ function AppLayout() {
             )}
           </div>
         ) : isTablet ? (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', gap: 8 }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '16px 8px 8px', gap: 8 }}>
             <div style={{ flex: 1, display: 'flex', gap: 8, overflow: 'hidden', minHeight: 0 }}>
               <div style={{ flex: 1, overflow: 'hidden', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
                 <Sandbox />
@@ -105,14 +109,16 @@ function AppLayout() {
           </div>
         ) : (
           <>
-            <div className="flex-1 flex gap-3 p-3 overflow-hidden">
+            <div className="flex-1 flex gap-3 p-6 overflow-hidden">
               <LeftPanel />
               <div className="flex-1 flex flex-col gap-3 overflow-hidden">
                 <Sandbox />
               </div>
               <RightPanel />
             </div>
-            {legend}
+            <div style={{ paddingBottom: 16 }}>
+              {legend}
+            </div>
           </>
         )}
 

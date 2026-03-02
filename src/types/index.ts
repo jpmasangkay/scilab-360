@@ -67,6 +67,7 @@ export interface AppState {
   showTeacherDash: boolean;
   atomCount: number;
   attempts: number;
+  theme: 'light' | 'dark';
 }
 
 export type AppAction =
@@ -82,7 +83,8 @@ export type AppAction =
   | { type: 'COMPLETE_CHALLENGE'; payload: number }
   | { type: 'ADD_SCORE'; payload: number }
   | { type: 'TOGGLE_TEACHER' }
-  | { type: 'INC_ATTEMPTS' };
+  | { type: 'INC_ATTEMPTS' }
+  | { type: 'TOGGLE_THEME' };
 
 export interface GridElement extends ElementData {
   col: number;

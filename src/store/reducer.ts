@@ -18,6 +18,7 @@ export const initialState: AppState = {
   showTeacherDash: false,
   atomCount: 0,
   attempts: 0,
+  theme: 'light',
 };
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -70,6 +71,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
     case 'ADD_SCORE':         return { ...state, score: state.score + action.payload };
     case 'TOGGLE_TEACHER':    return { ...state, showTeacherDash: !state.showTeacherDash };
     case 'INC_ATTEMPTS':      return { ...state, attempts: state.attempts + 1 };
+    case 'TOGGLE_THEME':      return { ...state, theme: state.theme === 'light' ? 'dark' : 'light' };
     default:                  return state;
   }
 }
