@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect, useCallback } from 'react';
-import { AppProvider } from './store/context';
+import { AppProvider, useApp } from './store/context';
 import { Header } from './components/Header';
 import { LeftPanel } from './components/LeftPanel';
 import { RightPanel } from './components/RightPanel';
@@ -31,6 +31,7 @@ function AppLayout() {
   const [activeTab, setActiveTab] = useState<Tab>('lab');
   const [tabletPanel, setTabletPanel] = useState<'none' | 'guide' | 'molecules'>('none');
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const { state } = useApp();
 
   const showToast = useCallback((msg: string) => {
     const id = Date.now();
@@ -39,7 +40,7 @@ function AppLayout() {
   }, []);
 
   const legend = (
-    <div className="flex items-center gap-4 px-4 shrink-0" style={{ height: 36, background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
+    <div className="flex items-center gap-4 px-4 shrink-0" style={{ height: 36, background: state.theme === 'dark' ? '#1e293b' : '#f8fafc', borderTop: `1px solid ${state.theme === 'dark' ? '#334155' : '#e2e8f0'}` }}>
       {[
         { color: '#14b8a6', label: 'Covalent Bond' },
         { color: '#f43f5e', label: 'Ionic Bond' },
@@ -47,7 +48,7 @@ function AppLayout() {
       ].map(({ color, label }) => (
         <div key={label} className="flex items-center gap-2">
           <div className="w-5 h-0.5 rounded-full" style={{ background: color }} />
-          <span className="text-xs font-share-tech" style={{ color: '#64748b' }}>{label}</span>
+          <span className="text-xs font-share-tech" style={{ color: state.theme === 'dark' ? '#94a3b8' : '#64748b' }}>{label}</span>
         </div>
       ))}
     </div>
@@ -55,7 +56,6 @@ function AppLayout() {
 
   const bgColor = state.theme === 'dark' ? '#0f172a' : '#f8fafc';
   const textColor = state.theme === 'dark' ? '#e2e8f0' : '#1e293b';
-  const borderColor = state.theme === 'dark' ? '#334155' : '#e2e8f0';
 
   return (
     <ToastContext.Provider value={showToast}>
