@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { RotateCcw, ClipboardList, BookOpen, FlaskConical, LayoutGrid, Atom, Menu, X } from 'lucide-react';
+import { RotateCcw, ClipboardList, BookOpen, FlaskConical, LayoutGrid, Atom, Menu, X, Sun, Moon } from 'lucide-react';
 import { useApp } from '../store/context';
+import { useTheme } from '../store/themeContext';
 import { ElementsPanel } from './ElementsPanel';
 import { useToast } from '../App';
 
@@ -13,21 +14,22 @@ interface HeaderProps {
   onTabletPanelChange?: (panel: 'none' | 'guide' | 'molecules') => void;
 }
 
-const BTN_BASE: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', gap: 6,
-  borderRadius: 10, cursor: 'pointer', whiteSpace: 'nowrap',
-  fontFamily: '"Nunito", sans-serif', fontWeight: 700,
-  letterSpacing: '0.02em', transition: 'all 0.2s',
-  background: '#ffffff', border: '1px solid #e2e8f0', color: '#0f766e',
-  fontSize: 13,
-};
-
 export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel, onTabletPanelChange }: HeaderProps) {
   const { state, dispatch } = useApp();
+  const { isDark, toggleTheme, t } = useTheme();
   const [showElements, setShowElements] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const showToast = useToast();
+
+  const BTN_BASE: React.CSSProperties = {
+    display: 'flex', alignItems: 'center', gap: 6,
+    borderRadius: 10, cursor: 'pointer', whiteSpace: 'nowrap',
+    fontFamily: '"Nunito", sans-serif', fontWeight: 700,
+    letterSpacing: '0.02em', transition: 'all 0.2s',
+    background: t.bg.card, border: `1px solid ${t.border.default}`, color: t.text.accent,
+    fontSize: 13,
+  };
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -40,18 +42,18 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
     return () => document.removeEventListener('mousedown', handle);
   }, [menuOpen]);
 
-  const btnPad  = isTablet ? '7px 12px' : '8px 16px';
-  const iconSz  = 15;
+  const btnPad = isTablet ? '7px 12px' : '8px 16px';
+  const iconSz = 15;
 
   const menuItem = (active = false, danger = false): React.CSSProperties => ({
     display: 'flex', alignItems: 'center', gap: 10,
     width: '100%', padding: '12px 16px', cursor: 'pointer',
     fontFamily: '"Nunito", sans-serif', fontWeight: 700,
     fontSize: 13, letterSpacing: '0.02em',
-    background: active ? '#f0fdfa' : 'transparent',
+    background: active ? (isDark ? t.bg.cardAlt : '#f0fdfa') : 'transparent',
     border: 'none',
-    borderBottom: '1px solid #f1f5f9',
-    color: danger ? '#ef4444' : active ? '#0f766e' : '#475569',
+    borderBottom: `1px solid ${t.border.subtle}`,
+    color: danger ? (isDark ? '#fb7185' : '#ef4444') : active ? t.text.accent : t.text.secondary,
     transition: 'background 0.15s',
   });
 
@@ -60,10 +62,11 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
       <div
         className="flex shrink-0 relative"
         style={{
-          background: '#ffffff',
-          borderBottom: '1px solid #e2e8f0',
+          background: t.bg.card,
+          borderBottom: `1px solid ${t.border.default}`,
           flexDirection: 'column',
           boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          transition: 'background 0.3s, border-color 0.3s',
         }}
       >
         {/* Main row */}
@@ -84,7 +87,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
             </div>
             <div>
               <p style={{
-                fontFamily: '"Nunito", sans-serif', fontWeight: 900, color: '#0f172a',
+                fontFamily: '"Nunito", sans-serif', fontWeight: 900, color: t.text.heading,
                 fontSize: isMobile ? 16 : isTablet ? 18 : 22,
                 letterSpacing: '-0.01em', lineHeight: 1.2,
               }}>
@@ -92,7 +95,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
               </p>
               <p style={{
                 fontFamily: '"Inter", sans-serif', fontSize: isMobile ? 9 : 11,
-                color: '#94a3b8', letterSpacing: '0.02em', lineHeight: 1, fontWeight: 500,
+                color: t.text.muted, letterSpacing: '0.02em', lineHeight: 1, fontWeight: 500,
               }}>
                 Interactive Chemistry Lab
               </p>
@@ -107,9 +110,9 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                 style={{
                   ...BTN_BASE,
                   padding: '8px 10px',
-                  background: menuOpen ? '#f0fdfa' : '#ffffff',
-                  border: menuOpen ? '1px solid #14b8a6' : '1px solid #e2e8f0',
-                  color: menuOpen ? '#0f766e' : '#64748b',
+                  background: menuOpen ? (isDark ? t.bg.cardAlt : '#f0fdfa') : t.bg.card,
+                  border: menuOpen ? `1px solid ${t.accent.primary}` : `1px solid ${t.border.default}`,
+                  color: menuOpen ? t.text.accent : t.text.muted,
                 }}
               >
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -119,17 +122,23 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                 <div style={{
                   position: 'absolute', top: 'calc(100% + 8px)', right: 0,
                   width: 220,
-                  background: '#ffffff',
-                  border: '1px solid #e2e8f0',
+                  background: t.bg.card,
+                  border: `1px solid ${t.border.default}`,
                   borderRadius: 14,
                   boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                   overflow: 'hidden',
                   zIndex: 200,
                 }}>
-                  <div style={{ padding: '10px 16px', background: '#f0fdfa', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, color: '#14b8a6', letterSpacing: '0.05em', fontWeight: 700 }}>LEVEL {state.level}</span>
-                    <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 800, color: '#0f766e' }}>{state.score} pts</span>
+                  <div style={{ padding: '10px 16px', background: isDark ? t.bg.cardAlt : '#f0fdfa', borderBottom: `1px solid ${t.border.default}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, color: t.accent.primary, letterSpacing: '0.05em', fontWeight: 700 }}>LEVEL {state.level}</span>
+                    <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 800, color: t.text.accent }}>{state.score} pts</span>
                   </div>
+
+                  <button style={menuItem(false)}
+                    onClick={() => { toggleTheme(); setMenuOpen(false); }}>
+                    {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                    {isDark ? 'Light Mode' : 'Dark Mode'}
+                  </button>
 
                   <button style={menuItem(false)}
                     onClick={() => { setShowElements(true); setMenuOpen(false); }}>
@@ -151,39 +160,47 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
           ) : (
             /* DESKTOP / TABLET buttons */
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-              <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: '#94a3b8', whiteSpace: 'nowrap', background: '#f1f5f9', padding: '4px 10px', borderRadius: 8 }}>
+              <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: t.text.muted, whiteSpace: 'nowrap', background: t.bg.muted, padding: '4px 10px', borderRadius: 8 }}>
                 {state.placedAtoms.length} atom{state.placedAtoms.length !== 1 ? 's' : ''} &middot; {state.bonds.length} bond{state.bonds.length !== 1 ? 's' : ''}
               </span>
 
+              {/* Dark mode toggle */}
+              <button onClick={toggleTheme}
+                style={{ ...BTN_BASE, padding: btnPad }}
+                onMouseEnter={e => { const b = e.currentTarget; b.style.background = isDark ? t.bg.cardAlt : '#f0fdfa'; b.style.borderColor = t.accent.primary; }}
+                onMouseLeave={e => { const b = e.currentTarget; b.style.background = t.bg.card; b.style.borderColor = t.border.default; }}>
+                {isDark ? <Sun size={iconSz} /> : <Moon size={iconSz} />}
+              </button>
+
               <button onClick={() => setShowElements(true)}
                 style={{ ...BTN_BASE, padding: btnPad }}
-                onMouseEnter={e => { const b = e.currentTarget; b.style.background = '#f0fdfa'; b.style.borderColor = '#14b8a6'; }}
-                onMouseLeave={e => { const b = e.currentTarget; b.style.background = '#ffffff'; b.style.borderColor = '#e2e8f0'; }}>
+                onMouseEnter={e => { const b = e.currentTarget; b.style.background = isDark ? t.bg.cardAlt : '#f0fdfa'; b.style.borderColor = t.accent.primary; }}
+                onMouseLeave={e => { const b = e.currentTarget; b.style.background = t.bg.card; b.style.borderColor = t.border.default; }}>
                 <BookOpen size={iconSz} /> Elements
               </button>
 
               <button onClick={() => dispatch({ type: 'CLEAR_SANDBOX' })}
-                style={{ ...BTN_BASE, padding: btnPad, color: '#ef4444', border: '1px solid #fecaca' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#fef2f2'; e.currentTarget.style.borderColor = '#ef4444'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.borderColor = '#fecaca'; }}>
+                style={{ ...BTN_BASE, padding: btnPad, color: isDark ? '#fb7185' : '#ef4444', border: `1px solid ${isDark ? '#7f1d1d' : '#fecaca'}` }}
+                onMouseEnter={e => { e.currentTarget.style.background = isDark ? '#2a0a0a' : '#fef2f2'; e.currentTarget.style.borderColor = isDark ? '#fb7185' : '#ef4444'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = t.bg.card; e.currentTarget.style.borderColor = isDark ? '#7f1d1d' : '#fecaca'; }}>
                 <RotateCcw size={iconSz} /> Clear
               </button>
 
               {isTablet && onTabletPanelChange && (
                 <>
                   <button onClick={() => onTabletPanelChange(tabletPanel === 'guide' ? 'none' : 'guide')}
-                    style={{ ...BTN_BASE, padding: btnPad, background: tabletPanel === 'guide' ? '#f0fdfa' : '#ffffff', border: tabletPanel === 'guide' ? '1px solid #14b8a6' : '1px solid #e2e8f0', color: tabletPanel === 'guide' ? '#0f766e' : '#64748b' }}>
+                    style={{ ...BTN_BASE, padding: btnPad, background: tabletPanel === 'guide' ? (isDark ? t.bg.cardAlt : '#f0fdfa') : t.bg.card, border: tabletPanel === 'guide' ? `1px solid ${t.accent.primary}` : `1px solid ${t.border.default}`, color: tabletPanel === 'guide' ? t.text.accent : t.text.muted }}>
                     <LayoutGrid size={iconSz} /> Guide
                   </button>
                   <button onClick={() => onTabletPanelChange(tabletPanel === 'molecules' ? 'none' : 'molecules')}
-                    style={{ ...BTN_BASE, padding: btnPad, background: tabletPanel === 'molecules' ? '#f0fdfa' : '#ffffff', border: tabletPanel === 'molecules' ? '1px solid #14b8a6' : '1px solid #e2e8f0', color: tabletPanel === 'molecules' ? '#0f766e' : '#64748b' }}>
+                    style={{ ...BTN_BASE, padding: btnPad, background: tabletPanel === 'molecules' ? (isDark ? t.bg.cardAlt : '#f0fdfa') : t.bg.card, border: tabletPanel === 'molecules' ? `1px solid ${t.accent.primary}` : `1px solid ${t.border.default}`, color: tabletPanel === 'molecules' ? t.text.accent : t.text.muted }}>
                     <Atom size={iconSz} /> Molecules
                   </button>
                 </>
               )}
 
               <button onClick={() => dispatch({ type: 'TOGGLE_TEACHER' })}
-                style={{ ...BTN_BASE, padding: btnPad, background: state.showTeacherDash ? '#14b8a6' : '#ffffff', border: state.showTeacherDash ? '1px solid #0d9488' : '1px solid #e2e8f0', color: state.showTeacherDash ? '#ffffff' : '#64748b' }}>
+                style={{ ...BTN_BASE, padding: btnPad, background: state.showTeacherDash ? '#14b8a6' : t.bg.card, border: state.showTeacherDash ? '1px solid #0d9488' : `1px solid ${t.border.default}`, color: state.showTeacherDash ? '#ffffff' : t.text.muted }}>
                 <ClipboardList size={iconSz} /> My Progress
               </button>
             </div>
@@ -192,7 +209,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
 
         {/* Mobile tab bar */}
         {isMobile && onTabChange && (
-          <div style={{ display: 'flex', gap: 6, borderTop: '1px solid #e2e8f0', padding: '6px 12px', background: '#f8fafc' }}>
+          <div style={{ display: 'flex', gap: 6, borderTop: `1px solid ${t.border.default}`, padding: '6px 12px', background: t.bg.cardAlt }}>
             {([
               { id: 'lab',       label: 'Lab',       Icon: FlaskConical },
               { id: 'guide',     label: 'Guide',     Icon: LayoutGrid },
@@ -206,7 +223,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                   transition: 'all 0.2s',
                   background: activeTab === id ? '#14b8a6' : 'transparent',
                   border: activeTab === id ? '1px solid #0d9488' : '1px solid transparent',
-                  color: activeTab === id ? '#ffffff' : '#94a3b8',
+                  color: activeTab === id ? '#ffffff' : t.text.muted,
                 }}>
                 <Icon size={14} /> {label}
               </button>
