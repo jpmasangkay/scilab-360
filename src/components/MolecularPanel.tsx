@@ -15,24 +15,33 @@ export function MolecularPanel() {
     return acc;
   }, {});
 
+  const isDark = state.theme === 'dark';
+  const toggleBg = isDark ? '#334155' : '#f1f5f9';
+  const visBg = isDark ? '#334155' : '#f8fafc';
+  const visBorder = isDark ? '#475569' : '#e2e8f0';
+  const textColor = isDark ? '#e2e8f0' : '#94a3b8';
+  const compoundBg = isDark ? '#0d6e6a' : '#f0fdfa';
+  const compoundBorder = isDark ? '#0f9488' : '#99f6e4';
+  const compoundText = isDark ? '#e2e8f0' : '#0f766e';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, height: '100%' }}>
       {/* Toggle */}
-      <div style={{ display: 'flex', gap: 4, background: '#f1f5f9', borderRadius: 10, padding: 4 }}>
+      <div style={{ display: 'flex', gap: 4, background: toggleBg, borderRadius: 10, padding: 4 }}>
         {(['ball-stick', 'lewis'] as ViewMode[]).map(v => (
           <button key={v} onClick={() => setView(v)}
-            style={{ flex: 1, padding: '8px 0', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, border: 'none', transition: 'all 0.15s', background: view === v ? '#14b8a6' : 'transparent', color: view === v ? '#ffffff' : '#64748b' }}>
+            style={{ flex: 1, padding: '8px 0', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, border: 'none', transition: 'all 0.15s', background: view === v ? '#14b8a6' : 'transparent', color: view === v ? '#ffffff' : textColor }}>
             {v === 'ball-stick' ? 'Ball & Stick' : 'Lewis / e'}
           </button>
         ))}
       </div>
 
       {/* Vis area */}
-      <div style={{ flex: 1, borderRadius: 14, overflow: 'hidden', position: 'relative', minHeight: 160, background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+      <div style={{ flex: 1, borderRadius: 14, overflow: 'hidden', position: 'relative', minHeight: 160, background: visBg, border: `1px solid ${visBorder}` }}>
         {view === 'ball-stick' ? (
           state.placedAtoms.length === 0 ? (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: '#94a3b8' }}>No molecule</p>
+              <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: textColor }}>No molecule</p>
             </div>
           ) : (
             <svg width="100%" height="100%" viewBox="0 0 300 200" style={{ position: 'absolute', inset: 0 }}>
@@ -76,11 +85,11 @@ export function MolecularPanel() {
 
       {/* Compound info */}
       {compound && (
-        <div style={{ padding: '12px 14px', background: '#f0fdfa', border: '1px solid #99f6e4', borderRadius: 12 }}>
-          <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 14, fontWeight: 800, color: '#0f766e', marginBottom: 6 }}>{compound.name}</p>
+        <div style={{ padding: '12px 14px', background: compoundBg, border: `1px solid ${compoundBorder}`, borderRadius: 12 }}>
+          <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 14, fontWeight: 800, color: compoundText, marginBottom: 6 }}>{compound.name}</p>
           <div style={{ display: 'flex', gap: 16 }}>
-            <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: '#64748b' }}>{compound.geometry}</span>
-            <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: '#64748b' }}>{compound.bondAngle}</span>
+            <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: compoundText }}>{compound.geometry}</span>
+            <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: compoundText }}>{compound.bondAngle}</span>
           </div>
         </div>
       )}
@@ -88,16 +97,16 @@ export function MolecularPanel() {
       {/* Bond stats */}
       {state.bonds.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: '#0f766e', textTransform: 'uppercase' }}>Bonds Detected</p>
+          <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: isDark ? '#14b8a6' : '#0f766e', textTransform: 'uppercase' }}>Bonds Detected</p>
           {Object.entries(bondTypeCounts).map(([type, count]) => {
             const bondColor = type === 'ionic' ? '#f43f5e' : type === 'metallic' ? '#3b82f6' : '#14b8a6';
             return (
               <div key={type} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 24, height: 3, background: bondColor, borderRadius: 2 }} />
-                  <span style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: '#475569', textTransform: 'capitalize' }}>{type}</span>
+                  <span style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: textColor, textTransform: 'capitalize' }}>{type}</span>
                 </div>
-                <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{count}x</span>
+                <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, fontWeight: 700, color: isDark ? '#e2e8f0' : '#1e293b' }}>{count}x</span>
               </div>
             );
           })}
@@ -106,7 +115,7 @@ export function MolecularPanel() {
 
       {/* Selected element */}
       {state.selectedElement && (
-        <div style={{ padding: '12px 14px', background: '#ffffff', border: `2px solid ${CATEGORY_COLORS[state.selectedElement.category].border}`, borderRadius: 14 }}>
+        <div style={{ padding: '12px 14px', background: isDark ? '#334155' : '#ffffff', border: `2px solid ${CATEGORY_COLORS[state.selectedElement.category].border}`, borderRadius: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
             <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 900, fontSize: 22, color: CATEGORY_COLORS[state.selectedElement.category].text }}>{state.selectedElement.symbol}</span>
             <button onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: null })} style={{ cursor: 'pointer', background: 'transparent', border: 'none', fontSize: 16, color: '#94a3b8' }}>&#x2715;</button>

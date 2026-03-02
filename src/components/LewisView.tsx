@@ -3,10 +3,12 @@ import { CATEGORY_COLORS } from '../utils/colors';
 
 export function LewisView() {
   const { state } = useApp();
+  const isDark = state.theme === 'dark';
+  const textColor = isDark ? '#94a3b8' : '#94a3b8';
 
   if (state.placedAtoms.length === 0) {
     return (
-      <p style={{ color: '#94a3b8', fontFamily: '"Inter", sans-serif', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
+      <p style={{ color: textColor, fontFamily: '"Inter", sans-serif', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
         No atoms placed yet
       </p>
     );
