@@ -104,7 +104,28 @@ const isTouchDevice =
 export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTileProps) {
   const { state, dispatch } = useApp();
   const [showPopup, setShowPopup] = useState(false);
-  const colors = CATEGORY_COLORS[el.category];
+  const isDark = state.theme === 'dark';
+  
+  // Get base colors from category
+  let colors = CATEGORY_COLORS[el.category];
+  
+  // Apply dark mode variants if needed
+  if (isDark) {
+    const darkColorMap: Record<string, typeof colors> = {
+      'alkali-metal':     { bg: '#b45309', border: '#d97706', text: '#fef3c7', glow: '#f59e0b' },
+      'alkaline-earth':   { bg: '#831843', border: '#db2777', text: '#fce7f3', glow: '#ec4899' },
+      'transition-metal': { bg: '#1e3a8a', border: '#60a5fa', text: '#dbeafe', glow: '#3b82f6' },
+      'post-transition':  { bg: '#164e63', border: '#06b6d4', text: '#e0f2fe', glow: '#0ea5e9' },
+      'metalloid':        { bg: '#4c1d95', border: '#a78bfa', text: '#ede9fe', glow: '#8b5cf6' },
+      'nonmetal':         { bg: '#134e4a', border: '#2dd4bf', text: '#ccfbf1', glow: '#14b8a6' },
+      'halogen':          { bg: '#9f1239', border: '#fb7185', text: '#ffe4e6', glow: '#f43f5e' },
+      'noble-gas':        { bg: '#065f46', border: '#6ee7b7', text: '#d1fae5', glow: '#10b981' },
+      'lanthanide':       { bg: '#92400e', border: '#fb923c', text: '#ffedd5', glow: '#f97316' },
+      'actinide':         { bg: '#7f1d1d', border: '#f87171', text: '#fee2e2', glow: '#ef4444' },
+      'unknown':          { bg: '#334155', border: '#cbd5e1', text: '#f1f5f9', glow: '#94a3b8' },
+    };
+    colors = darkColorMap[el.category] || colors;
+  }
 
   const treatAsTablet = !isMobile && isTouchDevice;
 
