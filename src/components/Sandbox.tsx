@@ -24,6 +24,15 @@ export function Sandbox({ isMobile }: SandboxProps) {
   const [dragOver, setDragOver] = useState(false);
   const sandboxRef = useRef<HTMLDivElement>(null);
 
+  const isDark = state.theme === 'dark';
+  const bgGradient = isDark 
+    ? 'linear-gradient(135deg, #1e293b 0%, #0f6c6e 50%, #134e4a 100%)'
+    : 'linear-gradient(135deg, #f8fafc 0%, #f0fdfa 50%, #ecfdf5 100%)';
+  const dragOverColor = isDark ? '#0f6c6e' : '#f0fdfa';
+  const borderColor = dragOver ? '#14b8a6' : (isDark ? '#475569' : '#cbd5e1');
+  const textSecondary = isDark ? '#64748b' : '#94a3b8';
+  const emptyBg = isDark ? '#334155' : '#e2e8f0';
+
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(true);
@@ -62,11 +71,9 @@ export function Sandbox({ isMobile }: SandboxProps) {
       style={{
         minHeight: isMobile ? 0 : 260,
         height: isMobile ? '100%' : undefined,
-        background: dragOver
-          ? '#f0fdfa'
-          : 'linear-gradient(135deg, #f8fafc 0%, #f0fdfa 50%, #ecfdf5 100%)',
-        border: dragOver ? '2px dashed #14b8a6' : '2px dashed #cbd5e1',
-        boxShadow: dragOver ? 'inset 0 0 30px rgba(20,184,166,0.08)' : 'inset 0 0 20px rgba(0,0,0,0.02)',
+        background: dragOver ? dragOverColor : bgGradient,
+        border: `2px dashed ${borderColor}`,
+        boxShadow: dragOver ? 'inset 0 0 30px rgba(20,184,166,0.08)' : (isDark ? 'inset 0 0 20px rgba(0,0,0,0.2)' : 'inset 0 0 20px rgba(0,0,0,0.02)'),
       }}
     >
       {/* Floating bubbles */}
@@ -100,13 +107,13 @@ export function Sandbox({ isMobile }: SandboxProps) {
       {/* Empty state */}
       {state.placedAtoms.length === 0 && (
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ gap: 8 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 16, background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <FlaskConical size={28} color="#94a3b8" />
+          <div style={{ width: 56, height: 56, borderRadius: 16, background: emptyBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FlaskConical size={28} color={textSecondary} />
           </div>
           {isMobile ? (
             <>
-              <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: 14, color: '#94a3b8', letterSpacing: '0.02em' }}>Lab is Empty</p>
-              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '10px 18px', textAlign: 'center', maxWidth: 240, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: 14, color: textSecondary, letterSpacing: '0.02em' }}>Lab is Empty</p>
+              <div style={{ background: isDark ? '#1e293b' : '#ffffff', border: `1px solid ${isDark ? '#334155' : '#e2e8f0'}`, borderRadius: 12, padding: '10px 18px', textAlign: 'center', maxWidth: 240, boxShadow: isDark ? '0 1px 3px rgba(0,0,0,0.3)' : '0 1px 3px rgba(0,0,0,0.04)' }}>
                 <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: '#64748b' }}>
                   Go to the <span style={{ color: '#14b8a6', fontWeight: 700 }}>Guide</span> tab
                 </p>

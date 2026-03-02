@@ -225,6 +225,15 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
   const [filterCat, setFilterCat] = useState<ElementCategory | 'all'>('all');
   const [detailOpen, setDetailOpen] = useState(false);
 
+  const isDark = state.theme === 'dark';
+  const bgColor = isDark ? '#0f172a' : '#f8fafc';
+  const headerBg = isDark ? '#1e293b' : '#ffffff';
+  const headerBorder = isDark ? '#334155' : '#e2e8f0';
+  const inputBg = isDark ? '#334155' : '#f8fafc';
+  const inputBorder = isDark ? '#475569' : '#e2e8f0';
+  const textPrimary = isDark ? '#e2e8f0' : '#0f172a';
+  const textSecondary = isDark ? '#94a3b8' : '#94a3b8';
+
   const width = useWindowWidth();
   const isMobile = width < 640;
   const isTablet = width >= 640 && width < 1024;
@@ -287,26 +296,26 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
   const activeCatColor = selected ? CATEGORY_COLORS[selected.category] : null;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', flexDirection: 'column', background: '#f8fafc', fontFamily: '"Inter", sans-serif' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', flexDirection: 'column', background: bgColor, fontFamily: '"Inter", sans-serif' }}>
 
       {/* ── Header ── */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: isMobile ? '10px 12px' : '14px 24px',
-        background: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
+        background: headerBg,
+        borderBottom: `1px solid ${headerBorder}`,
         flexShrink: 0, gap: 10,
-        boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+        boxShadow: isDark ? '0 1px 4px rgba(0,0,0,0.2)' : '0 1px 4px rgba(0,0,0,0.04)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 12 }}>
           <div style={{ width: 36, height: 36, borderRadius: 10, background: '#ccfbf1', border: '1px solid #14b8a640', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="2" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /><ellipse cx="12" cy="12" rx="10" ry="4" /></svg>
           </div>
           <div>
-            <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: isMobile ? 14 : 20, color: '#0f172a', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
+            <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: isMobile ? 14 : 20, color: textPrimary, letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
               Element Library
             </p>
-            {!isMobile && <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: '#94a3b8', letterSpacing: '0.02em' }}>All 118 Elements</p>}
+            {!isMobile && <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: textSecondary, letterSpacing: '0.02em' }}>All 118 Elements</p>}
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: isMobile ? 1 : 'none' }}>
@@ -316,18 +325,18 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
             placeholder={isMobile ? 'Search...' : 'Search name, symbol or number...'}
             style={{
               width: isMobile ? '100%' : 240, minWidth: 0,
-              padding: '8px 14px', background: '#f8fafc', border: '1px solid #e2e8f0',
-              borderRadius: 10, color: '#1e293b', fontFamily: '"Inter", sans-serif',
+              padding: '8px 14px', background: inputBg, border: `1px solid ${inputBorder}`,
+              borderRadius: 10, color: textPrimary, fontFamily: '"Inter", sans-serif',
               fontSize: 13, outline: 'none', transition: 'border-color 0.2s',
             }}
             onFocus={e => (e.currentTarget.style.borderColor = '#14b8a6')}
-            onBlur={e => (e.currentTarget.style.borderColor = '#e2e8f0')}
+            onBlur={e => (e.currentTarget.style.borderColor = inputBorder)}
           />
           <button
             onClick={onClose}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#64748b', cursor: 'pointer', transition: 'all 0.15s' }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: inputBg, border: `1px solid ${inputBorder}`, color: textSecondary, cursor: 'pointer', transition: 'all 0.15s' }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#fee2e2'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#fca5a5'; (e.currentTarget as HTMLButtonElement).style.color = '#ef4444'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f8fafc'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#e2e8f0'; (e.currentTarget as HTMLButtonElement).style.color = '#64748b'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = inputBg; (e.currentTarget as HTMLButtonElement).style.borderColor = inputBorder; (e.currentTarget as HTMLButtonElement).style.color = textSecondary; }}
           >
             <X size={16} />
           </button>

@@ -9,6 +9,13 @@ export function QuizPanel() {
   const [submitResult, setSubmitResult] = useState<{ ok: boolean; msg: string } | null>(null);
   const [activeDifficulty, setActiveDifficulty] = useState<Difficulty | 'all'>('all');
 
+  const isDark = state.theme === 'dark';
+  const cardBg = isDark ? '#134e4a' : '#f0fdfa';
+  const cardBorder = isDark ? '#0d6e6a' : '#99f6e4';
+  const textPrimary = isDark ? '#e2e8f0' : '#0f766e';
+  const textSecondary = isDark ? '#94a3b8' : '#64748b';
+  const accentColor = isDark ? '#14b8a6' : '#0f766e';
+
   if (state.mode !== 'quiz') return null;
 
   const challenge = state.currentChallenge;
@@ -19,9 +26,9 @@ export function QuizPanel() {
 
   if (!challenge) {
     return (
-      <div style={{ padding: 20, borderRadius: 14, textAlign: 'center', background: '#f0fdfa', border: '1px solid #99f6e4' }}>
-        <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 16, fontWeight: 800, color: '#0f766e' }}>All Challenges Complete!</p>
-        <p style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, color: '#64748b', marginTop: 6 }}>Score: {state.score}</p>
+      <div style={{ padding: 20, borderRadius: 14, textAlign: 'center', background: cardBg, border: `1px solid ${cardBorder}` }}>
+        <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 16, fontWeight: 800, color: textPrimary }}>All Challenges Complete!</p>
+        <p style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, color: textSecondary, marginTop: 6 }}>Score: {state.score}</p>
         <button onClick={() => dispatch({ type: 'SET_LEVEL', payload: 1 })}
           style={{ marginTop: 12, padding: '8px 20px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 700, background: '#14b8a6', border: 'none', color: '#ffffff' }}>
           Play Again
