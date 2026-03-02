@@ -179,7 +179,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
               </button>
 
               <button onClick={() => dispatch({ type: 'CLEAR_SANDBOX' })}
-                style={{ ...BTN_BASE, padding: btnPad, color: '#ef4444', border: '1px solid #fecaca', background: btnBg, borderColor: isDark ? '#7f1d1d' : '#fecaca' }}
+                style={{ ...BTN_BASE, padding: btnPad, color: '#ef4444', border: `1px solid ${isDark ? '#7f1d1d' : '#fecaca'}`, background: btnBg }}
                 onMouseEnter={e => { e.currentTarget.style.background = isDark ? '#7f1d1d' : '#fef2f2'; e.currentTarget.style.borderColor = '#ef4444'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = btnBg; e.currentTarget.style.borderColor = isDark ? '#7f1d1d' : '#fecaca'; }}>
                 <RotateCcw size={iconSz} /> Clear
