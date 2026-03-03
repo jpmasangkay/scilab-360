@@ -1,12 +1,15 @@
 import { useApp } from '../store/context';
-import { CATEGORY_COLORS } from '../utils/colors';
+import { useTheme } from '../store/theme';
+import { getCategoryColors } from '../utils/colors';
 
 export function LewisView() {
   const { state } = useApp();
+  const { theme } = useTheme();
+  const CATEGORY_COLORS = getCategoryColors(theme.isDark);
 
   if (state.placedAtoms.length === 0) {
     return (
-      <p style={{ color: '#94a3b8', fontFamily: '"Inter", sans-serif', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
+      <p style={{ color: theme.textTertiary, fontFamily: '"Inter", sans-serif', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
         No atoms placed yet
       </p>
     );
@@ -66,15 +69,15 @@ export function LewisView() {
                       left,
                       top,
                       transform: 'translate(-50%, -50%)',
-                      background: filled ? '#14b8a6' : 'transparent',
-                      border: filled ? 'none' : '1px solid #cbd5e1',
+                      background: filled ? theme.accent : 'transparent',
+                      border: filled ? 'none' : `1px solid ${theme.sandboxBorder}`,
                     }}
                   />
                 );
               })}
             </div>
 
-            <span style={{ fontSize: 12, color: '#64748b', fontFamily: '"Space Mono", monospace', fontWeight: 700, whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: 12, color: theme.textSecondary, fontFamily: '"Space Mono", monospace', fontWeight: 700, whiteSpace: 'nowrap' }}>
               {atom.element.symbol} &middot; {ve} val e
             </span>
           </div>

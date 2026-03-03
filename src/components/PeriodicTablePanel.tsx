@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { ElementCategory } from '../types';
 import { ELEMENTS, GRID_ELEMENTS, COMMON_ELEMENT_SYMBOLS } from '../data/elements';
 import { ElementTile } from './ElementTile';
+import { useTheme } from '../store/theme';
 
 const FILTER_CATEGORIES = [
   'all', 'nonmetal', 'halogen', 'noble-gas',
@@ -14,6 +15,7 @@ type FilterCategory = (typeof FILTER_CATEGORIES)[number];
 interface PeriodicTablePanelProps { onToast?: (msg: string) => void; isMobile?: boolean; isTablet?: boolean; }
 
 export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTablePanelProps) {
+  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCat, setFilterCat] = useState<FilterCategory>('all');
   const [showFull, setShowFull] = useState(false);
@@ -38,15 +40,15 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         placeholder="Search by name, symbol, or number..."
-        style={{ width: '100%', padding: '9px 14px', borderRadius: 10, fontFamily: '"Inter", sans-serif', fontSize: 13, outline: 'none', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#1e293b', caretColor: '#14b8a6', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-        onFocus={e => (e.currentTarget.style.borderColor = '#14b8a6')}
-        onBlur={e => (e.currentTarget.style.borderColor = '#e2e8f0')}
+        style={{ width: '100%', padding: '9px 14px', borderRadius: 10, fontFamily: '"Inter", sans-serif', fontSize: 13, outline: 'none', background: theme.inputBg, border: `1px solid ${theme.inputBorder}`, color: theme.text, caretColor: theme.accent, boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+        onFocus={e => (e.currentTarget.style.borderColor = theme.accent)}
+        onBlur={e => (e.currentTarget.style.borderColor = theme.inputBorder)}
       />
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
         {FILTER_CATEGORIES.map(c => (
           <button key={c} onClick={() => setFilterCat(c)}
-            style={{ padding: '4px 12px', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? '#14b8a6' : '#f8fafc', color: filterCat === c ? '#ffffff' : '#64748b', border: filterCat === c ? '1px solid #0d9488' : '1px solid #e2e8f0' }}>
+            style={{ padding: '4px 12px', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? theme.accent : theme.surfaceAlt, color: filterCat === c ? '#ffffff' : theme.textSecondary, border: filterCat === c ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}` }}>
             {c === 'all' ? 'All' : c.replace(/-/g, ' ')}
           </button>
         ))}
@@ -54,7 +56,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
 
       {!showFiltered && (
         <button onClick={() => setShowFull(v => !v)}
-          style={{ padding: '7px 14px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 700, textAlign: 'left', background: '#f8fafc', border: '1px solid #e2e8f0', color: '#64748b', transition: 'all 0.15s' }}>
+          style={{ padding: '7px 14px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 700, textAlign: 'left', background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, transition: 'all 0.15s' }}>
           {showFull ? 'Show Common Only' : 'Show All 118 Elements'}
         </button>
       )}
@@ -64,7 +66,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {filtered.map(el => <ElementTile key={el.atomicNumber} el={el} onToast={onToast} isMobile={isMobile} isTablet={isTablet} />)}
           {filtered.length === 0 && (
-            <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: '#94a3b8', padding: 8 }}>No elements match.</p>
+            <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: theme.textTertiary, padding: 8 }}>No elements match.</p>
           )}
         </div>
       ) : showFull ? (

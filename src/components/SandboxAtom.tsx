@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import type { PlacedAtom } from '../types';
-import { CATEGORY_COLORS, getAtomColor } from '../utils/colors';
+import { getCategoryColors, getAtomColor } from '../utils/colors';
 import { useApp } from '../store/context';
+import { useTheme } from '../store/theme';
 
 interface SandboxAtomProps {
   atom: PlacedAtom;
@@ -9,6 +10,8 @@ interface SandboxAtomProps {
 
 export function SandboxAtom({ atom }: SandboxAtomProps) {
   const { dispatch } = useApp();
+  const { theme } = useTheme();
+  const CATEGORY_COLORS = getCategoryColors(theme.isDark);
   const [dragging, setDragging] = useState(false);
   const offsetRef = useRef({ x: 0, y: 0 });
   const hasMoved = useRef(false);

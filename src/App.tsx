@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect, useCallback } from 'react';
 import { AppProvider } from './store/context';
+import { ThemeProvider, useTheme } from './store/theme';
 import { Header } from './components/Header';
 import { LeftPanel } from './components/LeftPanel';
 import { RightPanel } from './components/RightPanel';
@@ -25,6 +26,7 @@ export const ToastContext = createContext<(msg: string) => void>(() => {});
 export const useToast = () => useContext(ToastContext);
 
 function AppLayout() {
+  const { theme } = useTheme();
   const width = useWindowWidth();
   const isMobile = width < 768;
   const isTablet = width >= 768 && width < 1100;
@@ -39,7 +41,7 @@ function AppLayout() {
   }, []);
 
   const legend = (
-    <div className="flex items-center gap-4 px-4 shrink-0" style={{ height: 36, background: '#f8fafc', borderTop: '1px solid #e2e8f0' }}>
+    <div className="flex items-center gap-6 px-4 shrink-0" style={{ height: 36, background: theme.surfaceAlt, borderTop: `1px solid ${theme.border}` }}>
       {[
         { color: '#14b8a6', label: 'Covalent Bond' },
         { color: '#f43f5e', label: 'Ionic Bond' },
@@ -47,7 +49,7 @@ function AppLayout() {
       ].map(({ color, label }) => (
         <div key={label} className="flex items-center gap-2">
           <div className="w-5 h-0.5 rounded-full" style={{ background: color }} />
-          <span className="text-xs font-share-tech" style={{ color: '#64748b' }}>{label}</span>
+          <span className="text-xs font-share-tech" style={{ color: theme.textSecondary }}>{label}</span>
         </div>
       ))}
     </div>
@@ -55,7 +57,7 @@ function AppLayout() {
 
   return (
     <ToastContext.Provider value={showToast}>
-      <div className="w-full h-screen flex flex-col overflow-hidden font-exo2" style={{ background: '#f8fafc', color: '#1e293b' }}>
+      <div className="w-full h-screen flex flex-col overflow-hidden font-exo2" style={{ background: theme.bg, color: theme.text }}>
         <Header
           isMobile={isMobile}
           isTablet={isTablet}
@@ -122,10 +124,10 @@ function AppLayout() {
           {toasts.map(t => (
             <div key={t.id} style={{
               padding: '8px 18px', borderRadius: 20,
-              background: '#ffffff',
-              border: '1px solid #14b8a6',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.1), 0 0 0 1px rgba(20,184,166,0.2)',
-              fontFamily: '"Space Mono", monospace', fontSize: 13, color: '#0f766e',
+              background: theme.toastBg,
+              border: `1px solid ${theme.toastBorder}`,
+              boxShadow: theme.toastShadow,
+              fontFamily: '"Space Mono", monospace', fontSize: 13, color: theme.toastText,
               whiteSpace: 'nowrap',
               animation: 'slideUp 0.25s ease-out',
             }}>
@@ -140,8 +142,10 @@ function AppLayout() {
 
 export default function App() {
   return (
-    <AppProvider>
-      <AppLayout />
-    </AppProvider>
+    <ThemeProvider>
+      <AppProvider>
+        <AppLayout />
+      </AppProvider>
+    </ThemeProvider>
   );
 }

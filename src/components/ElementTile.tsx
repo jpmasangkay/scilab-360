@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react';
 import type { DragEvent } from 'react';
 import type { ElementData } from '../types';
-import { CATEGORY_COLORS } from '../utils/colors';
+import { getCategoryColors } from '../utils/colors';
 import { useApp } from '../store/context';
+import { useTheme } from '../store/theme';
 
 // Smart placement
 function getSmartPosition(existingCount: number): { x: number; y: number } {
@@ -22,6 +23,8 @@ function getSmartPosition(existingCount: number): { x: number; y: number } {
 // Element Detail Popup
 interface ElementPopupProps { el: ElementData; onClose: () => void; }
 function ElementPopup({ el, onClose }: ElementPopupProps) {
+  const { theme } = useTheme();
+  const CATEGORY_COLORS = getCategoryColors(theme.isDark);
   const colors = CATEGORY_COLORS[el.category];
   const rows = [
     ['Atomic Number', el.atomicNumber],
@@ -33,8 +36,8 @@ function ElementPopup({ el, onClose }: ElementPopupProps) {
     ['Category', el.category.replace(/-/g, ' ')],
   ];
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, backdropFilter: 'blur(4px)' }}>
-      <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 340, borderRadius: 20, overflow: 'hidden', background: '#ffffff', border: `2px solid ${colors.border}`, boxShadow: '0 16px 48px rgba(0,0,0,0.15)' }}>
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 9999, background: theme.overlay, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, backdropFilter: 'blur(4px)' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 340, borderRadius: 20, overflow: 'hidden', background: theme.surface, border: `2px solid ${colors.border}`, boxShadow: '0 16px 48px rgba(0,0,0,0.15)' }}>
         <div style={{ padding: '20px 24px 16px', background: colors.bg, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <div style={{ fontFamily: '"Nunito", sans-serif', fontSize: 48, fontWeight: 900, color: colors.text, lineHeight: 1 }}>{el.symbol}</div>
@@ -48,13 +51,13 @@ function ElementPopup({ el, onClose }: ElementPopupProps) {
         </div>
         <div style={{ padding: '16px 20px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           {rows.map(([label, value]) => (
-            <div key={String(label)} style={{ padding: '10px 12px', borderRadius: 10, background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-              <div style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{label}</div>
-              <div style={{ fontFamily: '"Nunito", sans-serif', fontSize: 14, fontWeight: 700, color: '#1e293b' }}>{String(value)}</div>
+            <div key={String(label)} style={{ padding: '10px 12px', borderRadius: 10, background: theme.surfaceAlt, border: `1px solid ${theme.border}` }}>
+              <div style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, color: theme.textTertiary, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{label}</div>
+              <div style={{ fontFamily: '"Nunito", sans-serif', fontSize: 14, fontWeight: 700, color: theme.text }}>{String(value)}</div>
             </div>
           ))}
         </div>
-        <div style={{ padding: '0 20px 16px', fontFamily: '"Inter", sans-serif', fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
+        <div style={{ padding: '0 20px 16px', fontFamily: '"Inter", sans-serif', fontSize: 11, color: theme.textTertiary, textAlign: 'center' }}>
           Click outside to close
         </div>
       </div>
@@ -103,6 +106,8 @@ const isTouchDevice =
 
 export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTileProps) {
   const { state, dispatch } = useApp();
+  const { theme } = useTheme();
+  const CATEGORY_COLORS = getCategoryColors(theme.isDark);
   const [showPopup, setShowPopup] = useState(false);
   const colors = CATEGORY_COLORS[el.category];
 
