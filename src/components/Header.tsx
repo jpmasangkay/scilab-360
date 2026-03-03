@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { RotateCcw, ClipboardList, BookOpen, FlaskConical, LayoutGrid, Atom, Menu, X, Sun, Moon } from 'lucide-react';
+import { RotateCcw, ClipboardList, BookOpen, FlaskConical, LayoutGrid, Atom, Menu, X, Sun, Moon, Beaker } from 'lucide-react';
 import { useApp } from '../store/context';
 import { useTheme } from '../store/theme';
 import { ElementsPanel } from './ElementsPanel';
+import { BondingsPanel } from './BondingsPanel';
 import { useToast } from '../App';
 
 interface HeaderProps {
@@ -18,6 +19,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
   const { state, dispatch } = useApp();
   const { theme, mode, toggleTheme } = useTheme();
   const [showElements, setShowElements] = useState(false);
+  const [showBondings, setShowBondings] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const showToast = useToast();
@@ -136,6 +138,11 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                   </div>
 
                   <button style={menuItem(false)}
+                    onClick={() => { setShowBondings(true); setMenuOpen(false); }}>
+                    <Beaker size={16} /> Bondings
+                  </button>
+
+                  <button style={menuItem(false)}
                     onClick={() => { setShowElements(true); setMenuOpen(false); }}>
                     <BookOpen size={16} /> Elements
                   </button>
@@ -165,6 +172,21 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                 {state.placedAtoms.length} atom{state.placedAtoms.length !== 1 ? 's' : ''} &middot; {state.bonds.length} bond{state.bonds.length !== 1 ? 's' : ''}
               </span>
 
+              {/* Dark/Light toggle */}
+              <button onClick={toggleTheme}
+                style={{ ...BTN_BASE, padding: btnPad }}
+                onMouseEnter={e => { const b = e.currentTarget; b.style.background = theme.surfaceHover; b.style.borderColor = theme.accent; }}
+                onMouseLeave={e => { const b = e.currentTarget; b.style.background = theme.surface; b.style.borderColor = theme.border; }}>
+                {mode === 'dark' ? <Sun size={iconSz} /> : <Moon size={iconSz} />}
+              </button>
+
+              <button onClick={() => setShowBondings(true)}
+                style={{ ...BTN_BASE, padding: btnPad }}
+                onMouseEnter={e => { const b = e.currentTarget; b.style.background = theme.surfaceHover; b.style.borderColor = theme.accent; }}
+                onMouseLeave={e => { const b = e.currentTarget; b.style.background = theme.surface; b.style.borderColor = theme.border; }}>
+                <Beaker size={iconSz} /> Bondings
+              </button>
+
               <button onClick={() => setShowElements(true)}
                 style={{ ...BTN_BASE, padding: btnPad }}
                 onMouseEnter={e => { const b = e.currentTarget; b.style.background = theme.surfaceHover; b.style.borderColor = theme.accent; }}
@@ -192,13 +214,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                 </>
               )}
 
-              {/* Dark/Light toggle */}
-              <button onClick={toggleTheme}
-                style={{ ...BTN_BASE, padding: btnPad }}
-                onMouseEnter={e => { const b = e.currentTarget; b.style.background = theme.surfaceHover; b.style.borderColor = theme.accent; }}
-                onMouseLeave={e => { const b = e.currentTarget; b.style.background = theme.surface; b.style.borderColor = theme.border; }}>
-                {mode === 'dark' ? <Sun size={iconSz} /> : <Moon size={iconSz} />}
-              </button>
+
 
               <button onClick={() => dispatch({ type: 'TOGGLE_TEACHER' })}
                 style={{ ...BTN_BASE, padding: btnPad, background: state.showTeacherDash ? theme.accent : theme.surface, border: state.showTeacherDash ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}`, color: state.showTeacherDash ? '#ffffff' : theme.textSecondary }}>
@@ -234,6 +250,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
       </div>
 
       {showElements && <ElementsPanel onClose={() => setShowElements(false)} onToast={showToast} />}
+      {showBondings && <BondingsPanel onClose={() => setShowBondings(false)} />}
     </>
   );
 }
