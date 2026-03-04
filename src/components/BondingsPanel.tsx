@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { X, Search, Beaker, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { X, Search, Beaker, Zap, ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react';
 import { useTheme } from '../store/theme';
 import { BONDING_DATA, BOND_TYPE_INFO } from '../data/bondings';
 import type { BondingEntry } from '../data/bondings';
@@ -194,11 +194,24 @@ function BondingCard({ entry, theme }: { entry: BondingEntry; theme: ReturnType<
 
 interface BondingsPanelProps { onClose: () => void; }
 
+function usePanelWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+}
+
 export function BondingsPanel({ onClose }: BondingsPanelProps) {
   const { theme } = useTheme();
   const [search, setSearch] = useState('');
   const [bondFilter, setBondFilter] = useState<BondFilter>('all');
   const [catFilter, setCatFilter] = useState<CategoryFilter>('all');
+  const [showFilters, setShowFilters] = useState(false);
+  const panelWidth = usePanelWidth();
+  const isMobile = panelWidth < 640;
 
   const filtered = useMemo(() => {
     const s = search.toLowerCase();
@@ -220,36 +233,72 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
     return counts;
   }, []);
 
+  const activeFilterCount = (bondFilter !== 'all' ? 1 : 0) + (catFilter !== 'all' ? 1 : 0);
+
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', flexDirection: 'column', background: theme.bg, fontFamily: '"Inter", sans-serif' }}>
 
       {/* Header */}
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 24px', background: theme.surface, borderBottom: `1px solid ${theme.border}`,
-        flexShrink: 0, gap: 12, boxShadow: theme.shadow,
+        display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', justifyContent: 'space-between',
+        padding: isMobile ? '12px 14px' : '14px 24px', background: theme.surface, borderBottom: `1px solid ${theme.border}`,
+        flexShrink: 0, gap: isMobile ? 10 : 12, boxShadow: theme.shadow,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 10, background: theme.accentBg, border: `1px solid ${theme.accent}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Beaker size={20} color={theme.accentDark} />
+        {/* Title row */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            <div style={{ width: isMobile ? 32 : 36, height: isMobile ? 32 : 36, borderRadius: 10, background: theme.accentBg, border: `1px solid ${theme.accent}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Beaker size={isMobile ? 17 : 20} color={theme.accentDark} />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: isMobile ? 17 : 20, color: theme.logoText, letterSpacing: '0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Molecular Bonding
+              </p>
+              <p style={{ fontFamily: '"Inter", sans-serif', fontSize: isMobile ? 11 : 12, color: theme.textTertiary }}>
+                {BONDING_DATA.length} chemical bonds & compounds
+              </p>
+            </div>
           </div>
-          <div>
-            <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: 20, color: theme.logoText, letterSpacing: '0.02em' }}>
-              Known Bondings
-            </p>
-            <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: theme.textTertiary }}>
-              {BONDING_DATA.length} chemical bonds & compounds
-            </p>
-          </div>
+          {isMobile && (
+            <button
+              onClick={onClose}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, cursor: 'pointer', transition: 'all 0.15s' }}
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, maxWidth: 400, minWidth: 0 }}>
+        {/* Search row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: isMobile ? undefined : 1, maxWidth: isMobile ? '100%' : 400, minWidth: 0 }}>
+          {isMobile && (
+            <button
+              onClick={() => setShowFilters(v => !v)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                height: 36, padding: '0 10px', borderRadius: 10, flexShrink: 0,
+                background: showFilters || activeFilterCount > 0 ? theme.accentBg : theme.surfaceAlt,
+                border: `1px solid ${showFilters || activeFilterCount > 0 ? theme.accent + '60' : theme.border}`,
+                color: showFilters || activeFilterCount > 0 ? theme.accent : theme.textSecondary,
+                cursor: 'pointer', transition: 'all 0.15s',
+                fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 700,
+              }}
+            >
+              <SlidersHorizontal size={14} />
+              {activeFilterCount > 0 && (
+                <span style={{
+                  width: 18, height: 18, borderRadius: '50%', background: theme.accent, color: '#fff',
+                  fontSize: 10, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>{activeFilterCount}</span>
+              )}
+            </button>
+          )}
           <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
             <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: theme.textTertiary }} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Search bonds, compounds, atoms..."
+              placeholder={isMobile ? 'Search...' : 'Search bonds, compounds, atoms...'}
               style={{
                 width: '100%', padding: '8px 14px 8px 34px', background: theme.inputBg, border: `1px solid ${theme.inputBorder}`,
                 borderRadius: 10, color: theme.text, fontFamily: '"Inter", sans-serif',
@@ -259,63 +308,66 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
               onBlur={e => (e.currentTarget.style.borderColor = theme.inputBorder)}
             />
           </div>
-          <button
-            onClick={onClose}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, cursor: 'pointer', transition: 'all 0.15s' }}
-            onMouseEnter={e => { const b = e.currentTarget; b.style.background = theme.dangerBg; b.style.borderColor = theme.dangerBorder; b.style.color = theme.dangerText; }}
-            onMouseLeave={e => { const b = e.currentTarget; b.style.background = theme.surfaceAlt; b.style.borderColor = theme.border; b.style.color = theme.textSecondary; }}
-          >
-            <X size={16} />
-          </button>
+          {!isMobile && (
+            <button
+              onClick={onClose}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, cursor: 'pointer', transition: 'all 0.15s' }}
+              onMouseEnter={e => { const b = e.currentTarget; b.style.background = theme.dangerBg; b.style.borderColor = theme.dangerBorder; b.style.color = theme.dangerText; }}
+              onMouseLeave={e => { const b = e.currentTarget; b.style.background = theme.surfaceAlt; b.style.borderColor = theme.border; b.style.color = theme.textSecondary; }}
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Body */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-
-        {/* Sidebar */}
-        <div style={{ width: 220, flexShrink: 0, borderRight: `1px solid ${theme.border}`, background: theme.surface, padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* Bond type summary */}
+      {/* Mobile filters drawer */}
+      {isMobile && showFilters && (
+        <div style={{
+          flexShrink: 0, background: theme.surface, borderBottom: `1px solid ${theme.border}`,
+          padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 10,
+          maxHeight: '40vh', overflowY: 'auto',
+        }}>
+          {/* Bond type pills */}
           <div>
-            <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Bond Type</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 8, textTransform: 'uppercase' }}>Bond Type</p>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {BOND_FILTERS.map(f => {
                 const active = bondFilter === f.value;
                 const info = f.value === 'all' ? { color: theme.accent, label: f.label } : BOND_TYPE_INFO[f.value];
                 return (
                   <button key={f.value} onClick={() => setBondFilter(f.value)}
                     style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
-                      fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 700,
-                      background: active ? info.color + '18' : 'transparent',
-                      border: active ? `1px solid ${info.color}40` : '1px solid transparent',
+                      display: 'inline-flex', alignItems: 'center', gap: 4,
+                      padding: '5px 10px', borderRadius: 16, cursor: 'pointer',
+                      fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 700,
+                      background: active ? info.color + '18' : theme.surfaceAlt,
+                      border: active ? `1px solid ${info.color}50` : `1px solid ${theme.border}`,
                       color: active ? info.color : theme.textSecondary,
-                      transition: 'all 0.15s', textAlign: 'left',
+                      transition: 'all 0.15s', whiteSpace: 'nowrap',
                     }}>
-                    <span>{f.label}</span>
-                    <span style={{ fontSize: 11, opacity: 0.6, fontFamily: '"Space Mono", monospace' }}>{bondCounts[f.value] ?? 0}</span>
+                    {f.label}
+                    <span style={{ fontSize: 10, opacity: 0.6, fontFamily: '"Space Mono", monospace' }}>{bondCounts[f.value] ?? 0}</span>
                   </button>
                 );
               })}
             </div>
           </div>
-
-          {/* Category filter */}
+          {/* Category pills */}
           <div>
-            <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Category</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 8, textTransform: 'uppercase' }}>Category</p>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {CAT_FILTERS.map(f => {
                 const active = catFilter === f.value;
                 return (
                   <button key={f.value} onClick={() => setCatFilter(f.value)}
                     style={{
-                      padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
-                      fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 700,
-                      background: active ? theme.accentBg : 'transparent',
-                      border: active ? `1px solid ${theme.accent}40` : '1px solid transparent',
+                      padding: '5px 10px', borderRadius: 16, cursor: 'pointer',
+                      fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 700,
+                      background: active ? theme.accentBg : theme.surfaceAlt,
+                      border: active ? `1px solid ${theme.accent}50` : `1px solid ${theme.border}`,
                       color: active ? theme.accent : theme.textSecondary,
-                      transition: 'all 0.15s', textAlign: 'left',
+                      transition: 'all 0.15s', whiteSpace: 'nowrap',
                     }}>
                     {f.label}
                   </button>
@@ -323,28 +375,86 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
               })}
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Legend */}
-          <div style={{ borderTop: `1px solid ${theme.border}`, paddingTop: 14 }}>
-            <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.textTertiary, marginBottom: 10, textTransform: 'uppercase' }}>Legend</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {Object.entries(BOND_TYPE_INFO).map(([key, info]) => (
-                <div key={key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                  <div style={{ width: 10, height: 10, borderRadius: 3, background: info.color, flexShrink: 0, marginTop: 3 }} />
-                  <div>
-                    <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 700, color: theme.text }}>{info.label}</p>
-                    <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 10, color: theme.textTertiary, lineHeight: 1.4 }}>{info.description}</p>
+      {/* Body */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+
+        {/* Sidebar — desktop only */}
+        {!isMobile && (
+          <div style={{ width: 220, flexShrink: 0, borderRight: `1px solid ${theme.border}`, background: theme.surface, padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Bond type summary */}
+            <div>
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Bond Type</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                {BOND_FILTERS.map(f => {
+                  const active = bondFilter === f.value;
+                  const info = f.value === 'all' ? { color: theme.accent, label: f.label } : BOND_TYPE_INFO[f.value];
+                  return (
+                    <button key={f.value} onClick={() => setBondFilter(f.value)}
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
+                        fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 700,
+                        background: active ? info.color + '18' : 'transparent',
+                        border: active ? `1px solid ${info.color}40` : '1px solid transparent',
+                        color: active ? info.color : theme.textSecondary,
+                        transition: 'all 0.15s', textAlign: 'left',
+                      }}>
+                      <span>{f.label}</span>
+                      <span style={{ fontSize: 11, opacity: 0.6, fontFamily: '"Space Mono", monospace' }}>{bondCounts[f.value] ?? 0}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Category filter */}
+            <div>
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Category</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                {CAT_FILTERS.map(f => {
+                  const active = catFilter === f.value;
+                  return (
+                    <button key={f.value} onClick={() => setCatFilter(f.value)}
+                      style={{
+                        padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
+                        fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 700,
+                        background: active ? theme.accentBg : 'transparent',
+                        border: active ? `1px solid ${theme.accent}40` : '1px solid transparent',
+                        color: active ? theme.accent : theme.textSecondary,
+                        transition: 'all 0.15s', textAlign: 'left',
+                      }}>
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Legend */}
+            <div style={{ borderTop: `1px solid ${theme.border}`, paddingTop: 14 }}>
+              <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.textTertiary, marginBottom: 10, textTransform: 'uppercase' }}>Legend</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {Object.entries(BOND_TYPE_INFO).map(([key, info]) => (
+                  <div key={key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: 3, background: info.color, flexShrink: 0, marginTop: 3 }} />
+                    <div>
+                      <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 700, color: theme.text }}>{info.label}</p>
+                      <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 10, color: theme.textTertiary, lineHeight: 1.4 }}>{info.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Cards */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: 20 }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '12px 10px' : 20 }}>
           {/* Stats bar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 12, marginBottom: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
             <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: theme.textSecondary }}>
               {filtered.length} result{filtered.length !== 1 ? 's' : ''}
             </span>
@@ -363,15 +473,15 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
           </div>
 
           {/* Card grid */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 8 : 10 }}>
             {filtered.map(entry => (
               <BondingCard key={entry.id} entry={entry} theme={theme} />
             ))}
           </div>
 
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-              <Zap size={40} color={theme.textTertiary} style={{ marginBottom: 12 }} />
+            <div style={{ textAlign: 'center', padding: isMobile ? '40px 16px' : '60px 20px' }}>
+              <Zap size={isMobile ? 32 : 40} color={theme.textTertiary} style={{ marginBottom: 12 }} />
               <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 16, fontWeight: 800, color: theme.textTertiary }}>No matches found</p>
               <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: theme.textTertiary, marginTop: 6 }}>Try a different search or filter</p>
             </div>
