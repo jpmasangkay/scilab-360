@@ -1,7 +1,7 @@
 import { X, BarChart2 } from 'lucide-react';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
-import { QUIZ_LEVELS, DIFFICULTY_CONFIG } from '../data/quizLevels';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
+import { QUIZ_LEVELS, DIFFICULTY_CONFIG } from '../../shared/data/quizLevels';
 
 const TOTAL_QUESTIONS = 30;
 

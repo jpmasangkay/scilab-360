@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
-import { getCategoryColors, getAtomColor } from '../utils/colors';
-import { KNOWN_COMPOUNDS } from '../data/compounds';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
+import { getCategoryColors, getAtomColor } from '../../shared/utils/colors';
+import { KNOWN_COMPOUNDS } from '../../shared/data/compounds';
 import { LewisView } from './LewisView';
 
 type ViewMode = 'ball-stick' | 'lewis';

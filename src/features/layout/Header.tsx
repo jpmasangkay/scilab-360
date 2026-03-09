@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { RotateCcw, ClipboardList, BookOpen, FlaskConical, LayoutGrid, Atom, Menu, X, Sun, Moon, Beaker } from 'lucide-react';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
-import { ElementsPanel } from './ElementsPanel';
-import { BondingsPanel } from './BondingsPanel';
-import { useToast } from '../App';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
+import { ElementsPanel } from '../periodic-table/ElementsPanel';
+import { BondingsPanel } from '../bondings/BondingsPanel';
+import { useToast } from '../../App';
 
 interface HeaderProps {
   activeTab?: 'lab' | 'guide' | 'molecules';

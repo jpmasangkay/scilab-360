@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { X, ChevronDown } from 'lucide-react';
-import { ELEMENTS, GRID_ELEMENTS } from '../data/elements';
-import { getCategoryColors } from '../utils/colors';
-import type { ElementData, ElementCategory } from '../types';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
+import { ELEMENTS, GRID_ELEMENTS } from '../../shared/data/elements';
+import { getCategoryColors } from '../../shared/utils/colors';
+import type { ElementData, ElementCategory } from '../../shared/types';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
 
 // ── Responsive hook ──────────────────────────────────────────────
 function useWindowWidth() {

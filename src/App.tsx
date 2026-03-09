@@ -1,12 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect, useCallback } from 'react';
-import { AppProvider } from './store/context';
-import { ThemeProvider, useTheme } from './store/theme';
-import { Header } from './components/Header';
-import { LeftPanel } from './components/LeftPanel';
-import { RightPanel } from './components/RightPanel';
-import { Sandbox } from './components/Sandbox';
-import { StudentDashboard } from './components/StudentDashboard';
+import { AppProvider } from './shared/store/context';
+import { ThemeProvider, useTheme } from './shared/store/theme';
+import { Header } from './features/layout/Header';
+import { LeftPanel } from './features/layout/LeftPanel';
+import { RightPanel } from './features/layout/RightPanel';
+import { Sandbox } from './features/sandbox/Sandbox';
+import { StudentDashboard } from './features/dashboard/StudentDashboard';
 
 function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);

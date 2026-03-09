@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 import type { DragEvent } from 'react';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
-import { ELEMENTS } from '../data/elements';
-import { validateBond } from '../utils/chemistry';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
+import { ELEMENTS } from '../../shared/data/elements';
+import { validateBond } from '../../shared/utils/chemistry';
 import { BondLines } from './BondLines';
 import { SandboxAtom } from './SandboxAtom';
 import { FlaskConical } from 'lucide-react';

@@ -2,35 +2,49 @@
  * SciLab 360 — Entry point
  *
  * This file is kept for backward compatibility.
- * The app is fully split into modular files:
+ * The app is fully split into feature-based modules:
  *
  *  src/
- *  ├── App.tsx                        ← root component & layout
- *  ├── types/index.ts                 ← all TypeScript types
- *  ├── data/
- *  │   ├── elements.ts                ← 118 elements + periodic grid
- *  │   ├── compounds.ts               ← known compound data
- *  │   └── quizLevels.ts              ← quiz challenge definitions
- *  ├── utils/
- *  │   ├── chemistry.ts               ← formula, bond detection, feedback
- *  │   └── colors.ts                  ← category colour maps
- *  ├── store/
- *  │   ├── context.tsx                ← AppContext & useApp hook
- *  │   └── reducer.ts                 ← appReducer & initialState
- *  └── components/
- *      ├── Header.tsx
- *      ├── LeftPanel.tsx
- *      ├── RightPanel.tsx
- *      ├── Sandbox.tsx
- *      ├── SandboxAtom.tsx
- *      ├── BondLines.tsx
- *      ├── ElementTile.tsx
- *      ├── PeriodicTablePanel.tsx
- *      ├── LewisView.tsx
- *      ├── MolecularPanel.tsx
- *      ├── QuizPanel.tsx
- *      ├── TeacherDashboard.tsx
- *      └── StudentDashboard.tsx
+ *  ├── App.tsx                              ← root component & layout
+ *  ├── features/
+ *  │   ├── layout/                          ← app shell & navigation
+ *  │   │   ├── Header.tsx
+ *  │   │   ├── LeftPanel.tsx
+ *  │   │   └── RightPanel.tsx
+ *  │   ├── sandbox/                         ← interactive chemistry lab
+ *  │   │   ├── Sandbox.tsx
+ *  │   │   ├── SandboxAtom.tsx
+ *  │   │   └── BondLines.tsx
+ *  │   ├── periodic-table/                  ← element selection & display
+ *  │   │   ├── PeriodicTablePanel.tsx
+ *  │   │   ├── ElementTile.tsx
+ *  │   │   └── ElementsPanel.tsx
+ *  │   ├── molecular-view/                  ← molecule visualization
+ *  │   │   ├── MolecularPanel.tsx
+ *  │   │   └── LewisView.tsx
+ *  │   ├── quiz/                            ← quiz challenges
+ *  │   │   └── QuizPanel.tsx
+ *  │   ├── bondings/                        ← bonding reference guide
+ *  │   │   └── BondingsPanel.tsx
+ *  │   └── dashboard/                       ← student & teacher progress
+ *  │       ├── StudentDashboard.tsx
+ *  │       └── TeacherDashboard.tsx
+ *  └── shared/
+ *      ├── store/                           ← state management
+ *      │   ├── context.tsx
+ *      │   ├── reducer.ts
+ *      │   └── theme.tsx
+ *      ├── types/
+ *      │   └── index.ts
+ *      ├── utils/
+ *      │   ├── chemistry.ts
+ *      │   └── colors.ts
+ *      └── data/
+ *          ├── elements.ts
+ *          ├── bondings.ts
+ *          ├── compounds.ts
+ *          ├── quizLevels.ts
+ *          └── molecularStructures.ts
  */
 
 export { default } from './App';

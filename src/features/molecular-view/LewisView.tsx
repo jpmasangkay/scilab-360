@@ -1,6 +1,6 @@
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
-import { getCategoryColors } from '../utils/colors';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
+import { getCategoryColors } from '../../shared/utils/colors';
 
 export function LewisView() {
   const { state } = useApp();

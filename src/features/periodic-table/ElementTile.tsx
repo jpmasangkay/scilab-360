@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 import type { DragEvent } from 'react';
-import type { ElementData } from '../types';
-import { getCategoryColors } from '../utils/colors';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
+import type { ElementData } from '../../shared/types';
+import { getCategoryColors } from '../../shared/utils/colors';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
 
 // Smart placement
 function getSmartPosition(existingCount: number): { x: number; y: number } {

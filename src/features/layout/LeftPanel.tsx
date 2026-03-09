@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
-import { PeriodicTablePanel } from './PeriodicTablePanel';
-import { QuizPanel } from './QuizPanel';
-import { QUIZ_LEVELS } from '../data/quizLevels';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
+import { PeriodicTablePanel } from '../periodic-table/PeriodicTablePanel';
+import { QuizPanel } from '../quiz/QuizPanel';
+import { QUIZ_LEVELS } from '../../shared/data/quizLevels';
 
 const CARD: React.CSSProperties = { padding: '14px 16px', borderRadius: 14 };
 

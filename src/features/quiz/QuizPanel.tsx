@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
-import { QUIZ_LEVELS, DIFFICULTY_CONFIG } from '../data/quizLevels';
-import type { Difficulty } from '../types';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
+import { QUIZ_LEVELS, DIFFICULTY_CONFIG } from '../../shared/data/quizLevels';
+import type { Difficulty } from '../../shared/types';
 
 export function QuizPanel() {
   const { state, dispatch } = useApp();

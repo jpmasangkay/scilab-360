@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import type { PlacedAtom } from '../types';
-import { getCategoryColors, getAtomColor } from '../utils/colors';
-import { useApp } from '../store/context';
-import { useTheme } from '../store/theme';
+import type { PlacedAtom } from '../../shared/types';
+import { getCategoryColors, getAtomColor } from '../../shared/utils/colors';
+import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
 
 interface SandboxAtomProps {
   atom: PlacedAtom;

@@ -1,5 +1,5 @@
-import { useTheme } from '../store/theme';
-import { MolecularPanel } from './MolecularPanel';
+import { useTheme } from '../../shared/store/theme';
+import { MolecularPanel } from '../molecular-view/MolecularPanel';
 
 interface RightPanelProps { fullHeight?: boolean; }
 

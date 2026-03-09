@@ -1,4 +1,4 @@
-import type { PlacedAtom, Bond } from '../types';
+import type { PlacedAtom, Bond } from '../../shared/types';
 
 interface BondLinesProps {
   atoms: PlacedAtom[];

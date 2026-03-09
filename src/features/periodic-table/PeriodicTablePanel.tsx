@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
-import type { ElementCategory } from '../types';
-import { ELEMENTS, GRID_ELEMENTS, COMMON_ELEMENT_SYMBOLS } from '../data/elements';
+import type { ElementCategory } from '../../shared/types';
+import { ELEMENTS, GRID_ELEMENTS, COMMON_ELEMENT_SYMBOLS } from '../../shared/data/elements';
 import { ElementTile } from './ElementTile';
-import { useTheme } from '../store/theme';
+import { useTheme } from '../../shared/store/theme';
 
 const FILTER_CATEGORIES = [
   'all', 'nonmetal', 'halogen', 'noble-gas',

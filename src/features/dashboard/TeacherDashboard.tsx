@@ -1,6 +1,6 @@
 import { X, BarChart2 } from 'lucide-react';
-import { useApp } from '../store/context';
-import { QUIZ_LEVELS, DIFFICULTY_CONFIG } from '../data/quizLevels';
+import { useApp } from '../../shared/store/context';
+import { QUIZ_LEVELS, DIFFICULTY_CONFIG } from '../../shared/data/quizLevels';
 
 const diffColors: Record<string, { bg: string; text: string; border: string }> = {
   easy: { bg: '#f0fdf4', text: '#16a34a', border: '#bbf7d0' },

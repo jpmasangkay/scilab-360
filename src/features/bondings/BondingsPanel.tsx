@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { X, Search, Beaker, Zap, ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react';
-import { useTheme } from '../store/theme';
-import { BONDING_DATA, BOND_TYPE_INFO } from '../data/bondings';
-import type { BondingEntry } from '../data/bondings';
-import { STRUCTURES, ATOM_COLORS } from '../data/molecularStructures';
-import type { MolecularStructure } from '../data/molecularStructures';
+import { useTheme } from '../../shared/store/theme';
+import { BONDING_DATA, BOND_TYPE_INFO } from '../../shared/data/bondings';
+import type { BondingEntry } from '../../shared/data/bondings';
+import { STRUCTURES, ATOM_COLORS } from '../../shared/data/molecularStructures';
+import type { MolecularStructure } from '../../shared/data/molecularStructures';
 
 type BondFilter = 'all' | 'covalent' | 'polar-covalent' | 'ionic' | 'metallic' | 'coordinate';
 type CategoryFilter = 'all' | 'organic' | 'inorganic' | 'acid' | 'base' | 'salt' | 'oxide' | 'hydride' | 'other';
