@@ -129,11 +129,11 @@ function PTile({
       <span style={{ fontSize: compact ? '5px' : 'clamp(7px, 0.6vw, 10px)', opacity: 0.7, lineHeight: 1, fontFamily: '"Space Mono", monospace' }}>
         {el.atomicNumber}
       </span>
-      <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: compact ? '8px' : 'clamp(11px, 1vw, 16px)', lineHeight: 1, marginTop: 1 }}>
+      <span style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, fontSize: compact ? '8px' : 'clamp(11px, 1vw, 16px)', lineHeight: 1, marginTop: 1 }}>
         {el.symbol}
       </span>
       {!compact && (
-        <span style={{ fontSize: 'clamp(7px, 0.55vw, 10px)', opacity: 0.7, lineHeight: 1, marginTop: 1, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: '"Inter", sans-serif' }}>
+        <span style={{ fontSize: 'clamp(7px, 0.55vw, 10px)', opacity: 0.7, lineHeight: 1, marginTop: 1, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: '"DM Sans", sans-serif' }}>
           {el.name}
         </span>
       )}
@@ -166,9 +166,9 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
         minWidth: isMobile ? 88 : 'auto',
       }}>
         <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 11, color: c.text, opacity: 0.6 }}>{el.atomicNumber}</span>
-        <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 900, fontSize: isMobile ? 34 : 52, color: c.text, lineHeight: 1 }}>{el.symbol}</span>
-        <span style={{ fontFamily: '"Inter", sans-serif', fontSize: isMobile ? 11 : 14, color: c.text, marginTop: 6, textAlign: 'center', fontWeight: 600 }}>{el.name}</span>
-        <span style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, color: c.text, opacity: 0.7, background: theme.surface, border: `1px solid ${c.border}60`, borderRadius: 6, padding: '3px 10px', marginTop: 8, textTransform: 'capitalize', letterSpacing: '0.05em', textAlign: 'center' }}>
+        <span style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 900, fontSize: isMobile ? 34 : 52, color: c.text, lineHeight: 1 }}>{el.symbol}</span>
+        <span style={{ fontFamily: '"DM Sans", sans-serif', fontSize: isMobile ? 11 : 14, color: c.text, marginTop: 6, textAlign: 'center', fontWeight: 600 }}>{el.name}</span>
+        <span style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 9, color: c.text, opacity: 0.7, background: theme.surface, border: `1px solid ${c.border}60`, borderRadius: 6, padding: '3px 10px', marginTop: 8, textTransform: 'capitalize', letterSpacing: '0.05em', textAlign: 'center' }}>
           {el.category.replace(/-/g, ' ')}
         </span>
       </div>
@@ -178,8 +178,8 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(4, 1fr)' : '1fr 1fr', gap: isMobile ? 5 : 8, marginBottom: 8 }}>
           {stats.map(([label, value]) => (
             <div key={label} style={{ background: theme.surfaceAlt, border: `1px solid ${theme.border}`, borderRadius: 10, padding: isMobile ? '5px 7px' : '8px 10px' }}>
-              <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 8, color: theme.textTertiary, marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
-              <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: isMobile ? 11 : 13, color: theme.text, fontWeight: 700, textTransform: 'capitalize' }}>{value}</p>
+              <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 8, color: theme.textTertiary, marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</p>
+              <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: isMobile ? 11 : 13, color: theme.text, fontWeight: 700, textTransform: 'capitalize' }}>{value}</p>
             </div>
           ))}
         </div>
@@ -189,7 +189,7 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
             onClick={onAddToLab}
             style={{
               width: '100%', marginTop: 8, padding: '10px', borderRadius: 10, cursor: 'pointer',
-              fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 800,
+              fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 800,
               letterSpacing: '0.05em', background: theme.accent, border: `1px solid ${theme.accentDark}`,
               color: '#ffffff', boxShadow: `0 2px 10px ${theme.accent}30`,
               transition: 'all 0.15s',
@@ -201,7 +201,7 @@ function ElementDetail({ el, isMobile, onAddToLab }: { el: ElementData; isMobile
 
         {!isMobile && (
           <div style={{ background: theme.surfaceAlt, border: `1px solid ${theme.border}`, borderRadius: 10, padding: '10px 12px', marginTop: 8 }}>
-            <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, color: theme.textTertiary, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Valence Shell (max 8)</p>
+            <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 9, color: theme.textTertiary, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Valence Shell (max 8)</p>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {Array.from({ length: 8 }, (_, i) => (
                 <div key={i} style={{
@@ -294,7 +294,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
   const activeCatColor = selected ? CATEGORY_COLORS[selected.category] : null;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', flexDirection: 'column', background: theme.bg, fontFamily: '"Inter", sans-serif' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', flexDirection: 'column', background: theme.bg, fontFamily: '"DM Sans", sans-serif' }}>
 
       {/* ── Header ── */}
       <div style={{
@@ -310,10 +310,10 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={theme.accentDark} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="2" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /><ellipse cx="12" cy="12" rx="10" ry="4" /></svg>
           </div>
           <div>
-            <p style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: isMobile ? 14 : 20, color: theme.logoText, letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
+            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, fontSize: isMobile ? 14 : 20, color: theme.logoText, letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>
               Element Library
             </p>
-            {!isMobile && <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 12, color: theme.textTertiary, letterSpacing: '0.02em' }}>All 118 Elements</p>}
+            {!isMobile && <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 12, color: theme.textTertiary, letterSpacing: '0.02em' }}>All 118 Elements</p>}
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: isMobile ? 1 : 'none' }}>
@@ -324,7 +324,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
             style={{
               width: isMobile ? '100%' : 240, minWidth: 0,
               padding: '8px 14px', background: theme.inputBg, border: `1px solid ${theme.inputBorder}`,
-              borderRadius: 10, color: theme.text, fontFamily: '"Inter", sans-serif',
+              borderRadius: 10, color: theme.text, fontFamily: '"DM Sans", sans-serif',
               fontSize: 13, outline: 'none', transition: 'border-color 0.2s',
             }}
             onFocus={e => (e.currentTarget.style.borderColor = theme.accent)}
@@ -351,14 +351,14 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
           <div style={{ display: 'flex', flexWrap: isMobile ? 'nowrap' : 'wrap', gap: 5, flexShrink: 0, overflowX: 'auto', paddingBottom: isMobile ? 3 : 0 }}>
             <button
               onClick={() => setFilterCat('all')}
-              style={{ padding: '5px 12px', fontSize: isMobile ? 10 : 11, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, background: filterCat === 'all' ? theme.accent : theme.surface, color: filterCat === 'all' ? '#ffffff' : theme.textSecondary, border: filterCat === 'all' ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}`, transition: 'all 0.12s', whiteSpace: 'nowrap', flexShrink: 0 }}
+              style={{ padding: '5px 12px', fontSize: isMobile ? 10 : 11, borderRadius: 8, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, background: filterCat === 'all' ? theme.accent : theme.surface, color: filterCat === 'all' ? '#ffffff' : theme.textSecondary, border: filterCat === 'all' ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}`, transition: 'all 0.12s', whiteSpace: 'nowrap', flexShrink: 0 }}
             >All</button>
             {LEGEND_CATS.map(cat => {
               const c = CATEGORY_COLORS[cat.value];
               const active = filterCat === cat.value;
               return (
                 <button key={cat.value} onClick={() => setFilterCat(active ? 'all' : cat.value)}
-                  style={{ padding: '5px 12px', fontSize: isMobile ? 10 : 11, borderRadius: 8, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, fontFamily: '"Nunito", sans-serif', fontWeight: 700, background: active ? c.border : c.bg, color: active ? '#ffffff' : c.text, border: `1px solid ${active ? c.border : c.border + '40'}`, boxShadow: active ? `0 2px 8px ${c.border}30` : 'none', transition: 'all 0.12s' }}
+                  style={{ padding: '5px 12px', fontSize: isMobile ? 10 : 11, borderRadius: 8, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, background: active ? c.border : c.bg, color: active ? '#ffffff' : c.text, border: `1px solid ${active ? c.border : c.border + '40'}`, boxShadow: active ? `0 2px 8px ${c.border}30` : 'none', transition: 'all 0.12s' }}
                 >{cat.label}</button>
               );
             })}
@@ -377,7 +377,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
               <div style={{ display: 'grid', gridTemplateColumns: COLS, gap: isMobile ? 2 : 3 }}>
                 <div style={{ gridColumn: '1 / 3' }} />
                 <div style={{ gridColumn: '3 / 18', height: isMobile ? 4 : 8, borderRadius: 4, background: theme.borderLight, border: `1px dashed ${theme.sandboxBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {!isMobile && <span style={{ fontSize: 8, color: theme.textTertiary, fontFamily: '"Inter", sans-serif', letterSpacing: '0.1em', fontWeight: 500 }}>LANTHANIDES & ACTINIDES</span>}
+                  {!isMobile && <span style={{ fontSize: 8, color: theme.textTertiary, fontFamily: '"DM Sans", sans-serif', letterSpacing: '0.1em', fontWeight: 500 }}>LANTHANIDES & ACTINIDES</span>}
                 </div>
               </div>
 
@@ -419,7 +419,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
               return (
                 <div key={cat.value} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                   <div style={{ width: 10, height: 10, borderRadius: 3, background: c.bg, border: `1.5px solid ${c.border}`, flexShrink: 0 }} />
-                  <span style={{ fontSize: isMobile ? 9 : 10, color: theme.textSecondary, fontFamily: '"Inter", sans-serif', fontWeight: 500 }}>{cat.label}</span>
+                  <span style={{ fontSize: isMobile ? 9 : 10, color: theme.textSecondary, fontFamily: '"DM Sans", sans-serif', fontWeight: 500 }}>{cat.label}</span>
                 </div>
               );
             })}
@@ -431,7 +431,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
           <div style={{ width: isTablet ? 220 : 270, flexShrink: 0, borderLeft: `1px solid ${theme.border}`, background: theme.surface, padding: 16, overflowY: 'auto' }}>
             {selected
               ? <ElementDetail el={selected} onAddToLab={isTablet ? () => addToLab(selected) : undefined} />
-              : <p style={{ color: theme.textTertiary, fontSize: 13, textAlign: 'center', marginTop: 40, fontFamily: '"Inter", sans-serif' }}>{isTablet ? 'Tap any element' : 'Click any element'}</p>
+              : <p style={{ color: theme.textTertiary, fontSize: 13, textAlign: 'center', marginTop: 40, fontFamily: '"DM Sans", sans-serif' }}>{isTablet ? 'Tap any element' : 'Click any element'}</p>
             }
           </div>
         )}
@@ -459,7 +459,7 @@ export function ElementsPanel({ onClose, onToast }: ElementsPanelProps) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 32, height: 3, borderRadius: 99, background: theme.sandboxBorder }} />
                 {selected && (
-                  <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 700, fontSize: 13, color: activeCatColor?.text ?? theme.text }}>
+                  <span style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, fontSize: 13, color: activeCatColor?.text ?? theme.text }}>
                     {selected.symbol} &mdash; {selected.name}
                   </span>
                 )}

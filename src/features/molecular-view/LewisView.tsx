@@ -9,7 +9,7 @@ export function LewisView() {
 
   if (state.placedAtoms.length === 0) {
     return (
-      <p style={{ color: theme.textTertiary, fontFamily: '"Inter", sans-serif', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
+      <p style={{ color: theme.textTertiary, fontFamily: '"DM Sans", sans-serif', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
         No atoms placed yet
       </p>
     );
@@ -46,7 +46,7 @@ export function LewisView() {
                   left: PADDING,
                   width: BOX,
                   height: BOX,
-                  fontFamily: '"Nunito", sans-serif',
+                  fontFamily: '"Playfair Display", sans-serif',
                   fontWeight: 800,
                   fontSize: 20,
                   background: colors.bg,

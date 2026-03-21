@@ -43,9 +43,9 @@ function AppLayout() {
   const legend = (
     <div className="flex items-center gap-6 px-4 shrink-0" style={{ height: 36, background: theme.surfaceAlt, borderTop: `1px solid ${theme.border}` }}>
       {[
-        { color: '#14b8a6', label: 'Covalent Bond' },
-        { color: '#f43f5e', label: 'Ionic Bond' },
-        { color: '#3b82f6', label: 'Metallic Bond' },
+        { color: '#0E6B68', label: 'Covalent Bond' },
+        { color: '#B85030', label: 'Ionic Bond' },
+        { color: '#4A78A0', label: 'Metallic Bond' },
       ].map(({ color, label }) => (
         <div key={label} className="flex items-center gap-2">
           <div className="w-5 h-0.5 rounded-full" style={{ background: color }} />

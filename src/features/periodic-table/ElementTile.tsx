@@ -40,24 +40,24 @@ function ElementPopup({ el, onClose }: ElementPopupProps) {
       <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 340, borderRadius: 20, overflow: 'hidden', background: theme.surface, border: `2px solid ${colors.border}`, boxShadow: '0 16px 48px rgba(0,0,0,0.15)' }}>
         <div style={{ padding: '20px 24px 16px', background: colors.bg, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <div style={{ fontFamily: '"Nunito", sans-serif', fontSize: 48, fontWeight: 900, color: colors.text, lineHeight: 1 }}>{el.symbol}</div>
-            <div style={{ fontFamily: '"Inter", sans-serif', fontSize: 16, color: colors.text, marginTop: 4, fontWeight: 600 }}>{el.name}</div>
-            <div style={{ fontFamily: '"Inter", sans-serif', fontSize: 11, color: colors.text, marginTop: 2, opacity: 0.7, textTransform: 'capitalize', letterSpacing: '0.05em' }}>{el.category.replace(/-/g, ' ')}</div>
+            <div style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 48, fontWeight: 900, color: colors.text, lineHeight: 1 }}>{el.symbol}</div>
+            <div style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 16, color: colors.text, marginTop: 4, fontWeight: 600 }}>{el.name}</div>
+            <div style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 11, color: colors.text, marginTop: 2, opacity: 0.7, textTransform: 'capitalize', letterSpacing: '0.05em' }}>{el.category.replace(/-/g, ' ')}</div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
             <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: colors.text, fontSize: 18, opacity: 0.6 }}>&#x2715;</button>
-            <div style={{ fontFamily: '"Nunito", sans-serif', fontSize: 22, fontWeight: 800, color: colors.text, opacity: 0.8 }}>{el.atomicNumber}</div>
+            <div style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 22, fontWeight: 800, color: colors.text, opacity: 0.8 }}>{el.atomicNumber}</div>
           </div>
         </div>
         <div style={{ padding: '16px 20px 20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           {rows.map(([label, value]) => (
             <div key={String(label)} style={{ padding: '10px 12px', borderRadius: 10, background: theme.surfaceAlt, border: `1px solid ${theme.border}` }}>
-              <div style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, color: theme.textTertiary, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{label}</div>
-              <div style={{ fontFamily: '"Nunito", sans-serif', fontSize: 14, fontWeight: 700, color: theme.text }}>{String(value)}</div>
+              <div style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 9, color: theme.textTertiary, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{label}</div>
+              <div style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 14, fontWeight: 700, color: theme.text }}>{String(value)}</div>
             </div>
           ))}
         </div>
-        <div style={{ padding: '0 20px 16px', fontFamily: '"Inter", sans-serif', fontSize: 11, color: theme.textTertiary, textAlign: 'center' }}>
+        <div style={{ padding: '0 20px 16px', fontFamily: '"DM Sans", sans-serif', fontSize: 11, color: theme.textTertiary, textAlign: 'center' }}>
           Click outside to close
         </div>
       </div>
@@ -83,7 +83,7 @@ function createGhost(symbol: string, color: string, x: number, y: number) {
   ghostEl.style.cssText = `
     position:fixed;pointer-events:none;z-index:99999;
     width:56px;height:56px;border-radius:50%;
-    background:${color};border:3px solid #14b8a6;
+    background:${color};border:3px solid #0E6B68;
     display:flex;align-items:center;justify-content:center;
     font-family:Nunito,sans-serif;font-weight:800;font-size:18px;
     color:#fff;opacity:0.92;box-shadow:0 4px 20px rgba(0,0,0,0.2);
@@ -258,7 +258,7 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
           onMouseLeave={e => { const d = e.currentTarget as HTMLDivElement; d.style.transform = 'scale(1)'; d.style.zIndex = '1'; d.style.boxShadow = 'none'; }}
         >
           <span style={{ fontSize: 'clamp(7px, 0.6vw, 10px)', opacity: 0.7, lineHeight: 1, fontFamily: '"Space Mono", monospace' }}>{el.atomicNumber}</span>
-          <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: 'clamp(11px, 1vw, 16px)', lineHeight: 1 }}>{el.symbol}</span>
+          <span style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, fontSize: 'clamp(11px, 1vw, 16px)', lineHeight: 1 }}>{el.symbol}</span>
         </div>
       ) : (
         <div
@@ -273,8 +273,8 @@ export function ElementTile({ el, tiny = false, onToast, isMobile }: ElementTile
           onMouseLeave={e => { const d = e.currentTarget as HTMLDivElement; d.style.boxShadow = 'none'; d.style.transform = 'scale(1)'; }}
         >
           <div style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, opacity: 0.6, lineHeight: 1 }}>{el.atomicNumber}</div>
-          <div style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 800, fontSize: 24, lineHeight: 1.1 }}>{el.symbol}</div>
-          <div style={{ fontFamily: '"Inter", sans-serif', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 60, opacity: 0.8 }}>{el.name}</div>
+          <div style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, fontSize: 24, lineHeight: 1.1 }}>{el.symbol}</div>
+          <div style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 60, opacity: 0.8 }}>{el.name}</div>
         </div>
       )}
     </>

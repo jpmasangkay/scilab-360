@@ -18,7 +18,7 @@ export function BondLines({ atoms, bonds }: BondLinesProps) {
         const dx = b.x - a.x;
         const dy = b.y - a.y;
         const angle = Math.atan2(dy, dx);
-        const color = bond.type === 'ionic' ? '#f43f5e' : bond.type === 'metallic' ? '#3b82f6' : '#14b8a6';
+        const color = bond.type === 'ionic' ? '#B85030' : bond.type === 'metallic' ? '#4A78A0' : '#0E6B68';
 
         if (bond.order === 1) {
           return (

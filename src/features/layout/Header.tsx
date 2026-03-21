@@ -27,7 +27,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
   const BTN_BASE: React.CSSProperties = {
     display: 'flex', alignItems: 'center', gap: 6,
     borderRadius: 10, cursor: 'pointer', whiteSpace: 'nowrap',
-    fontFamily: '"Nunito", sans-serif', fontWeight: 700,
+    fontFamily: '"Playfair Display", sans-serif', fontWeight: 700,
     letterSpacing: '0.02em', transition: 'all 0.2s',
     background: theme.surface, border: `1px solid ${theme.border}`, color: theme.accent,
     fontSize: 13,
@@ -50,7 +50,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
   const menuItem = (active = false, danger = false): React.CSSProperties => ({
     display: 'flex', alignItems: 'center', gap: 10,
     width: '100%', padding: '12px 16px', cursor: 'pointer',
-    fontFamily: '"Nunito", sans-serif', fontWeight: 700,
+    fontFamily: '"Playfair Display", sans-serif', fontWeight: 700,
     fontSize: 13, letterSpacing: '0.02em',
     background: active ? theme.accentBg : 'transparent',
     border: 'none',
@@ -77,26 +77,36 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
           gap: 12, position: 'relative', zIndex: 2,
         }}>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 12, flexShrink: 0 }}>
             <div style={{
               width: isMobile ? 34 : 42, height: isMobile ? 34 : 42,
-              borderRadius: 12, background: theme.accent,
+              borderRadius: isMobile ? 10 : 14,
+              background: theme.accent,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: `0 2px 8px ${theme.accent}40`,
+              boxShadow: `0 2px 10px ${theme.accent}50`,
+              border: `1px solid ${theme.accentDark}`,
             }}>
-              <FlaskConical size={isMobile ? 18 : 22} color="#ffffff" strokeWidth={2.5} />
+              {/* Palayok (clay pot) icon */}
+              <svg width={isMobile ? 18 : 22} height={isMobile ? 18 : 22} viewBox="0 0 22 24" fill="none">
+                <ellipse cx="11" cy="6" rx="5" ry="1.6" fill="white" opacity="0.95"/>
+                <path d="M6,6 L5.5,9 Q5,9.5 5.5,10 L16.5,10 Q17,9.5 16.5,9 L16,6" fill="white" opacity="0.9"/>
+                <path d="M5.5,10 Q2,13 2,17 Q2,22 11,22 Q20,22 20,17 Q20,13 16.5,10 Z" fill="white"/>
+                <path d="M4.5,15 Q11,13.5 17.5,15" stroke={theme.accent} strokeWidth="0.7" strokeLinecap="round"/>
+                <path d="M3.5,18.5 Q11,17 18.5,18.5" stroke={theme.accent} strokeWidth="0.6" strokeLinecap="round" opacity="0.6"/>
+              </svg>
             </div>
             <div>
               <p style={{
-                fontFamily: '"Nunito", sans-serif', fontWeight: 900, color: theme.logoText,
-                fontSize: isMobile ? 16 : isTablet ? 18 : 22,
-                letterSpacing: '-0.01em', lineHeight: 1.2,
+                fontFamily: '"Playfair Display", serif', fontWeight: 800, color: theme.logoText,
+                fontSize: isMobile ? 15 : isTablet ? 18 : 21,
+                letterSpacing: '0em', lineHeight: 1.15,
               }}>
-                SciLab 360
+                SciLab <em style={{ fontStyle: 'italic', fontWeight: 400 }}>360</em>
               </p>
               <p style={{
-                fontFamily: '"Inter", sans-serif', fontSize: isMobile ? 9 : 11,
-                color: theme.subtitleText, letterSpacing: '0.02em', lineHeight: 1, fontWeight: 500,
+                fontFamily: '"DM Sans", sans-serif', fontSize: isMobile ? 9 : 10,
+                color: theme.subtitleText, letterSpacing: '0.06em', lineHeight: 1,
+                fontWeight: 400, textTransform: 'uppercase',
               }}>
                 Interactive Chemistry Lab
               </p>
@@ -131,8 +141,8 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                   zIndex: 200,
                 }}>
                   <div style={{ padding: '10px 16px', background: theme.accentBg, borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, color: theme.accent, letterSpacing: '0.05em', fontWeight: 700 }}>LEVEL {state.level}</span>
-                    <span style={{ fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 800, color: theme.accent }}>
+                    <span style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, color: theme.accent, letterSpacing: '0.05em', fontWeight: 700 }}>LEVEL {state.level}</span>
+                    <span style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 800, color: theme.accent }}>
                       {state.score} pts
                     </span>
                   </div>
@@ -224,6 +234,30 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
           )}
         </div>
 
+        {/* Karagatan wave — bottom decoration */}
+        {!isMobile && (
+          <svg
+            style={{ display: 'block', width: '100%', height: 7, position: 'relative', zIndex: 1, marginTop: -1 }}
+            viewBox="0 0 900 7"
+            preserveAspectRatio="none"
+            fill="none"
+          >
+            <path
+              d="M0,3.5 C30,0.5 60,6.5 90,3.5 C120,0.5 150,6.5 180,3.5 C210,0.5 240,6.5 270,3.5 C300,0.5 330,6.5 360,3.5 C390,0.5 420,6.5 450,3.5 C480,0.5 510,6.5 540,3.5 C570,0.5 600,6.5 630,3.5 C660,0.5 690,6.5 720,3.5 C750,0.5 780,6.5 810,3.5 C840,0.5 870,6.5 900,3.5"
+              stroke={theme.accentBorder}
+              strokeWidth="1.2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M0,5.5 C30,2.5 60,8.5 90,5.5 C120,2.5 150,8.5 180,5.5 C210,2.5 240,8.5 270,5.5 C300,2.5 330,8.5 360,5.5 C390,2.5 420,8.5 450,5.5 C480,2.5 510,8.5 540,5.5 C570,2.5 600,8.5 630,5.5 C660,2.5 690,8.5 720,5.5 C750,2.5 780,8.5 810,5.5 C840,2.5 870,8.5 900,5.5"
+              stroke={theme.accentBorder}
+              strokeWidth="0.6"
+              strokeLinecap="round"
+              opacity="0.45"
+            />
+          </svg>
+        )}
+
         {/* Mobile tab bar */}
         {isMobile && onTabChange && (
           <div style={{ display: 'flex', gap: 6, borderTop: `1px solid ${theme.border}`, padding: '6px 12px', background: theme.surfaceAlt }}>
@@ -236,7 +270,7 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
                 style={{
                   flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
                   padding: '8px 0', borderRadius: 10, cursor: 'pointer',
-                  fontFamily: '"Nunito", sans-serif', fontSize: 12, fontWeight: 700,
+                  fontFamily: '"Playfair Display", sans-serif', fontSize: 12, fontWeight: 700,
                   transition: 'all 0.2s',
                   background: activeTab === id ? theme.accent : 'transparent',
                   border: activeTab === id ? `1px solid ${theme.accentDark}` : '1px solid transparent',

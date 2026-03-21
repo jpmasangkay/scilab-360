@@ -1,72 +1,57 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
 export interface ThemeTokens {
-  // Mode
   isDark: boolean;
 
-  // Page & surface
   bg: string;
   surface: string;
   surfaceAlt: string;
   surfaceHover: string;
 
-  // Borders
   border: string;
   borderLight: string;
 
-  // Text
   text: string;
   textSecondary: string;
   textTertiary: string;
 
-  // Accent (teal)
   accent: string;
   accentDark: string;
   accentLight: string;
   accentBg: string;
   accentBorder: string;
 
-  // Input
   inputBg: string;
   inputBorder: string;
 
-  // Progress bars
   progressBg: string;
 
-  // Shadows & overlay
   shadow: string;
   shadowLg: string;
   overlay: string;
 
-  // Scrollbar
   scrollbarTrack: string;
   scrollbarThumb: string;
   scrollbarThumbHover: string;
 
-  // Toast
   toastBg: string;
   toastBorder: string;
   toastShadow: string;
   toastText: string;
 
-  // Specific semantic
   dangerText: string;
   dangerBg: string;
   dangerBorder: string;
 
-  // Logo
   logoText: string;
   subtitleText: string;
 
-  // Stats / counts label
   statBg: string;
   statText: string;
 
-  // Formula
   formulaBg: string;
   formulaBorder: string;
 
-  // Sandbox
   sandboxBg: string;
   sandboxBgHover: string;
   sandboxBorder: string;
@@ -75,122 +60,134 @@ export interface ThemeTokens {
   sandboxDotColor: string;
 }
 
+// ─── Light: Laiya Beach — warm sand, Tayabas Bay teal ───────────────────────
 const lightTheme: ThemeTokens = {
   isDark: false,
-  bg: '#f8fafc',
-  surface: '#ffffff',
-  surfaceAlt: '#f8fafc',
-  surfaceHover: '#f0fdfa',
+  // Sandy warm backgrounds — like the white sand beaches of Laiya
+  bg:           '#F5EFE4',
+  surface:      '#FDFAF5',
+  surfaceAlt:   '#EDE5D6',
+  surfaceHover: '#E4F2F0',
 
-  border: '#e2e8f0',
-  borderLight: '#f1f5f9',
+  // Earthy porous borders — pottery & stone
+  border:      '#D4C8B4',
+  borderLight: '#E8DECE',
 
-  text: '#1e293b',
-  textSecondary: '#64748b',
-  textTertiary: '#94a3b8',
+  // Text inspired by deep mangrove green-black
+  text:          '#1A2826',
+  textSecondary: '#566860',
+  textTertiary:  '#96AEA8',
 
-  accent: '#14b8a6',
-  accentDark: '#0d9488',
-  accentLight: '#5eead4',
-  accentBg: '#f0fdfa',
-  accentBorder: '#99f6e4',
+  // Tayabas Bay ocean teal — the deep clear water off Laiya
+  accent:       '#0E6B68',
+  accentDark:   '#094E4C',
+  accentLight:  '#3BA8A2',
+  accentBg:     '#E4F3F2',
+  accentBorder: '#9AD4D0',
 
-  inputBg: '#f8fafc',
-  inputBorder: '#e2e8f0',
+  inputBg:     '#FDFAF5',
+  inputBorder: '#D4C8B4',
 
-  progressBg: '#e2e8f0',
+  progressBg: '#D8CFC0',
 
-  shadow: '0 1px 3px rgba(0,0,0,0.04)',
-  shadowLg: '0 8px 32px rgba(0,0,0,0.12)',
-  overlay: 'rgba(0,0,0,0.3)',
+  shadow:   '0 1px 4px rgba(26,40,38,0.07)',
+  shadowLg: '0 8px 36px rgba(26,40,38,0.14)',
+  overlay:  'rgba(10,20,18,0.35)',
 
-  scrollbarTrack: '#f1f5f9',
-  scrollbarThumb: '#94a3b8',
-  scrollbarThumbHover: '#64748b',
+  scrollbarTrack:     '#EDE5D6',
+  scrollbarThumb:     '#B8A898',
+  scrollbarThumbHover:'#8A7C6E',
 
-  toastBg: '#ffffff',
-  toastBorder: '#14b8a6',
-  toastShadow: '0 4px 16px rgba(0,0,0,0.1), 0 0 0 1px rgba(20,184,166,0.2)',
-  toastText: '#0f766e',
+  toastBg:     '#FDFAF5',
+  toastBorder: '#0E6B68',
+  toastShadow: '0 4px 20px rgba(14,107,104,0.15), 0 0 0 1px rgba(14,107,104,0.2)',
+  toastText:   '#094E4C',
 
-  dangerText: '#ef4444',
-  dangerBg: '#fef2f2',
-  dangerBorder: '#fecaca',
+  // Pottery terracotta for danger/destructive actions
+  dangerText:   '#B85030',
+  dangerBg:     '#FBF0EA',
+  dangerBorder: '#E4B09A',
 
-  logoText: '#0f172a',
-  subtitleText: '#94a3b8',
+  logoText:    '#1A2826',
+  subtitleText:'#96AEA8',
 
-  statBg: '#f1f5f9',
-  statText: '#94a3b8',
+  statBg:  '#EDE5D6',
+  statText:'#96AEA8',
 
-  formulaBg: '#ffffff',
-  formulaBorder: '#99f6e4',
+  formulaBg:     '#FDFAF5',
+  formulaBorder: '#9AD4D0',
 
-  sandboxBg: 'linear-gradient(135deg, #f8fafc 0%, #f0fdfa 50%, #ecfdf5 100%)',
-  sandboxBgHover: '#f0fdfa',
-  sandboxBorder: '#cbd5e1',
-  sandboxBorderHover: '#14b8a6',
-  sandboxEmptyIcon: '#e2e8f0',
-  sandboxDotColor: '#94a3b8',
+  // Sandbox: flat sandy tone (no gradient)
+  sandboxBg:          '#F0EAE0',
+  sandboxBgHover:     '#E4F2F0',
+  sandboxBorder:      '#C8C0B0',
+  sandboxBorderHover: '#0E6B68',
+  sandboxEmptyIcon:   '#D8CFBE',
+  sandboxDotColor:    '#C4B89E',
 };
 
+// ─── Dark: Deep ocean floor — Tayabas Bay at night ──────────────────────────
 const darkTheme: ThemeTokens = {
   isDark: true,
-  bg: '#0c1222',
-  surface: '#162032',
-  surfaceAlt: '#1a2740',
-  surfaceHover: '#1a3a3a',
+  // Deep ocean floor — like the sea at night off San Juan's coast
+  bg:           '#0C1918',
+  surface:      '#152422',
+  surfaceAlt:   '#1C3230',
+  surfaceHover: '#1C3A38',
 
-  border: '#2a3a52',
-  borderLight: '#1e2e46',
+  border:      '#2A4240',
+  borderLight: '#1E3230',
 
-  text: '#e8edf5',
-  textSecondary: '#8899b0',
-  textTertiary: '#5a6f8a',
+  text:          '#E8F0EE',
+  textSecondary: '#7A9A96',
+  textTertiary:  '#4A6A66',
 
-  accent: '#2dd4bf',
-  accentDark: '#14b8a6',
-  accentLight: '#5eead4',
-  accentBg: '#0d2e2e',
-  accentBorder: '#1a5c5c',
+  // Bioluminescent ocean teal — glowing sea at night
+  accent:       '#2EC4BC',
+  accentDark:   '#1A8C86',
+  accentLight:  '#5ED8D2',
+  accentBg:     '#0C2E2C',
+  accentBorder: '#1A5C58',
 
-  inputBg: '#1a2740',
-  inputBorder: '#2a3a52',
+  inputBg:     '#1C3230',
+  inputBorder: '#2A4240',
 
-  progressBg: '#2a3a52',
+  progressBg: '#2A4240',
 
-  shadow: '0 1px 3px rgba(0,0,0,0.3)',
-  shadowLg: '0 8px 32px rgba(0,0,0,0.5)',
-  overlay: 'rgba(0,0,0,0.6)',
+  shadow:   '0 1px 4px rgba(0,0,0,0.35)',
+  shadowLg: '0 8px 36px rgba(0,0,0,0.55)',
+  overlay:  'rgba(0,0,0,0.65)',
 
-  scrollbarTrack: '#162032',
-  scrollbarThumb: '#3a4f6a',
-  scrollbarThumbHover: '#5a6f8a',
+  scrollbarTrack:      '#1A2A28',
+  scrollbarThumb:      '#3A5250',
+  scrollbarThumbHover: '#5A7270',
 
-  toastBg: '#162032',
-  toastBorder: '#2dd4bf',
-  toastShadow: '0 4px 16px rgba(0,0,0,0.4), 0 0 0 1px rgba(45,212,191,0.3)',
-  toastText: '#2dd4bf',
+  toastBg:     '#152422',
+  toastBorder: '#2EC4BC',
+  toastShadow: '0 4px 20px rgba(0,0,0,0.45), 0 0 0 1px rgba(46,196,188,0.3)',
+  toastText:   '#2EC4BC',
 
-  dangerText: '#f87171',
-  dangerBg: '#2a1a1a',
-  dangerBorder: '#7f1d1d',
+  // Terracotta pottery glow for danger
+  dangerText:   '#E87050',
+  dangerBg:     '#2A1A14',
+  dangerBorder: '#7A3020',
 
-  logoText: '#f1f5f9',
-  subtitleText: '#5a6f8a',
+  logoText:    '#E8F0EE',
+  subtitleText:'#4A6A66',
 
-  statBg: '#1a2740',
-  statText: '#5a6f8a',
+  statBg:  '#1C3230',
+  statText:'#4A6A66',
 
-  formulaBg: '#162032',
-  formulaBorder: '#1a5c5c',
+  formulaBg:     '#152422',
+  formulaBorder: '#1A5C58',
 
-  sandboxBg: 'linear-gradient(135deg, #0c1222 0%, #0d2222 50%, #0a1e1a 100%)',
-  sandboxBgHover: '#0d2e2e',
-  sandboxBorder: '#2a3a52',
-  sandboxBorderHover: '#2dd4bf',
-  sandboxEmptyIcon: '#2a3a52',
-  sandboxDotColor: '#2a3a52',
+  // Sandbox: flat deep ocean tone (no gradient)
+  sandboxBg:          '#0E2220',
+  sandboxBgHover:     '#0C2E2C',
+  sandboxBorder:      '#2A4240',
+  sandboxBorderHover: '#2EC4BC',
+  sandboxEmptyIcon:   '#2A4240',
+  sandboxDotColor:    '#1E3430',
 };
 
 type ThemeMode = 'light' | 'dark';

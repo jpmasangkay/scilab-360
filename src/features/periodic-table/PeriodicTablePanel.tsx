@@ -40,7 +40,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         placeholder="Search by name, symbol, or number..."
-        style={{ width: '100%', padding: '9px 14px', borderRadius: 10, fontFamily: '"Inter", sans-serif', fontSize: 13, outline: 'none', background: theme.inputBg, border: `1px solid ${theme.inputBorder}`, color: theme.text, caretColor: theme.accent, boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+        style={{ width: '100%', padding: '9px 14px', borderRadius: 10, fontFamily: '"DM Sans", sans-serif', fontSize: 13, outline: 'none', background: theme.inputBg, border: `1px solid ${theme.inputBorder}`, color: theme.text, caretColor: theme.accent, boxSizing: 'border-box', transition: 'border-color 0.2s' }}
         onFocus={e => (e.currentTarget.style.borderColor = theme.accent)}
         onBlur={e => (e.currentTarget.style.borderColor = theme.inputBorder)}
       />
@@ -48,7 +48,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
         {FILTER_CATEGORIES.map(c => (
           <button key={c} onClick={() => setFilterCat(c)}
-            style={{ padding: '4px 12px', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? theme.accent : theme.surfaceAlt, color: filterCat === c ? '#ffffff' : theme.textSecondary, border: filterCat === c ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}` }}>
+            style={{ padding: '4px 12px', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? theme.accent : theme.surfaceAlt, color: filterCat === c ? '#ffffff' : theme.textSecondary, border: filterCat === c ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}` }}>
             {c === 'all' ? 'All' : c.replace(/-/g, ' ')}
           </button>
         ))}
@@ -56,7 +56,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
 
       {!showFiltered && (
         <button onClick={() => setShowFull(v => !v)}
-          style={{ padding: '7px 14px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 700, textAlign: 'left', background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, transition: 'all 0.15s' }}>
+          style={{ padding: '7px 14px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 700, textAlign: 'left', background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, transition: 'all 0.15s' }}>
           {showFull ? 'Show Common Only' : 'Show All 118 Elements'}
         </button>
       )}
@@ -66,7 +66,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {filtered.map(el => <ElementTile key={el.atomicNumber} el={el} onToast={onToast} isMobile={isMobile} isTablet={isTablet} />)}
           {filtered.length === 0 && (
-            <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: theme.textTertiary, padding: 8 }}>No elements match.</p>
+            <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.textTertiary, padding: 8 }}>No elements match.</p>
           )}
         </div>
       ) : showFull ? (

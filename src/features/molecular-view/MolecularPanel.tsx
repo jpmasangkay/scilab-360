@@ -24,7 +24,7 @@ export function MolecularPanel() {
       <div style={{ display: 'flex', gap: 4, background: theme.statBg, borderRadius: 10, padding: 4 }}>
         {(['ball-stick', 'lewis'] as ViewMode[]).map(v => (
           <button key={v} onClick={() => setView(v)}
-            style={{ flex: 1, padding: '8px 0', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Nunito", sans-serif', fontWeight: 700, border: 'none', transition: 'all 0.15s', background: view === v ? theme.accent : 'transparent', color: view === v ? '#ffffff' : theme.textSecondary }}>
+            style={{ flex: 1, padding: '8px 0', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, border: 'none', transition: 'all 0.15s', background: view === v ? theme.accent : 'transparent', color: view === v ? '#ffffff' : theme.textSecondary }}>
             {v === 'ball-stick' ? 'Ball & Stick' : 'Lewis / e'}
           </button>
         ))}
@@ -35,7 +35,7 @@ export function MolecularPanel() {
         {view === 'ball-stick' ? (
           state.placedAtoms.length === 0 ? (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-              <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: theme.textTertiary }}>No molecule</p>
+              <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.textTertiary }}>No molecule</p>
             </div>
           ) : (
             <svg width="100%" height="100%" viewBox="0 0 300 200" style={{ position: 'absolute', inset: 0 }}>
@@ -59,7 +59,7 @@ export function MolecularPanel() {
                     if (!a || !b) return null;
                     const { px: ax, py: ay } = p(a.x, a.y);
                     const { px: bx, py: by } = p(b.x, b.y);
-                    return <line key={i} x1={ax} y1={ay} x2={bx} y2={by} stroke={bond.type === 'ionic' ? '#f43f5e' : '#14b8a6'} strokeWidth={2.5} strokeLinecap="round" />;
+                    return <line key={i} x1={ax} y1={ay} x2={bx} y2={by} stroke={bond.type === 'ionic' ? '#B85030' : '#0E6B68'} strokeWidth={2.5} strokeLinecap="round" />;
                   })}
                   {atoms.map(atom => {
                     const { px, py } = p(atom.x, atom.y);
@@ -80,7 +80,7 @@ export function MolecularPanel() {
       {/* Compound info */}
       {compound && (
         <div style={{ padding: '12px 14px', background: theme.accentBg, border: `1px solid ${theme.accentBorder}`, borderRadius: 12 }}>
-          <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 14, fontWeight: 800, color: theme.accent, marginBottom: 6 }}>{compound.name}</p>
+          <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 14, fontWeight: 800, color: theme.accent, marginBottom: 6 }}>{compound.name}</p>
           <div style={{ display: 'flex', gap: 16 }}>
             <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: theme.textSecondary }}>{compound.geometry}</span>
             <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 12, color: theme.textSecondary }}>{compound.bondAngle}</span>
@@ -91,14 +91,14 @@ export function MolecularPanel() {
       {/* Bond stats */}
       {state.bonds.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, textTransform: 'uppercase' }}>Bonds Detected</p>
+          <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, textTransform: 'uppercase' }}>Bonds Detected</p>
           {Object.entries(bondTypeCounts).map(([type, count]) => {
-            const bondColor = type === 'ionic' ? '#f43f5e' : type === 'metallic' ? '#3b82f6' : '#14b8a6';
+            const bondColor = type === 'ionic' ? '#B85030' : type === 'metallic' ? '#4A78A0' : '#0E6B68';
             return (
               <div key={type} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 24, height: 3, background: bondColor, borderRadius: 2 }} />
-                  <span style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: theme.textSecondary, textTransform: 'capitalize' }}>{type}</span>
+                  <span style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.textSecondary, textTransform: 'capitalize' }}>{type}</span>
                 </div>
                 <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, fontWeight: 700, color: theme.text }}>{count}x</span>
               </div>
@@ -111,10 +111,10 @@ export function MolecularPanel() {
       {state.selectedElement && (
         <div style={{ padding: '12px 14px', background: theme.surface, border: `2px solid ${CATEGORY_COLORS[state.selectedElement.category].border}`, borderRadius: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ fontFamily: '"Nunito", sans-serif', fontWeight: 900, fontSize: 22, color: CATEGORY_COLORS[state.selectedElement.category].text }}>{state.selectedElement.symbol}</span>
+            <span style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 900, fontSize: 22, color: CATEGORY_COLORS[state.selectedElement.category].text }}>{state.selectedElement.symbol}</span>
             <button onClick={() => dispatch({ type: 'SELECT_ELEMENT', payload: null })} style={{ cursor: 'pointer', background: 'transparent', border: 'none', fontSize: 16, color: theme.textTertiary }}>&#x2715;</button>
           </div>
-          <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 13, color: theme.textSecondary, marginBottom: 12 }}>{state.selectedElement.name}</p>
+          <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.textSecondary, marginBottom: 12 }}>{state.selectedElement.name}</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
             {[
               ['Atomic #', state.selectedElement.atomicNumber],
@@ -125,8 +125,8 @@ export function MolecularPanel() {
               ['Electronegativity', state.selectedElement.electronegativity ?? '--'],
             ].map(([label, value]) => (
               <div key={String(label)} style={{ padding: '8px 10px', background: theme.surfaceAlt, border: `1px solid ${theme.border}`, borderRadius: 8 }}>
-                <p style={{ fontFamily: '"Inter", sans-serif', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.06em', color: theme.textTertiary, marginBottom: 3 }}>{label}</p>
-                <p style={{ fontFamily: '"Nunito", sans-serif', fontSize: 13, fontWeight: 700, color: theme.text }}>{String(value)}</p>
+                <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.06em', color: theme.textTertiary, marginBottom: 3 }}>{label}</p>
+                <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 700, color: theme.text }}>{String(value)}</p>
               </div>
             ))}
           </div>
