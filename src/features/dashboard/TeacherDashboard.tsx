@@ -1,5 +1,6 @@
 import { X, BarChart2 } from 'lucide-react';
 import { useApp } from '../../shared/store/context';
+import { useTheme } from '../../shared/store/theme';
 import { QUIZ_LEVELS, DIFFICULTY_CONFIG } from '../../shared/data/quizLevels';
 
 const diffColors: Record<string, { bg: string; text: string; border: string }> = {
@@ -10,6 +11,7 @@ const diffColors: Record<string, { bg: string; text: string; border: string }> =
 
 export function TeacherDashboard() {
   const { state, dispatch } = useApp();
+  const { theme } = useTheme();
   if (!state.showTeacherDash) return null;
 
   const completed = state.completedChallenges.length;
