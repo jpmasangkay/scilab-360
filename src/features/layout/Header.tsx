@@ -86,12 +86,41 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: `0 2px 10px ${theme.accent}40`, flexShrink: 0,
             }}>
-              <svg width={isMobile ? 18 : 22} height={isMobile ? 19 : 23} viewBox="0 0 22 23" fill="none">
-                <ellipse cx="11" cy="5.5" rx="5" ry="1.6" fill="white" opacity="0.92"/>
-                <path d="M6,5.5 L5.5,8.5 Q5.1,9.2 5.7,9.6 L16.3,9.6 Q16.9,9.2 16.5,8.5 L16,5.5" fill="white" opacity="0.85"/>
-                <path d="M5.7,9.6 Q2,12.5 2,17 Q2,21.5 11,21.5 Q20,21.5 20,17 Q20,12.5 16.3,9.6 Z" fill="white"/>
-                <path d="M4,14.5 Q11,13.2 18,14.5" stroke={theme.accentDark} strokeWidth="0.7" strokeLinecap="round" opacity="0.55"/>
-                <path d="M3.5,18 Q11,16.8 18.5,18" stroke={theme.accentDark} strokeWidth="0.55" strokeLinecap="round" opacity="0.38"/>
+              {/* Palayok logo — dark glazed clay pot with lid, icon scale */}
+              <svg width={isMobile ? 20 : 24} height={isMobile ? 20 : 24} viewBox="0 0 24 22" fill="none">
+                {/* Ground shadow */}
+                <ellipse cx="12" cy="20.5" rx="7" ry="1.4" fill="black" opacity="0.3"/>
+                {/* BODY */}
+                <path d="M3,10 Q1,12 1,15 Q1,20 12,20 Q23,20 23,15 Q23,12 21,10 Z" fill="white" opacity="0.88"/>
+                {/* Body right shadow */}
+                <path d="M16,10 Q21.5,12 23,15 Q23,19.5 17,20 L12,20 Q18,19 20,15.5 Q21.5,12.5 16,10 Z" fill="black" opacity="0.22"/>
+                {/* Body left highlight */}
+                <path d="M3,10 Q1.2,12 1.3,14 Q2.5,12 5,10.8 Z" fill="white" opacity="0.4"/>
+                {/* Specular */}
+                <ellipse cx="6.5" cy="13" rx="2.2" ry="1.5" fill="white" opacity="0.3" transform="rotate(-20 6.5 13)"/>
+                {/* Ring grooves */}
+                <path d="M2.5,13 Q12,11.6 21.5,13" stroke="white" strokeWidth="0.5" strokeLinecap="round" opacity="0.25"/>
+                <path d="M1.5,16.5 Q12,15.2 22.5,16.5" stroke="white" strokeWidth="0.45" strokeLinecap="round" opacity="0.18"/>
+                {/* RIM LEDGE */}
+                <ellipse cx="12" cy="10" rx="9" ry="2" fill="white" opacity="0.75"/>
+                <path d="M3,10 Q12,8.5 21,10" stroke="white" strokeWidth="0.5" strokeLinecap="round" opacity="0.35"/>
+                <ellipse cx="12" cy="10" rx="6.5" ry="1.2" fill="black" opacity="0.45"/>
+                {/* LID */}
+                <path d="M3,10 Q3,3.5 12,2.5 Q21,3.5 21,10 Z" fill="white" opacity="0.85"/>
+                {/* Lid right shadow */}
+                <path d="M16,3 Q20.5,5.5 21,10 L18,10 Q18.5,6 16,3 Z" fill="black" opacity="0.28"/>
+                {/* Lid left highlight */}
+                <path d="M3,10 Q3,5.5 5.5,3.8 Q3.5,5.5 3.2,9 Z" fill="white" opacity="0.3"/>
+                {/* Lid ring */}
+                <path d="M4,7.5 Q12,6 20,7.5" stroke="white" strokeWidth="0.45" strokeLinecap="round" opacity="0.2"/>
+                {/* KNOB base */}
+                <ellipse cx="12" cy="2.5" rx="3" ry="1" fill="white" opacity="0.72"/>
+                {/* Knob dome */}
+                <path d="M9,2.5 Q9,0 12,0 Q15,0 15,2.5 Z" fill="white" opacity="0.82"/>
+                {/* Knob right shadow */}
+                <path d="M13.5,0.3 Q15,1 15,2.5 L14,2.5 Q14.2,1.2 13.5,0.3 Z" fill="black" opacity="0.22"/>
+                {/* Knob specular */}
+                <ellipse cx="10.8" cy="1.2" rx="1" ry="0.7" fill="white" opacity="0.5"/>
               </svg>
             </div>
             <div>
@@ -245,9 +274,13 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
           </svg>
         )}
 
-        {/* ── Mobile tab bar ─────────────────────────────── */}
+        {/* ── Mobile tab bar — filled pill style ──────────── */}
         {isMobile && onTabChange && (
-          <div style={{ display: 'flex', borderTop: `1px solid ${theme.border}`, background: theme.surfaceAlt }}>
+          <div style={{
+            display: 'flex', gap: 6, padding: '7px 10px',
+            borderTop: `1px solid ${theme.border}`,
+            background: theme.surfaceAlt,
+          }}>
             {([
               { id: 'lab',       label: 'Lab',       Icon: FlaskConical },
               { id: 'guide',     label: 'Guide',     Icon: LayoutGrid },
@@ -256,11 +289,13 @@ export function Header({ activeTab, onTabChange, isMobile, isTablet, tabletPanel
               <button key={id} onClick={() => onTabChange(id)}
                 style={{
                   flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  padding: '10px 0', cursor: 'pointer', minHeight: 46,
+                  padding: '9px 4px', cursor: 'pointer', minHeight: 44,
                   fontFamily: '"DM Sans", sans-serif', fontSize: 12, fontWeight: activeTab === id ? 600 : 400,
-                  transition: 'all 0.18s', border: 'none', background: 'transparent',
-                  color: activeTab === id ? theme.accent : theme.textTertiary,
-                  borderBottom: activeTab === id ? `2px solid ${theme.accent}` : '2px solid transparent',
+                  transition: 'all 0.18s',
+                  borderRadius: 10,
+                  border: activeTab === id ? `1px solid ${theme.accentDark}` : '1px solid transparent',
+                  background: activeTab === id ? theme.accent : 'transparent',
+                  color: activeTab === id ? '#ffffff' : theme.textTertiary,
                 }}>
                 <Icon size={14} /> {label}
               </button>

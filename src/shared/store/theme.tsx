@@ -126,68 +126,71 @@ const lightTheme: ThemeTokens = {
   sandboxDotColor:    '#C4B89E',
 };
 
-// ─── Dark: Deep ocean floor — Tayabas Bay at night ──────────────────────────
+// ─── Dark: Cool slate-gray — light gray base, teal-kissed to complement the accent ───
+// Cool blue-gray surfaces so the teal (#2EC4BC) accent reads crisp and vibrant.
 const darkTheme: ThemeTokens = {
   isDark: true,
-  // Deep ocean floor — like the sea at night off San Juan's coast
-  bg:           '#0C1918',
-  surface:      '#152422',
-  surfaceAlt:   '#1C3230',
-  surfaceHover: '#1C3A38',
 
-  border:      '#2A4240',
-  borderLight: '#1E3230',
+  // Cool light-gray backgrounds with a faint teal undertone
+  bg:           '#1E2329',
+  surface:      '#252C34',
+  surfaceAlt:   '#2C343E',
+  surfaceHover: '#1E2E2D',
 
-  text:          '#E8F0EE',
-  textSecondary: '#7A9A96',
-  textTertiary:  '#4A6A66',
+  // Cool gray borders, slightly teal-shifted
+  border:      '#3A4554',
+  borderLight: '#2E3A48',
 
-  // Bioluminescent ocean teal — glowing sea at night
+  // Crisp cool-white text — high contrast on gray
+  text:          '#DDE4EC',
+  textSecondary: '#8A9DB5',
+  textTertiary:  '#506075',
+
+  // Tayabas Bay teal — vivid against the cool gray
   accent:       '#2EC4BC',
-  accentDark:   '#1A8C86',
-  accentLight:  '#5ED8D2',
-  accentBg:     '#0C2E2C',
-  accentBorder: '#1A5C58',
+  accentDark:   '#1A9690',
+  accentLight:  '#60DAD4',
+  accentBg:     '#0E2228',
+  accentBorder: '#174840',
 
-  inputBg:     '#1C3230',
-  inputBorder: '#2A4240',
+  inputBg:     '#2C343E',
+  inputBorder: '#3A4554',
 
-  progressBg: '#2A4240',
+  progressBg: '#303A46',
 
-  shadow:   '0 1px 4px rgba(0,0,0,0.35)',
-  shadowLg: '0 8px 36px rgba(0,0,0,0.55)',
-  overlay:  'rgba(0,0,0,0.65)',
+  shadow:   '0 1px 4px rgba(0,0,0,0.45)',
+  shadowLg: '0 8px 36px rgba(0,0,0,0.6)',
+  overlay:  'rgba(0,0,0,0.68)',
 
-  scrollbarTrack:      '#1A2A28',
-  scrollbarThumb:      '#3A5250',
-  scrollbarThumbHover: '#5A7270',
+  scrollbarTrack:      '#252C34',
+  scrollbarThumb:      '#3A4554',
+  scrollbarThumbHover: '#4E6070',
 
-  toastBg:     '#152422',
+  toastBg:     '#252C34',
   toastBorder: '#2EC4BC',
-  toastShadow: '0 4px 20px rgba(0,0,0,0.45), 0 0 0 1px rgba(46,196,188,0.3)',
+  toastShadow: '0 4px 20px rgba(0,0,0,0.5), 0 0 0 1px rgba(46,196,188,0.22)',
   toastText:   '#2EC4BC',
 
-  // Terracotta pottery glow for danger
-  dangerText:   '#E87050',
-  dangerBg:     '#2A1A14',
-  dangerBorder: '#7A3020',
+  dangerText:   '#F07060',
+  dangerBg:     '#241820',
+  dangerBorder: '#6A2E38',
 
-  logoText:    '#E8F0EE',
-  subtitleText:'#4A6A66',
+  logoText:    '#DDE4EC',
+  subtitleText:'#506075',
 
-  statBg:  '#1C3230',
-  statText:'#4A6A66',
+  statBg:  '#2C343E',
+  statText:'#506075',
 
-  formulaBg:     '#152422',
-  formulaBorder: '#1A5C58',
+  formulaBg:     '#252C34',
+  formulaBorder: '#174840',
 
-  // Sandbox: flat deep ocean tone (no gradient)
-  sandboxBg:          '#0E2220',
-  sandboxBgHover:     '#0C2E2C',
-  sandboxBorder:      '#2A4240',
+  // Sandbox — slightly darker cool gray so elements pop
+  sandboxBg:          '#191F26',
+  sandboxBgHover:     '#1E2E2D',
+  sandboxBorder:      '#2E3A48',
   sandboxBorderHover: '#2EC4BC',
-  sandboxEmptyIcon:   '#2A4240',
-  sandboxDotColor:    '#1E3430',
+  sandboxEmptyIcon:   '#2E3A48',
+  sandboxDotColor:    '#263040',
 };
 
 type ThemeMode = 'light' | 'dark';

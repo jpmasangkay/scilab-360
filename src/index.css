@@ -67,9 +67,9 @@ body {
 ::-webkit-scrollbar-thumb  { background: #B8A898; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #8A7C6E; }
 
-[data-theme="dark"] ::-webkit-scrollbar-track { background: #1A2A28; }
-[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #3A5250; }
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #5A7270; }
+[data-theme="dark"] ::-webkit-scrollbar-track { background: #252C34; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #3A4554; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #4E6070; }
 
 /* ── Sandy dot-texture overlay (light) ────────────────── */
 [data-theme="light"] #root::before {
@@ -89,6 +89,6 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(46,196,188,0.035) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(46,196,188,0.05) 1px, transparent 0);
   background-size: 26px 26px;
 }

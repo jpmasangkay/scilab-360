@@ -105,29 +105,98 @@ export function Sandbox({ isMobile }: SandboxProps) {
       {/* Empty state */}
       {state.placedAtoms.length === 0 && (
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ gap: 10 }}>
-          {/* Palayok + Karagatan illustration */}
-          <svg width="90" height="100" viewBox="0 0 90 100" fill="none" style={{ opacity: theme.isDark ? 0.22 : 0.18 }}>
-            {/* Waves below pot — karagatan */}
-            <path d="M5,78 C15,73 25,83 35,78 C45,73 55,83 65,78 C72,74 79,80 85,78" stroke={theme.accent} strokeWidth="1.4" strokeLinecap="round"/>
-            <path d="M10,85 C20,80 30,90 40,85 C50,80 60,90 70,85 C75,82 80,87 85,85" stroke={theme.accent} strokeWidth="1" strokeLinecap="round" opacity="0.6"/>
-            <path d="M2,92 C12,87 22,97 32,92 C42,87 52,97 62,92 C70,88 77,94 88,92" stroke={theme.accent} strokeWidth="0.8" strokeLinecap="round" opacity="0.35"/>
-            {/* Palayok body — wide round belly */}
-            <path d="M17,38 Q12,43 12,52 Q12,68 45,68 Q78,68 78,52 Q78,43 73,38 Z" fill={theme.accent}/>
-            {/* Palayok neck */}
-            <path d="M30,38 L29,28 Q29,26 32,26 L58,26 Q61,26 61,28 L60,38 Z" fill={theme.accent}/>
-            {/* Palayok rim */}
-            <ellipse cx="45" cy="26" rx="17" ry="4.5" fill={theme.accent}/>
-            {/* Horizontal ring texture on belly */}
-            <path d="M18,47 Q45,44 72,47" stroke="white" strokeWidth="1.2" strokeLinecap="round" opacity="0.25"/>
-            <path d="M14,56 Q45,53 76,56" stroke="white" strokeWidth="1.2" strokeLinecap="round" opacity="0.2"/>
-            <path d="M16,64 Q45,61 74,64" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.15"/>
-            {/* Coconut frond — left */}
-            <path d="M8,36 C4,30 0,22 6,16" stroke={theme.accentLight} strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-            <path d="M8,36 C2,33 -2,26 2,20" stroke={theme.accentLight} strokeWidth="1" strokeLinecap="round" opacity="0.3"/>
-            {/* Coconut frond — right */}
-            <path d="M82,36 C86,30 90,22 84,16" stroke={theme.accentLight} strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-            <path d="M82,36 C88,33 92,26 88,20" stroke={theme.accentLight} strokeWidth="1" strokeLinecap="round" opacity="0.3"/>
-          </svg>
+          {/* ── Palayok — dark glazed clay pot with lid, matching real San Juan palayok ── */}
+          {(() => {
+            // Light mode: black tones  |  Dark mode: light brown tones
+            const potBase  = theme.isDark ? '#C49A6C' : '#0A0A0A';
+            const potRim   = theme.isDark ? '#D4AA7A' : '#1A1A1A';
+            const potInner = theme.isDark ? '#8C6A40' : '#000000';
+            return (
+              <svg width="120" height="120" viewBox="0 0 120 108" fill="none" style={{ opacity: theme.isDark ? 0.92 : 0.72 }}>
+                <defs>
+                  <clipPath id="lid-clip">
+                    <path d="M22,47 Q22,28 60,26 Q98,28 98,47 Z"/>
+                  </clipPath>
+                  <clipPath id="body-clip">
+                    <path d="M22,47 Q8,56 8,68 Q8,88 60,88 Q112,88 112,68 Q112,56 98,47 Z"/>
+                  </clipPath>
+                </defs>
+
+                {/* ── Ground shadow ── */}
+                <ellipse cx="60" cy="92" rx="36" ry="6" fill="black" opacity="0.32"/>
+
+                {/* ── Karagatan waves below pot ── */}
+                <path d="M4,100 C15,95 26,105 37,100 C48,95 59,105 70,100 C79,96 88,102 106,100" stroke={theme.accent} strokeWidth="1.3" strokeLinecap="round" opacity="0.65"/>
+                <path d="M8,108 C19,103 30,113 41,108 C52,103 63,113 74,108 C83,105 91,110 108,108" stroke={theme.accent} strokeWidth="0.9" strokeLinecap="round" opacity="0.35"/>
+
+                {/* ═══════════════════════════════════
+                    BODY — wide squat belly, flares outward
+                    ═══════════════════════════════════ */}
+                {/* Body base */}
+                <path d="M22,47 Q8,56 8,68 Q8,88 60,88 Q112,88 112,68 Q112,56 98,47 Z" fill={potBase}/>
+                {/* Body right shadow — deepens the round form */}
+                <path d="M72,47 Q96,53 112,68 Q112,86 82,88 L60,88 Q88,86 94,70 Q100,56 72,47 Z"
+                  fill="black" opacity="0.38" clipPath="url(#body-clip)"/>
+                {/* Body left highlight — light source upper-left */}
+                <path d="M22,47 Q9,55 9,63 Q11,55 20,50 Q30,46 46,45 Z"
+                  fill="white" opacity="0.14" clipPath="url(#body-clip)"/>
+                {/* Specular highlight — bright oval upper-left */}
+                <ellipse cx="34" cy="57" rx="10" ry="7" fill="white" opacity="0.12" transform="rotate(-25 34 57)"/>
+
+                {/* Wheel-thrown ring grooves — follow the curvature */}
+                <path d="M16,57 Q60,52 104,57" stroke="white" strokeWidth="0.9" strokeLinecap="round" opacity="0.18"/>
+                <path d="M10,67 Q60,62 110,67" stroke="white" strokeWidth="0.8" strokeLinecap="round" opacity="0.14"/>
+                <path d="M11,77 Q60,72 109,77" stroke="white" strokeWidth="0.7" strokeLinecap="round" opacity="0.1"/>
+                {/* Right-side ring shadow — ring disappears into shadow zone */}
+                <path d="M88,57 Q103,59 104,57" stroke="black" strokeWidth="1" strokeLinecap="round" opacity="0.22"/>
+                <path d="M92,67 Q108,69 110,67" stroke="black" strokeWidth="0.8" strokeLinecap="round" opacity="0.18"/>
+
+                {/* ═══════════════════════════════════
+                    RIM LEDGE — where lid rests on body
+                    ═══════════════════════════════════ */}
+                {/* Rim ring — slightly wider than neck, forms the ledge */}
+                <ellipse cx="60" cy="47" rx="38" ry="8" fill={potRim}/>
+                {/* Rim top face — catches light */}
+                <path d="M22,47 Q60,41 98,47" stroke="white" strokeWidth="1.2" strokeLinecap="round" opacity="0.22"/>
+                {/* Rim inner edge — dark shadow into body opening */}
+                <ellipse cx="60" cy="47" rx="28" ry="5" fill={potInner}/>
+
+                {/* ═══════════════════════════════════
+                    LID — domed, sits on rim ledge
+                    ═══════════════════════════════════ */}
+                {/* Lid dome base */}
+                <path d="M22,47 Q22,28 60,26 Q98,28 98,47 Z" fill={potBase}/>
+                {/* Lid right shadow */}
+                <path d="M74,27 Q96,33 98,47 L86,47 Q88,35 74,27 Z"
+                  fill="black" opacity="0.32" clipPath="url(#lid-clip)"/>
+                {/* Lid left highlight */}
+                <path d="M22,47 Q22,34 30,29 Q24,34 23,44 Z"
+                  fill="white" opacity="0.13" clipPath="url(#lid-clip)"/>
+                {/* Lid specular */}
+                <ellipse cx="38" cy="36" rx="9" ry="6" fill="white" opacity="0.1" transform="rotate(-20 38 36)"/>
+                {/* Lid ring groove */}
+                <path d="M26,42 Q60,38 94,42" stroke="white" strokeWidth="0.7" strokeLinecap="round" opacity="0.15"/>
+                {/* Lid bottom edge — where it meets the rim */}
+                <path d="M22,47 Q60,44 98,47" stroke={potInner} strokeWidth="1.5" strokeLinecap="round" opacity="0.6"/>
+
+                {/* ═══════════════════════════════════
+                    KNOB — small dome handle on lid
+                    ═══════════════════════════════════ */}
+                {/* Knob base / stem */}
+                <ellipse cx="60" cy="26" rx="9" ry="4" fill={potRim}/>
+                {/* Knob dome */}
+                <path d="M51,26 Q51,18 60,16 Q69,18 69,26 Z" fill={potBase}/>
+                {/* Knob dome right shadow */}
+                <path d="M64,17 Q69,20 69,26 L66,26 Q67,21 64,17 Z" fill="black" opacity="0.3"/>
+                {/* Knob dome highlight */}
+                <path d="M52,26 Q52,20 56,17 Q52,21 52,25 Z" fill="white" opacity="0.18"/>
+                {/* Knob specular */}
+                <ellipse cx="56" cy="20" rx="2.5" ry="1.8" fill="white" opacity="0.22" transform="rotate(-20 56 20)"/>
+                {/* Knob base rim highlight */}
+                <path d="M51,26 Q60,23 69,26" stroke="white" strokeWidth="0.7" strokeLinecap="round" opacity="0.2"/>
+              </svg>
+            );
+          })()}
 
           {isMobile ? (
             <>
