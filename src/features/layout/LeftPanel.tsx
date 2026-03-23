@@ -5,7 +5,14 @@ import { PeriodicTablePanel } from '../periodic-table/PeriodicTablePanel';
 import { QuizPanel } from '../quiz/QuizPanel';
 import { QUIZ_LEVELS } from '../../shared/data/quizLevels';
 
-const CARD: React.CSSProperties = { padding: '14px 16px', borderRadius: 14 };
+function PotteryRing({ width = 56, color }: { width?: number; color: string }) {
+  return (
+    <svg width={width} height={6} viewBox={`0 0 ${width} 6`} fill="none" style={{ display: 'block' }}>
+      <path d={`M1,3 Q${width/4},1 ${width/2},3 Q${width*3/4},5 ${width-1},3`} stroke={color} strokeWidth="1.1" strokeLinecap="round"/>
+      <path d={`M4,5 Q${width/4},3 ${width/2},5 Q${width*3/4},7 ${width-4},5`} stroke={color} strokeWidth="0.5" strokeLinecap="round" opacity="0.4"/>
+    </svg>
+  );
+}
 
 interface LeftPanelProps {
   fullHeight?: boolean;
@@ -19,84 +26,121 @@ export function LeftPanel({ fullHeight, isMobile, isTablet, onToast }: LeftPanel
   const { theme } = useTheme();
 
   const feedbackAccent =
-    state.feedbackType === 'success' ? '#10b981' :
-    state.feedbackType === 'error'   ? '#ef4444' :
-    state.feedbackType === 'warning' ? '#f59e0b' : theme.accent;
+    state.feedbackType === 'success' ? '#16a34a' :
+    state.feedbackType === 'error'   ? '#B85030' :
+    state.feedbackType === 'warning' ? '#c07a28' : theme.accent;
 
   const feedbackBg =
-    state.feedbackType === 'success' ? (theme.isDark ? '#0a2a1a' : '#f0fdf4') :
-    state.feedbackType === 'error'   ? (theme.isDark ? '#2a1a1a' : '#fef2f2') :
-    state.feedbackType === 'warning' ? (theme.isDark ? '#2a2410' : '#fffbeb') : theme.accentBg;
+    state.feedbackType === 'success' ? (theme.isDark ? '#0a2a18' : '#f0fdf4') :
+    state.feedbackType === 'error'   ? (theme.isDark ? '#2A1A12' : '#FBF0EA') :
+    state.feedbackType === 'warning' ? (theme.isDark ? '#2a2010' : '#fffbeb') : theme.accentBg;
+
+  const compact = isMobile || isTablet;
+  const cardPad = compact ? '12px 14px' : '16px 18px';
+  const gap = compact ? 8 : 12;
 
   return (
-    <div style={{ width: fullHeight ? '100%' : 'min(420px, 38vw)', minWidth: fullHeight ? undefined : 300, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 14, height: '100%', minHeight: 0, overflow: 'hidden' }}>
+    <div style={{
+      width: fullHeight ? '100%' : 'min(380px, 34vw)',
+      minWidth: fullHeight ? undefined : 272,
+      flexShrink: 0,
+      display: 'flex', flexDirection: 'column',
+      gap, height: '100%', minHeight: 0, overflow: 'hidden',
+    }}>
 
-      {/* Progress */}
-      <div style={{ ...CARD, background: theme.surface, border: `1px solid ${theme.border}`, flexShrink: 0, boxShadow: theme.shadow }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <span style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 12, fontWeight: 800, color: theme.accent, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Progress</span>
-            <svg width="52" height="5" viewBox="0 0 52 5" fill="none">
-              <path d="M1,2.5 Q13,0.5 26,2.5 Q39,4.5 51,2.5" stroke={theme.accentBorder} strokeWidth="1" strokeLinecap="round"/>
-              <path d="M4,4 Q13,2.5 26,4 Q39,5.5 48,4" stroke={theme.accentBorder} strokeWidth="0.5" strokeLinecap="round" opacity="0.5"/>
-            </svg>
+      {/* ── Progress ─────────────────────────────── */}
+      <div style={{
+        padding: cardPad, borderRadius: 12,
+        background: theme.surface, border: `1px solid ${theme.border}`,
+        flexShrink: 0, boxShadow: theme.shadow,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: compact ? 10 : 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <span style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 800, color: theme.accent, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Progress</span>
+            <PotteryRing width={50} color={theme.accentBorder} />
           </div>
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 5 }}>
             {(['free-play', 'quiz'] as const).map(m => (
               <button key={m} onClick={() => dispatch({ type: 'SET_MODE', payload: m })}
-                style={{ padding: '5px 14px', fontSize: 12, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s', background: state.mode === m ? (m === 'quiz' ? '#B85030' : theme.accent) : theme.statBg, color: state.mode === m ? '#ffffff' : theme.textSecondary, border: state.mode === m ? `1px solid ${m === 'quiz' ? '#8A3A1E' : theme.accentDark}` : `1px solid ${theme.border}` }}>
+                style={{
+                  padding: '5px 10px', fontSize: 11,
+                  fontFamily: '"DM Sans", sans-serif', fontWeight: 500,
+                  borderRadius: 6, cursor: 'pointer', transition: 'all 0.18s',
+                  minHeight: 32,
+                  background: state.mode === m ? (m === 'quiz' ? '#B85030' : theme.accent) : 'transparent',
+                  color: state.mode === m ? '#ffffff' : theme.textTertiary,
+                  border: state.mode === m
+                    ? `1px solid ${m === 'quiz' ? '#8A3A1E' : theme.accentDark}`
+                    : `1px solid ${theme.border}`,
+                }}>
                 {m === 'free-play' ? 'Free Play' : 'Quiz'}
               </button>
             ))}
           </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-          <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, color: theme.textSecondary }}>Level {state.level}</span>
-          <span style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 800, color: theme.accent }}>Score: {state.score}</span>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+          <span style={{ fontFamily: '"Space Mono", monospace', fontSize: 11, color: theme.textTertiary }}>Level {state.level}</span>
+          <span style={{ fontFamily: '"Playfair Display", serif', fontSize: compact ? 15 : 17, fontWeight: 700, color: theme.accent }}>
+            {state.score} <span style={{ fontSize: 10, fontWeight: 400, fontStyle: 'italic', opacity: 0.7 }}>pts</span>
+          </span>
         </div>
-        <div style={{ height: 8, background: theme.progressBg, borderRadius: 999, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${(state.completedChallenges.length / QUIZ_LEVELS.length) * 100}%`, background: theme.accent, borderRadius: 999, transition: 'width 0.5s' }} />
+
+        <div style={{ height: 5, background: theme.progressBg, borderRadius: 4, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${(state.completedChallenges.length / QUIZ_LEVELS.length) * 100}%`, background: theme.accent, borderRadius: 4, transition: 'width 0.6s ease' }} />
         </div>
+        <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 10, color: theme.textTertiary, marginTop: 5, letterSpacing: '0.02em' }}>
+          {state.completedChallenges.length} of {QUIZ_LEVELS.length} challenges
+        </p>
       </div>
 
-      {/* Quiz */}
-      <div style={{ maxHeight: 320, overflowY: 'auto', overflowX: 'hidden', borderRadius: 14, flexShrink: 0 }}>
+      {/* ── Quiz ──────────────────────────────────── */}
+      <div style={{ maxHeight: compact ? 240 : 300, overflowY: 'auto', overflowX: 'hidden', borderRadius: 12, flexShrink: 0 }}>
         <QuizPanel />
       </div>
 
-      {/* Feedback */}
-      <div style={{ ...CARD, background: feedbackBg, border: `1px solid ${feedbackAccent}30`, borderLeft: `4px solid ${feedbackAccent}`, flexShrink: 0 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: 6 }}>
-          <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', color: feedbackAccent, textTransform: 'uppercase' }}>Feedback</p>
-          <svg width="48" height="5" viewBox="0 0 48 5" fill="none">
-            <path d="M1,2.5 Q12,0.5 24,2.5 Q36,4.5 47,2.5" stroke={feedbackAccent} strokeWidth="0.9" strokeLinecap="round" opacity="0.5"/>
-            <path d="M4,4 Q12,2.5 24,4 Q36,5.5 44,4" stroke={feedbackAccent} strokeWidth="0.5" strokeLinecap="round" opacity="0.3"/>
-          </svg>
+      {/* ── Feedback ──────────────────────────────── */}
+      <div style={{
+        padding: compact ? '10px 14px' : '14px 18px', borderRadius: 10,
+        background: feedbackBg,
+        border: `1px solid ${feedbackAccent}25`,
+        borderLeft: `3px solid ${feedbackAccent}`,
+        flexShrink: 0,
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 6 }}>
+          <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', color: feedbackAccent, textTransform: 'uppercase' }}>Feedback</p>
+          <PotteryRing width={40} color={feedbackAccent} />
         </div>
-        <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.textSecondary, lineHeight: 1.6 }}>{state.feedback}</p>
+        <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: compact ? 12 : 13, color: theme.textSecondary, lineHeight: 1.6 }}>
+          {state.feedback}
+        </p>
       </div>
 
-      {/* Touch hint */}
-      {(isMobile || isTablet) && (
-        <div style={{ ...CARD, background: theme.accentBg, border: `1px solid ${theme.accentBorder}`, borderLeft: `4px solid ${theme.accent}`, flexShrink: 0, padding: '10px 14px' }}>
-          <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 12, color: theme.textSecondary, lineHeight: 1.6 }}>
-            {isTablet
-              ? <><strong style={{ color: theme.accent }}>Tap</strong> any element to add it &middot; <strong style={{ color: theme.accent }}>Drag</strong> it into the sandbox to place precisely</>
-              : <><strong style={{ color: theme.accent }}>Tap any element</strong> below to add it to your lab instantly. Long-press for element details.</>
-            }
+      {/* ── Touch hint (tablet only, not mobile — mobile has less space) ── */}
+      {isTablet && (
+        <div style={{
+          padding: '9px 14px', borderRadius: 9,
+          background: theme.accentBg, border: `1px solid ${theme.accentBorder}`,
+          borderLeft: `3px solid ${theme.accent}`, flexShrink: 0,
+        }}>
+          <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 11, color: theme.textSecondary, lineHeight: 1.55 }}>
+            <strong style={{ color: theme.accent, fontWeight: 600 }}>Tap</strong> an element to add &middot; <strong style={{ color: theme.accent, fontWeight: 600 }}>Drag</strong> to place
           </p>
         </div>
       )}
 
-      {/* Periodic table */}
-      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden', background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 14, maxWidth: '100%', WebkitOverflowScrolling: 'touch' as any, boxShadow: theme.shadow }}>
-        <div style={{ padding: '14px 16px 16px 16px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 12 }}>
-            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 12, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, textTransform: 'uppercase' }}>Periodic Table</p>
-            <svg width="60" height="5" viewBox="0 0 60 5" fill="none">
-              <path d="M1,2.5 Q15,0.5 30,2.5 Q45,4.5 59,2.5" stroke={theme.accentBorder} strokeWidth="1" strokeLinecap="round"/>
-              <path d="M4,4 Q15,2.5 30,4 Q45,5.5 56,4" stroke={theme.accentBorder} strokeWidth="0.5" strokeLinecap="round" opacity="0.5"/>
-            </svg>
+      {/* ── Periodic table ────────────────────────── */}
+      <div style={{
+        flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden',
+        background: theme.surface, border: `1px solid ${theme.border}`,
+        borderRadius: 12, maxWidth: '100%',
+        WebkitOverflowScrolling: 'touch' as any,
+        boxShadow: theme.shadow,
+      }}>
+        <div style={{ padding: compact ? '12px 12px 14px' : '14px 16px 18px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: compact ? 10 : 14 }}>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.07em', color: theme.accent, textTransform: 'uppercase' }}>Periodic Table</p>
+            <PotteryRing width={62} color={theme.accentBorder} />
           </div>
           <PeriodicTablePanel onToast={onToast} isMobile={isMobile} isTablet={isTablet} />
         </div>

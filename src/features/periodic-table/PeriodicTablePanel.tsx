@@ -48,7 +48,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
         {FILTER_CATEGORIES.map(c => (
           <button key={c} onClick={() => setFilterCat(c)}
-            style={{ padding: '4px 12px', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? theme.accent : theme.surfaceAlt, color: filterCat === c ? '#ffffff' : theme.textSecondary, border: filterCat === c ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}` }}>
+            style={{ padding: '4px 12px', fontSize: 12, borderRadius: 8, cursor: 'pointer', fontFamily: '"Playfair Display", serif', fontWeight: 700, whiteSpace: 'nowrap', transition: 'all 0.15s', background: filterCat === c ? theme.accent : theme.surfaceAlt, color: filterCat === c ? '#ffffff' : theme.textSecondary, border: filterCat === c ? `1px solid ${theme.accentDark}` : `1px solid ${theme.border}` }}>
             {c === 'all' ? 'All' : c.replace(/-/g, ' ')}
           </button>
         ))}
@@ -56,7 +56,7 @@ export function PeriodicTablePanel({ onToast, isMobile, isTablet }: PeriodicTabl
 
       {!showFiltered && (
         <button onClick={() => setShowFull(v => !v)}
-          style={{ padding: '7px 14px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 700, textAlign: 'left', background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, transition: 'all 0.15s' }}>
+          style={{ padding: '7px 14px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Playfair Display", serif', fontSize: 13, fontWeight: 700, textAlign: 'left', background: theme.surfaceAlt, border: `1px solid ${theme.border}`, color: theme.textSecondary, transition: 'all 0.15s' }}>
           {showFull ? 'Show Common Only' : 'Show All 118 Elements'}
         </button>
       )}

@@ -46,7 +46,7 @@ export function LewisView() {
                   left: PADDING,
                   width: BOX,
                   height: BOX,
-                  fontFamily: '"Playfair Display", sans-serif',
+                  fontFamily: '"Playfair Display", serif',
                   fontWeight: 800,
                   fontSize: 20,
                   background: colors.bg,

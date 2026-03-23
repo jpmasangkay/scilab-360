@@ -60,15 +60,18 @@ export function Sandbox({ isMobile }: SandboxProps) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="relative flex-1 rounded-2xl overflow-hidden transition-all duration-200"
       style={{
+        position: 'relative', flex: 1, borderRadius: 16,
+        overflow: 'hidden', transition: 'all 0.2s',
         minHeight: isMobile ? 0 : 260,
         height: isMobile ? '100%' : undefined,
-        background: dragOver
-          ? theme.sandboxBgHover
-          : theme.sandboxBg,
-        border: dragOver ? `2px dashed ${theme.sandboxBorderHover}` : `2px dashed ${theme.sandboxBorder}`,
-        boxShadow: dragOver ? `inset 0 0 30px ${theme.accent}10` : 'inset 0 0 20px rgba(0,0,0,0.02)',
+        background: dragOver ? theme.sandboxBgHover : theme.sandboxBg,
+        border: dragOver
+          ? `1.5px dashed ${theme.sandboxBorderHover}`
+          : `1.5px dashed ${theme.sandboxBorder}`,
+        boxShadow: dragOver
+          ? `inset 0 0 40px ${theme.accent}0e`
+          : `inset 0 0 30px rgba(0,0,0,0.015)`,
       }}
     >
       {/* Floating bubbles */}
@@ -128,20 +131,17 @@ export function Sandbox({ isMobile }: SandboxProps) {
 
           {isMobile ? (
             <>
-              <p style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: 14, color: theme.textTertiary, letterSpacing: '0.01em', fontStyle: 'italic' }}>Lab is Empty</p>
-              <div style={{ background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 12, padding: '10px 18px', textAlign: 'center', maxWidth: 240, boxShadow: theme.shadow }}>
-                <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 12, color: theme.textSecondary }}>
-                  Go to the <span style={{ color: theme.accent, fontWeight: 700 }}>Guide</span> tab
-                </p>
-                <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 11, color: theme.textTertiary, marginTop: 4 }}>
-                  and tap any element to add it
+              <p style={{ fontFamily: '"Playfair Display", serif', fontWeight: 600, fontSize: 14, color: theme.textTertiary, fontStyle: 'italic' }}>Lab is empty</p>
+              <div style={{ background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 10, padding: '9px 18px', textAlign: 'center', maxWidth: 230, boxShadow: theme.shadow, marginTop: 4 }}>
+                <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 12, color: theme.textSecondary, lineHeight: 1.5 }}>
+                  Open the <span style={{ color: theme.accent, fontWeight: 600 }}>Guide</span> tab and tap an element to begin.
                 </p>
               </div>
             </>
           ) : (
             <>
-              <p style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: 15, color: theme.textTertiary, letterSpacing: '0.01em', fontStyle: 'italic' }}>Drag Atoms Here</p>
-              <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 12, marginTop: 0, color: theme.textTertiary }}>Double-click placed atoms to remove</p>
+              <p style={{ fontFamily: '"Playfair Display", serif', fontWeight: 600, fontSize: 16, color: theme.textTertiary, fontStyle: 'italic', letterSpacing: '-0.01em' }}>Drag atoms here</p>
+              <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 12, color: theme.textTertiary, opacity: 0.7, marginTop: 2, letterSpacing: '0.01em' }}>Double-click a placed atom to remove it</p>
             </>
           )}
         </div>
@@ -153,16 +153,18 @@ export function Sandbox({ isMobile }: SandboxProps) {
       {/* Formula overlay */}
       {state.formula && (
         <div
-          className="absolute bottom-3 left-1/2 -translate-x-1/2 px-5 py-2 rounded-xl z-10"
           style={{
-            fontFamily: '"Playfair Display", sans-serif',
-            fontSize: 18,
-            fontWeight: 800,
+            position: 'absolute', bottom: 14, left: '50%',
+            transform: 'translateX(-50%)',
+            padding: '7px 22px', borderRadius: 10, zIndex: 10,
+            fontFamily: '"Playfair Display", serif',
+            fontSize: 17, fontWeight: 700, fontStyle: 'italic',
             color: theme.accent,
-            letterSpacing: '0.5px',
+            letterSpacing: '0.02em',
             background: theme.formulaBg,
             border: `1px solid ${theme.formulaBorder}`,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+            boxShadow: theme.shadowLg,
+            whiteSpace: 'nowrap',
           }}
         >
           {state.formula}

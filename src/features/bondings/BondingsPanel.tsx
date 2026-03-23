@@ -109,12 +109,12 @@ function BondingCard({ entry, theme }: { entry: BondingEntry; theme: ReturnType<
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
             <span style={{
-              fontFamily: '"Playfair Display", sans-serif', fontWeight: 900, fontSize: 20, color: theme.text, letterSpacing: '-0.01em',
+              fontFamily: '"Playfair Display", serif', fontWeight: 900, fontSize: 20, color: theme.text, letterSpacing: '-0.01em',
             }}>
               {entry.formula}
             </span>
             <span style={{
-              padding: '2px 10px', borderRadius: 6, fontSize: 10, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700,
+              padding: '2px 10px', borderRadius: 6, fontSize: 10, fontFamily: '"Playfair Display", serif', fontWeight: 700,
               background: bondInfo.color + '18', color: bondInfo.color, border: `1px solid ${bondInfo.color}30`,
               textTransform: 'uppercase', letterSpacing: '0.05em',
             }}>
@@ -154,7 +154,7 @@ function BondingCard({ entry, theme }: { entry: BondingEntry; theme: ReturnType<
 
           {/* Description */}
           <div style={{ padding: '12px 14px', background: theme.surfaceAlt, borderRadius: 10, border: `1px solid ${theme.borderLight}` }}>
-            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', color: bondInfo.color, marginBottom: 6, textTransform: 'uppercase' }}>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', color: bondInfo.color, marginBottom: 6, textTransform: 'uppercase' }}>
               How It Bonds
             </p>
             <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.text, lineHeight: 1.7 }}>
@@ -164,7 +164,7 @@ function BondingCard({ entry, theme }: { entry: BondingEntry; theme: ReturnType<
 
           {/* Properties */}
           <div style={{ padding: '12px 14px', background: theme.surfaceAlt, borderRadius: 10, border: `1px solid ${theme.borderLight}` }}>
-            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', color: theme.accent, marginBottom: 6, textTransform: 'uppercase' }}>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', color: theme.accent, marginBottom: 6, textTransform: 'uppercase' }}>
               Properties & Uses
             </p>
             <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.text, lineHeight: 1.7 }}>
@@ -182,7 +182,7 @@ function BondingCard({ entry, theme }: { entry: BondingEntry; theme: ReturnType<
             ].map(([label, value]) => (
               <div key={label} style={{ padding: '10px 12px', borderRadius: 10, background: theme.surface, border: `1px solid ${theme.border}` }}>
                 <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 9, color: theme.textTertiary, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>{label}</p>
-                <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 14, fontWeight: 700, color: theme.text }}>{value}</p>
+                <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 14, fontWeight: 700, color: theme.text }}>{value}</p>
               </div>
             ))}
           </div>
@@ -251,7 +251,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
               <Beaker size={isMobile ? 17 : 20} color={theme.accentDark} />
             </div>
             <div style={{ minWidth: 0 }}>
-              <p style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, fontSize: isMobile ? 17 : 20, color: theme.logoText, letterSpacing: '0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <p style={{ fontFamily: '"Playfair Display", serif', fontWeight: 800, fontSize: isMobile ? 17 : 20, color: theme.logoText, letterSpacing: '0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Molecular Bonding
               </p>
               <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: isMobile ? 11 : 12, color: theme.textTertiary }}>
@@ -281,7 +281,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
                 border: `1px solid ${showFilters || activeFilterCount > 0 ? theme.accent + '60' : theme.border}`,
                 color: showFilters || activeFilterCount > 0 ? theme.accent : theme.textSecondary,
                 cursor: 'pointer', transition: 'all 0.15s',
-                fontFamily: '"Playfair Display", sans-serif', fontSize: 12, fontWeight: 700,
+                fontFamily: '"Playfair Display", serif', fontSize: 12, fontWeight: 700,
               }}
             >
               <SlidersHorizontal size={14} />
@@ -330,7 +330,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
         }}>
           {/* Bond type pills */}
           <div>
-            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 8, textTransform: 'uppercase' }}>Bond Type</p>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 8, textTransform: 'uppercase' }}>Bond Type</p>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {BOND_FILTERS.map(f => {
                 const active = bondFilter === f.value;
@@ -340,7 +340,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 4,
                       padding: '5px 10px', borderRadius: 16, cursor: 'pointer',
-                      fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 700,
+                      fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 700,
                       background: active ? info.color + '18' : theme.surfaceAlt,
                       border: active ? `1px solid ${info.color}50` : `1px solid ${theme.border}`,
                       color: active ? info.color : theme.textSecondary,
@@ -355,7 +355,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
           </div>
           {/* Category pills */}
           <div>
-            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 8, textTransform: 'uppercase' }}>Category</p>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 10, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 8, textTransform: 'uppercase' }}>Category</p>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {CAT_FILTERS.map(f => {
                 const active = catFilter === f.value;
@@ -363,7 +363,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
                   <button key={f.value} onClick={() => setCatFilter(f.value)}
                     style={{
                       padding: '5px 10px', borderRadius: 16, cursor: 'pointer',
-                      fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 700,
+                      fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 700,
                       background: active ? theme.accentBg : theme.surfaceAlt,
                       border: active ? `1px solid ${theme.accent}50` : `1px solid ${theme.border}`,
                       color: active ? theme.accent : theme.textSecondary,
@@ -386,7 +386,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
           <div style={{ width: 220, flexShrink: 0, borderRight: `1px solid ${theme.border}`, background: theme.surface, padding: 16, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Bond type summary */}
             <div>
-              <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Bond Type</p>
+              <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Bond Type</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {BOND_FILTERS.map(f => {
                   const active = bondFilter === f.value;
@@ -396,7 +396,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                         padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
-                        fontFamily: '"Playfair Display", sans-serif', fontSize: 12, fontWeight: 700,
+                        fontFamily: '"Playfair Display", serif', fontSize: 12, fontWeight: 700,
                         background: active ? info.color + '18' : 'transparent',
                         border: active ? `1px solid ${info.color}40` : '1px solid transparent',
                         color: active ? info.color : theme.textSecondary,
@@ -412,7 +412,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
 
             {/* Category filter */}
             <div>
-              <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Category</p>
+              <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.accent, marginBottom: 10, textTransform: 'uppercase' }}>Category</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 {CAT_FILTERS.map(f => {
                   const active = catFilter === f.value;
@@ -420,7 +420,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
                     <button key={f.value} onClick={() => setCatFilter(f.value)}
                       style={{
                         padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
-                        fontFamily: '"Playfair Display", sans-serif', fontSize: 12, fontWeight: 700,
+                        fontFamily: '"Playfair Display", serif', fontSize: 12, fontWeight: 700,
                         background: active ? theme.accentBg : 'transparent',
                         border: active ? `1px solid ${theme.accent}40` : '1px solid transparent',
                         color: active ? theme.accent : theme.textSecondary,
@@ -435,13 +435,13 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
 
             {/* Legend */}
             <div style={{ borderTop: `1px solid ${theme.border}`, paddingTop: 14 }}>
-              <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.textTertiary, marginBottom: 10, textTransform: 'uppercase' }}>Legend</p>
+              <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', color: theme.textTertiary, marginBottom: 10, textTransform: 'uppercase' }}>Legend</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {Object.entries(BOND_TYPE_INFO).map(([key, info]) => (
                   <div key={key} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                     <div style={{ width: 10, height: 10, borderRadius: 3, background: info.color, flexShrink: 0, marginTop: 3 }} />
                     <div>
-                      <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 700, color: theme.text }}>{info.label}</p>
+                      <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 700, color: theme.text }}>{info.label}</p>
                       <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 10, color: theme.textTertiary, lineHeight: 1.4 }}>{info.description}</p>
                     </div>
                   </div>
@@ -459,13 +459,13 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
               {filtered.length} result{filtered.length !== 1 ? 's' : ''}
             </span>
             {bondFilter !== 'all' && (
-              <span style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 6, fontSize: 11, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, background: BOND_TYPE_INFO[bondFilter].color + '18', color: BOND_TYPE_INFO[bondFilter].color, border: `1px solid ${BOND_TYPE_INFO[bondFilter].color}30` }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 6, fontSize: 11, fontFamily: '"Playfair Display", serif', fontWeight: 700, background: BOND_TYPE_INFO[bondFilter].color + '18', color: BOND_TYPE_INFO[bondFilter].color, border: `1px solid ${BOND_TYPE_INFO[bondFilter].color}30` }}>
                 {BOND_TYPE_INFO[bondFilter].label}
                 <button onClick={() => setBondFilter('all')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontSize: 14, padding: 0, marginLeft: 4 }}>×</button>
               </span>
             )}
             {catFilter !== 'all' && (
-              <span style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 6, fontSize: 11, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, background: theme.statBg, color: theme.textSecondary, border: `1px solid ${theme.border}` }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 6, fontSize: 11, fontFamily: '"Playfair Display", serif', fontWeight: 700, background: theme.statBg, color: theme.textSecondary, border: `1px solid ${theme.border}` }}>
                 {catFilter.charAt(0).toUpperCase() + catFilter.slice(1)}
                 <button onClick={() => setCatFilter('all')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontSize: 14, padding: 0, marginLeft: 4 }}>×</button>
               </span>
@@ -482,7 +482,7 @@ export function BondingsPanel({ onClose }: BondingsPanelProps) {
           {filtered.length === 0 && (
             <div style={{ textAlign: 'center', padding: isMobile ? '40px 16px' : '60px 20px' }}>
               <Zap size={isMobile ? 32 : 40} color={theme.textTertiary} style={{ marginBottom: 12 }} />
-              <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 16, fontWeight: 800, color: theme.textTertiary }}>No matches found</p>
+              <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 16, fontWeight: 800, color: theme.textTertiary }}>No matches found</p>
               <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: 13, color: theme.textTertiary, marginTop: 6 }}>Try a different search or filter</p>
             </div>
           )}

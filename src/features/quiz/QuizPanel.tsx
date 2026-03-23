@@ -22,10 +22,10 @@ export function QuizPanel() {
   if (!challenge) {
     return (
       <div style={{ padding: 20, borderRadius: 14, textAlign: 'center', background: theme.accentBg, border: `1px solid ${theme.accentBorder}` }}>
-        <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 16, fontWeight: 800, color: theme.accent }}>All Challenges Complete!</p>
+        <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 16, fontWeight: 800, color: theme.accent }}>All Challenges Complete!</p>
         <p style={{ fontFamily: '"Space Mono", monospace', fontSize: 13, color: theme.textSecondary, marginTop: 6 }}>Score: {state.score}</p>
         <button onClick={() => dispatch({ type: 'SET_LEVEL', payload: 1 })}
-          style={{ marginTop: 12, padding: '8px 20px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 700, background: theme.accent, border: 'none', color: '#ffffff' }}>
+          style={{ marginTop: 12, padding: '8px 20px', borderRadius: 10, cursor: 'pointer', fontFamily: '"Playfair Display", serif', fontSize: 13, fontWeight: 700, background: theme.accent, border: 'none', color: '#ffffff' }}>
           Play Again
         </button>
       </div>
@@ -85,13 +85,13 @@ export function QuizPanel() {
       <div onClick={() => setCollapsed(v => !v)}
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', cursor: 'pointer', background: theme.surfaceAlt, borderBottom: collapsed ? 'none' : `1px solid ${theme.border}` }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, padding: '3px 10px', borderRadius: 8, background: theme.accent, color: '#ffffff' }}>
+          <span style={{ fontSize: 11, fontFamily: '"Playfair Display", serif', fontWeight: 800, padding: '3px 10px', borderRadius: 8, background: theme.accent, color: '#ffffff' }}>
             Lvl {challenge.level}
           </span>
-          <span style={{ fontSize: 11, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, padding: '3px 9px', borderRadius: 8, background: diffColors[challenge.difficulty]?.bg ?? theme.statBg, color: diffColors[challenge.difficulty]?.text ?? theme.textSecondary, border: `1px solid ${diffColors[challenge.difficulty]?.border ?? theme.border}` }}>
+          <span style={{ fontSize: 11, fontFamily: '"Playfair Display", serif', fontWeight: 700, padding: '3px 9px', borderRadius: 8, background: diffColors[challenge.difficulty]?.bg ?? theme.statBg, color: diffColors[challenge.difficulty]?.text ?? theme.textSecondary, border: `1px solid ${diffColors[challenge.difficulty]?.border ?? theme.border}` }}>
             {diff.emoji} {diff.label}
           </span>
-          <span style={{ fontSize: 13, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, color: theme.text }}>
+          <span style={{ fontSize: 13, fontFamily: '"Playfair Display", serif', fontWeight: 700, color: theme.text }}>
             {challenge.description}
           </span>
         </div>
@@ -103,14 +103,14 @@ export function QuizPanel() {
 
           {/* Difficulty selector */}
           <div>
-            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, color: theme.textTertiary, letterSpacing: '0.05em', marginBottom: 7, fontWeight: 700, textTransform: 'uppercase' }}>Difficulty</p>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, color: theme.textTertiary, letterSpacing: '0.05em', marginBottom: 7, fontWeight: 700, textTransform: 'uppercase' }}>Difficulty</p>
             <div style={{ display: 'flex', gap: 6 }}>
               {(['all', 'easy', 'medium', 'hard'] as const).map(d => {
                 const isActive = activeDifficulty === d;
                 const dc = d === 'all' ? { bg: theme.statBg, text: theme.textSecondary, border: theme.border } : (diffColors[d] ?? { bg: theme.statBg, text: theme.textSecondary, border: theme.border });
                 return (
                   <button key={d} onClick={() => setActiveDifficulty(d)}
-                    style={{ flex: 1, padding: '6px 0', borderRadius: 8, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontSize: 12, fontWeight: 700, transition: 'all 0.15s', background: isActive ? dc.bg : theme.surfaceAlt, color: isActive ? dc.text : theme.textTertiary, border: `1px solid ${isActive ? dc.border : theme.border}` }}>
+                    style={{ flex: 1, padding: '6px 0', borderRadius: 8, cursor: 'pointer', fontFamily: '"Playfair Display", serif', fontSize: 12, fontWeight: 700, transition: 'all 0.15s', background: isActive ? dc.bg : theme.surfaceAlt, color: isActive ? dc.text : theme.textTertiary, border: `1px solid ${isActive ? dc.border : theme.border}` }}>
                     {d === 'all' ? 'All' : `${d.charAt(0).toUpperCase() + d.slice(1)}`}
                   </button>
                 );
@@ -121,7 +121,7 @@ export function QuizPanel() {
           {/* Atom badges */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {Object.entries(atomCounts).map(([sym, { have, need, ok }]) => (
-              <div key={sym} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 10, fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 700, background: ok ? (theme.isDark ? '#0a2a1a' : '#f0fdf4') : theme.surfaceAlt, border: `1px solid ${ok ? (theme.isDark ? '#166534' : '#86efac') : theme.border}`, color: ok ? '#16a34a' : theme.textSecondary }}>
+              <div key={sym} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 10, fontFamily: '"Playfair Display", serif', fontSize: 13, fontWeight: 700, background: ok ? (theme.isDark ? '#0a2a1a' : '#f0fdf4') : theme.surfaceAlt, border: `1px solid ${ok ? (theme.isDark ? '#166534' : '#86efac') : theme.border}`, color: ok ? '#16a34a' : theme.textSecondary }}>
                 <span style={{ fontWeight: 800 }}>{sym}</span>
                 <span style={{ fontSize: 12, opacity: 0.7 }}>{have}/{need}</span>
                 {ok && <span style={{ color: '#16a34a', fontWeight: 800 }}>&#x2713;</span>}
@@ -132,7 +132,7 @@ export function QuizPanel() {
           {/* Progress bar */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 11, fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, letterSpacing: '0.05em', color: theme.textTertiary, textTransform: 'uppercase' }}>Atoms Placed</span>
+              <span style={{ fontSize: 11, fontFamily: '"Playfair Display", serif', fontWeight: 700, letterSpacing: '0.05em', color: theme.textTertiary, textTransform: 'uppercase' }}>Atoms Placed</span>
               <span style={{ fontSize: 12, fontFamily: '"Space Mono", monospace', color: theme.textSecondary }}>{current}/{total}</span>
             </div>
             <div style={{ height: 8, background: theme.progressBg, borderRadius: 999, overflow: 'hidden' }}>
@@ -156,14 +156,14 @@ export function QuizPanel() {
           {alreadyCompleted ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ padding: '12px 14px', borderRadius: 12, background: theme.isDark ? '#0a2a1a' : '#f0fdf4', border: `1px solid ${theme.isDark ? '#166534' : '#86efac'}`, textAlign: 'center' }}>
-                <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 13, fontWeight: 800, color: '#16a34a' }}>
+                <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 13, fontWeight: 800, color: '#16a34a' }}>
                   Challenge Complete!
                 </p>
               </div>
               {nextChallenge && (
                 <button
                   onClick={() => { dispatch({ type: 'SET_CHALLENGE', payload: nextChallenge }); setSubmitResult(null); }}
-                  style={{ padding: 12, borderRadius: 12, color: '#ffffff', fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, fontSize: 14, cursor: 'pointer', border: 'none', background: theme.accent, transition: 'all 0.2s' }}
+                  style={{ padding: 12, borderRadius: 12, color: '#ffffff', fontFamily: '"Playfair Display", serif', fontWeight: 800, fontSize: 14, cursor: 'pointer', border: 'none', background: theme.accent, transition: 'all 0.2s' }}
                   onMouseEnter={e => { e.currentTarget.style.background = theme.accentDark; e.currentTarget.style.transform = 'scale(1.02)'; }}
                   onMouseLeave={e => { e.currentTarget.style.background = theme.accent; e.currentTarget.style.transform = 'scale(1)'; }}>
                   Next Challenge (Lvl {nextChallenge.level})
@@ -172,7 +172,7 @@ export function QuizPanel() {
             </div>
           ) : (
             <button onClick={handleSubmit}
-              style={{ padding: 12, borderRadius: 12, color: '#ffffff', fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, fontSize: 14, cursor: 'pointer', border: 'none', background: theme.accent, transition: 'all 0.2s' }}
+              style={{ padding: 12, borderRadius: 12, color: '#ffffff', fontFamily: '"Playfair Display", serif', fontWeight: 800, fontSize: 14, cursor: 'pointer', border: 'none', background: theme.accent, transition: 'all 0.2s' }}
               onMouseEnter={e => { e.currentTarget.style.background = theme.accentDark; e.currentTarget.style.transform = 'scale(1.02)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = theme.accent; e.currentTarget.style.transform = 'scale(1)'; }}>
               Check Answer
@@ -181,7 +181,7 @@ export function QuizPanel() {
 
           {/* Level selector */}
           <div>
-            <p style={{ fontFamily: '"Playfair Display", sans-serif', fontSize: 11, fontWeight: 700, letterSpacing: '0.05em', color: theme.textTertiary, marginBottom: 8, textTransform: 'uppercase' }}>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontSize: 11, fontWeight: 700, letterSpacing: '0.05em', color: theme.textTertiary, marginBottom: 8, textTransform: 'uppercase' }}>
               {activeDifficulty === 'all' ? 'All Levels' : `${activeDifficulty.charAt(0).toUpperCase() + activeDifficulty.slice(1)} Levels`}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -193,7 +193,7 @@ export function QuizPanel() {
                   <button key={q.level}
                     onClick={() => { dispatch({ type: 'SET_CHALLENGE', payload: q }); setSubmitResult(null); }}
                     title={`${q.description} (${q.difficulty})`}
-                    style={{ minWidth: 40, padding: '5px 10px', borderRadius: 8, fontSize: 12, cursor: 'pointer', fontFamily: '"Playfair Display", sans-serif', fontWeight: 700, transition: 'all 0.15s', background: isActive ? theme.accent : isDone ? dc.bg : theme.surfaceAlt, color: isActive ? '#ffffff' : isDone ? dc.text : theme.textTertiary, border: isActive ? `1px solid ${theme.accentDark}` : `1px solid ${isDone ? dc.border : theme.border}`, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    style={{ minWidth: 40, padding: '5px 10px', borderRadius: 8, fontSize: 12, cursor: 'pointer', fontFamily: '"Playfair Display", serif', fontWeight: 700, transition: 'all 0.15s', background: isActive ? theme.accent : isDone ? dc.bg : theme.surfaceAlt, color: isActive ? '#ffffff' : isDone ? dc.text : theme.textTertiary, border: isActive ? `1px solid ${theme.accentDark}` : `1px solid ${isDone ? dc.border : theme.border}`, display: 'flex', alignItems: 'center', gap: 4 }}>
                     {q.level}
                     {isDone && <span style={{ fontSize: 10, color: dc.text }}>&#x2713;</span>}
                   </button>

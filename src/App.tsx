@@ -8,14 +8,14 @@ import { RightPanel } from './features/layout/RightPanel';
 import { Sandbox } from './features/sandbox/Sandbox';
 import { StudentDashboard } from './features/dashboard/StudentDashboard';
 
-function useWindowWidth() {
-  const [width, setWidth] = useState(window.innerWidth);
+function useWindowSize() {
+  const [size, setSize] = useState({ w: window.innerWidth, h: window.innerHeight });
   useEffect(() => {
-    const handler = () => setWidth(window.innerWidth);
+    const handler = () => setSize({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener('resize', handler);
     return () => window.removeEventListener('resize', handler);
   }, []);
-  return width;
+  return size;
 }
 
 type Tab = 'lab' | 'guide' | 'molecules';
@@ -27,9 +27,9 @@ export const useToast = () => useContext(ToastContext);
 
 function AppLayout() {
   const { theme } = useTheme();
-  const width = useWindowWidth();
-  const isMobile = width < 768;
-  const isTablet = width >= 768 && width < 1100;
+  const { w } = useWindowSize();
+  const isMobile = w < 768;
+  const isTablet = w >= 768 && w < 1100;
   const [activeTab, setActiveTab] = useState<Tab>('lab');
   const [tabletPanel, setTabletPanel] = useState<'none' | 'guide' | 'molecules'>('none');
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -41,15 +41,22 @@ function AppLayout() {
   }, []);
 
   const legend = (
-    <div className="flex items-center gap-6 px-4 shrink-0" style={{ height: 36, background: theme.surfaceAlt, borderTop: `1px solid ${theme.border}` }}>
+    <div style={{
+      height: 36, display: 'flex', alignItems: 'center', gap: isMobile ? 16 : 24,
+      padding: isMobile ? '0 12px' : '0 18px', flexShrink: 0,
+      background: theme.surface, borderTop: `1px solid ${theme.border}`,
+    }}>
+      <svg width="24" height="10" viewBox="0 0 24 10" fill="none" style={{ flexShrink: 0, opacity: 0.45 }}>
+        <path d="M0,5 C3,2 6,8 9,5 C12,2 15,8 18,5 C20,3 22,7 24,5" stroke={theme.accent} strokeWidth="1.2" strokeLinecap="round"/>
+      </svg>
       {[
-        { color: '#0E6B68', label: 'Covalent Bond' },
-        { color: '#B85030', label: 'Ionic Bond' },
-        { color: '#4A78A0', label: 'Metallic Bond' },
+        { color: '#0E6B68', label: isMobile ? 'Covalent' : 'Covalent bond' },
+        { color: '#B85030', label: isMobile ? 'Ionic' : 'Ionic bond' },
+        { color: '#4A78A0', label: isMobile ? 'Metallic' : 'Metallic bond' },
       ].map(({ color, label }) => (
-        <div key={label} className="flex items-center gap-2">
-          <div className="w-5 h-0.5 rounded-full" style={{ background: color }} />
-          <span className="text-xs font-share-tech" style={{ color: theme.textSecondary }}>{label}</span>
+        <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          <div style={{ width: 18, height: 2, background: color, borderRadius: 1, flexShrink: 0 }} />
+          <span style={{ fontFamily: '"DM Sans", sans-serif', fontSize: isMobile ? 10 : 11, color: theme.textTertiary, letterSpacing: '0.03em', whiteSpace: 'nowrap' }}>{label}</span>
         </div>
       ))}
     </div>
@@ -57,7 +64,7 @@ function AppLayout() {
 
   return (
     <ToastContext.Provider value={showToast}>
-      <div className="w-full h-screen flex flex-col overflow-hidden font-exo2" style={{ background: theme.bg, color: theme.text }}>
+      <div style={{ width: '100%', height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: theme.bg, color: theme.text }}>
         <Header
           isMobile={isMobile}
           isTablet={isTablet}
@@ -67,37 +74,37 @@ function AppLayout() {
           onTabletPanelChange={setTabletPanel}
         />
 
+        {/* ── MOBILE ── */}
         {isMobile ? (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', maxWidth: '100vw', paddingBottom: 'env(safe-area-inset-bottom, 8px)' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
             {activeTab === 'lab' && (
-              <>
-                <div style={{ flex: 1, overflow: 'hidden', borderRadius: 12, display: 'flex', flexDirection: 'column', minHeight: 0, marginBottom: 8 }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', minHeight: 0 }}>
+                <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRadius: 14 }}>
                   <Sandbox isMobile />
                 </div>
-                <div style={{ flexShrink: 0, paddingBottom: 64 }}>
-                  {legend}
-                </div>
-              </>
+                {legend}
+              </div>
             )}
             {activeTab === 'guide' && (
-              <div style={{ flex: 1, overflow: 'hidden', paddingBottom: 64 }}>
+              <div style={{ flex: 1, overflow: 'hidden', padding: '8px 8px 0', minHeight: 0 }}>
                 <LeftPanel fullHeight isMobile onToast={showToast} />
               </div>
             )}
             {activeTab === 'molecules' && (
-              <div style={{ flex: 1, overflow: 'hidden', paddingBottom: 64 }}>
+              <div style={{ flex: 1, overflow: 'hidden', padding: '8px 8px 0', minHeight: 0 }}>
                 <RightPanel fullHeight />
               </div>
             )}
           </div>
         ) : isTablet ? (
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '8px 8px 0', gap: 8 }}>
-            <div style={{ flex: 1, display: 'flex', gap: 8, overflow: 'hidden', minHeight: 0 }}>
+          /* ── TABLET ── */
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '10px 10px 0', gap: 0, minHeight: 0 }}>
+            <div style={{ flex: 1, display: 'flex', gap: 10, overflow: 'hidden', minHeight: 0 }}>
               <div style={{ flex: 1, overflow: 'hidden', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
                 <Sandbox />
               </div>
               {tabletPanel !== 'none' && (
-                <div style={{ width: 320, flexShrink: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: Math.min(300, w * 0.32), flexShrink: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                   {tabletPanel === 'guide' && <LeftPanel fullHeight isTablet onToast={showToast} />}
                   {tabletPanel === 'molecules' && <RightPanel fullHeight />}
                 </div>
@@ -106,10 +113,11 @@ function AppLayout() {
             {legend}
           </div>
         ) : (
+          /* ── DESKTOP ── */
           <>
-            <div className="flex-1 flex gap-3 p-3 overflow-hidden">
+            <div style={{ flex: 1, display: 'flex', gap: 14, padding: 14, overflow: 'hidden', minHeight: 0 }}>
               <LeftPanel />
-              <div className="flex-1 flex flex-col gap-3 overflow-hidden">
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
                 <Sandbox />
               </div>
               <RightPanel />
@@ -120,15 +128,15 @@ function AppLayout() {
 
         <StudentDashboard />
 
-        <div style={{ position: 'fixed', bottom: 48, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center', zIndex: 9999, pointerEvents: 'none' }}>
+        {/* Toasts */}
+        <div style={{ position: 'fixed', bottom: 20, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center', zIndex: 9999, pointerEvents: 'none' }}>
           {toasts.map(t => (
             <div key={t.id} style={{
-              padding: '8px 18px', borderRadius: 20,
-              background: theme.toastBg,
-              border: `1px solid ${theme.toastBorder}`,
+              padding: '9px 20px', borderRadius: 24,
+              background: theme.toastBg, border: `1px solid ${theme.toastBorder}`,
               boxShadow: theme.toastShadow,
-              fontFamily: '"Space Mono", monospace', fontSize: 13, color: theme.toastText,
-              whiteSpace: 'nowrap',
+              fontFamily: '"DM Sans", sans-serif', fontSize: 13, fontWeight: 500,
+              color: theme.toastText, whiteSpace: 'nowrap',
               animation: 'slideUp 0.25s ease-out',
             }}>
               {t.msg}

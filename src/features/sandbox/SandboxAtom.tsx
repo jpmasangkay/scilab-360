@@ -144,7 +144,7 @@ export function SandboxAtom({ atom }: SandboxAtomProps) {
         touchAction: 'none',
       }}
     >
-      <span style={{ fontFamily: '"Playfair Display", sans-serif', fontWeight: 800, color: '#ffffff', fontSize: 13, lineHeight: 1, textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
+      <span style={{ fontFamily: '"Playfair Display", serif', fontWeight: 800, color: '#ffffff', fontSize: 13, lineHeight: 1, textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>
         {atom.element.symbol}
       </span>
       <span style={{ fontSize: 8, color: 'rgba(255,255,255,0.8)', fontFamily: '"Space Mono", monospace' }}>
